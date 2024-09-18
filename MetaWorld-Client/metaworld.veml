@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<veml xmlns="http://www.fivesqd.com/schemas/veml/1.3" xsi:schemaLocation="http://www.fivesqd.com/schemas/veml/1.3 schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata>
+    <title>MetaWorld Client v1.0-dev0</title>
+	<script>metaworld/Toolbar/Scripts/Toolbar.js</script>
+	<script>metaworld/vossynchronization.js</script>
+	<script>metaworld/thirdpersoncharacter.js</script>
+	<script>metaworld/worldconfiguration.js</script>
+	<script>metaworld/entityplacer.js</script>
+	<script>metaworld/entity.js</script>
+	<script>metaworld/sun.js</script>
+	<script>metaworld/worldrenderer.js</script>
+	<script>metaworld/loadingindicator.js</script>
+    <script>metaworld/metaworld.js</script>
+	<inputevent input="move" event="Move(?);"></inputevent>
+    <inputevent input="endmove" event="EndMove();"></inputevent>
+	<inputevent input="look" event="Look(?);"></inputevent>
+	<inputevent input="endlook" event="EndLook();"></inputevent>
+	<inputevent input="left" event="OnLeftPress();"></inputevent>
+	<inputevent input="right" event="OnRightPress();"></inputevent>
+	<inputevent input="key" event="OnKey(?)"></inputevent>
+  </metadata>
+  <environment>
+    <background>
+      <color>gray</color>
+    </background>
+  </environment>
+</veml>

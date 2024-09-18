@@ -1,0 +1,27 @@
+{
+    "author": {
+        "name": "Dylan Baker"
+    },
+    "name": "metaworld-server",
+    "description": "Server for MetaWorld.",
+    "keywords": [
+        "MetaWorld",
+        "WebVerse",
+        "VSS",
+        "VOS"
+    ],
+    "version": "1.0.0",
+    "main": "server.js",
+    "license": "MIT",
+    "dependencies": {
+        "@fivesquaredinteractive/vos-synchronization": "latest",
+        "express": "^4.17.3",
+        "sqlite3": "latest",
+        "sqlite": "latest",
+        "simplex-noise": "latest",
+        "alea": "latest"
+    },
+    "engines": {
+        "node": ">=6.0"
+    }
+}

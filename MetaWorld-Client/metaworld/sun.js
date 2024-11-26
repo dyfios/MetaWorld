@@ -43,7 +43,7 @@ class Sun {
         }
         
         Context.DefineContext("SUNCONTEXT", this);
-        LightEntity.Create(null, Vector3.zero, new Quaternion(0.7071, 0, 0, 0.7071), null "BaseLight", "OnBaseLightEntityCreated");
+        //LightEntity.Create(null, Vector3.zero, new Quaternion(0.7071, 0, 0, 0.7071), null, "BaseLight", "OnBaseLightEntityCreated");
         LightEntity.Create(null, Vector3.zero, Quaternion.identity, null, "Sun", "OnSunLightEntityCreated");
     }
 }

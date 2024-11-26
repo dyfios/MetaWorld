@@ -114,7 +114,7 @@ class WorldConfiguration {
                         if (curr_orientation.placement_offset == null || curr_orientation.placement_offset.x == null
                             || curr_orientation.placement_offset.y == null || curr_orientation.placement_offset.z == null) {
                             Logging.LogError("MetaWorld->ApplyEntitiesConfig: Invalid entity variant: "
-                                 entity + ":" + variant + " invalid valid_orientation placement_offset.");
+                                 + entity + ":" + variant + " invalid valid_orientation placement_offset.");
                         }
                     }
                     

@@ -142,8 +142,7 @@ class EntityPlacer {
             }
             
             context.StopPlacing();
-            
-            // TODO.
+            WorldStorage.SetItem("ENTITY-DELETE-ENABLED", "TRUE");
         }
         
         this.ExitDeleteMode = function() {
@@ -153,7 +152,7 @@ class EntityPlacer {
                 return;
             }
             
-            // TODO.
+            WorldStorage.SetItem("ENTITY-DELETE-ENABLED", "FALSE");
         }
         
         this.ToggleOrientation = function() {

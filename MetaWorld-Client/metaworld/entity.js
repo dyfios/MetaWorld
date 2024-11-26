@@ -28,6 +28,11 @@ function FinishLoadingPlacingEntity(entity) {
 function FinishLoadingPlacedEntity(entity) {
     entity.SetVisibility(true);
     entity.SetInteractionState(InteractionState.Static);
+    pos = entity.GetPosition(false);
+    if (Math.abs(pos.y + 1) < 0.01) {
+        // Flora entity placed on terrain. Snap to terrain.
+        SnapEntityToTerrain(entity);
+    }
 }
 
 function LoadEntity(loadedEntityID, entityIndex, variantIndex, entityID, variantID, modelPath, offset, placementOffset, rotation, gridSize, startPlacing = true) {
@@ -47,5 +52,15 @@ function LoadEntity(loadedEntityID, entityIndex, variantIndex, entityID, variant
     }
     else {
         MeshEntity.Create(null, modelPath, [ modelPath ], offset, rotation, loadedEntityID, "FinishLoadingPlacedEntity");
+    }
+}
+
+function SnapEntityToTerrain(entity) {
+    currentPos = entity.GetPosition(false);
+    entity.SetPosition(new Vector3(currentPos.x, 1024, currentPos.z), false, false);
+
+    raycast = entity.GetRaycast(Vector3.down);
+    if (raycast != null) {
+        entity.SetPosition(raycast.hitPoint, false);
     }
 }

@@ -4,19 +4,11 @@
 function FinishLoadingCharacter(character) {
     var context = Context.GetContext("thirdPersonCharacterContext");
     context.characterEntity = Entity.Get(context.characterEntityID);
-    if (context.mode === "vr") {
-        Camera.SetPosition(position, false);
-    }
-    else {
-        context.characterEntity.PlaceCameraOn();
-        Camera.SetPosition(new Vector3(0, 2, -2), true);
-    }
     context.OnLoaded();
 }
 
 class ThirdPersonCharacter {
-    constructor(name, id = null, minZ = -90, maxZ = 90, motionMultiplier = 0.1, rotationMultiplier = 0.1, position = Vector3.zero, onLoaded = null, mode = "desktop",
-        characterMesh = null, characterMeshResources = null, characterMeshOffset = Vector3.zero, characterMeshRotation = Quaternion.identity, labelOffset = Vector3.zero) {
+    constructor(name, id = null, minZ = -90, maxZ = 90, motionMultiplier = 0.1, rotationMultiplier = 0.1, position = Vector3.zero, onLoaded = null, mode = "desktop") {
         this.minZ = minZ;
         this.maxZ = maxZ;
         this.motionMultiplier = motionMultiplier
@@ -26,8 +18,7 @@ class ThirdPersonCharacter {
         this.currentRotation = Vector3.zero;
         this.currentTransform = null;
         this.characterEntity = null;
-        this.mode = mode;
-        this.loaded = false;
+        this.inVRMode = false;
         
         this.characterEntityID = null;
         if (id != null)
@@ -70,18 +61,21 @@ class ThirdPersonCharacter {
             context = Context.GetContext("thirdPersonCharacterContext");
             if (context.characterEntity != null) {
                 context.currentTransform = context.characterEntity.GetTransform();
-                if (context.currentTransform == null) {
-                    return;
-                }
                 var newMotion = new Vector3(context.currentTransform.forward.x * context.currentMotion.x - context.currentTransform.right.x * context.currentMotion.z,
                     context.currentMotion.y, context.currentTransform.forward.z * context.currentMotion.x - context.currentTransform.right.z * context.currentMotion.z);
-                if (mode === "vr") {
-                    var cameraPosition = Camera.GetPosition(false);
-                    var newPosition = new Vector3(cameraPosition.x + newMotion.x,
-                    cameraPosition.y + newMotion.y, cameraPosition.z + newMotion.z);
-                    Camera.SetPosition(newPosition, false);
+                if (mode === "vr" || Input.IsVR) {
+                    if (!context.inVRMode) {
+                        Input.AddRigFollower(context.characterEntity);
+                        context.inVRMode = true;
+                    }
                 }
-                else {
+                else if (!Input.IsVR) {
+                    if (!context.inVRMode) {
+                        Input.RemoveRigFollower(context.characterEntity);
+                        context.characterEntity.PlaceCameraOn();
+                        Camera.SetPosition(new Vector3(0, 2, -2), true);
+                        context.inVRMode = false;
+                    }
                     var newPosition = new Vector3(context.currentTransform.position.x + newMotion.x,
                     context.currentTransform.position.y + newMotion.y, context.currentTransform.position.z + newMotion.z);
                     context.characterEntity.SetPosition(newPosition, false);
@@ -95,9 +89,16 @@ class ThirdPersonCharacter {
         
         Context.DefineContext("thirdPersonCharacterContext", this);
         
-        this.characterEntity = CharacterEntity.Create(null, characterMesh, characterMeshResources, characterMeshOffset, characterMeshRotation, labelOffset, position,
+        this.characterEntity = CharacterEntity.Create(null, position,
             Quaternion.identity, Vector3.one, false, name, this.characterEntityID, "FinishLoadingCharacter");
         Context.DefineContext("thirdPersonCharacterContext", this);
+        if (mode === "vr") {
+            
+        }
+        else if (!Input.IsVR) {
+            this.characterEntity.PlaceCameraOn();
+            Camera.SetPosition(new Vector3(0, 2, -2), true);
+        }
         
         Time.SetInterval(`
             var context = Context.GetContext("thirdPersonCharacterContext");
@@ -111,6 +112,14 @@ class ThirdPersonCharacter {
         Context.DefineContext("thirdPersonCharacterContext", this);
     }
     
+    /// @function ThirdPersonCharacter.SetMotionMultiplier
+    /// Set the motion multiplier for the third person character.
+    /// @param {float} multiplier The multiplier to apply. Must be greater than 0.
+    SetMotionMultiplier(multiplier) {
+        this.motionMultiplier = multiplier;
+        Context.DefineContext("thirdPersonCharacterContext", this);
+    }
+
     /// @function ThirdPersonCharacter.MoveCharacter
     /// Move the character by the provided amounts in the x and y directions.
     /// @param {float} x The X component of the motion.
@@ -140,6 +149,32 @@ class ThirdPersonCharacter {
     // End the lifting of the character.
     EndLiftCharacter() {
         this.currentMotion.y = 0;
+    }
+
+    // @function ThirdPersonCharacter.LiftCharacterOneStep
+    // Lift the character one step in the y direction.
+    LiftCharacterOneStep() {
+        context = this;
+        if (context.characterEntity != null) {
+            context.currentTransform = context.characterEntity.GetTransform();
+            var newMotion = new Vector3(0, context.motionMultiplier, 0);
+            var newPosition = new Vector3(context.currentTransform.position.x + newMotion.x,
+                context.currentTransform.position.y + newMotion.y, context.currentTransform.position.z + newMotion.z);
+            context.characterEntity.SetPosition(newPosition, false);
+        }
+    }
+
+    // @function ThirdPersonCharacter.DropCharacterOneStep
+    // Drop the character one step in the y direction.
+    DropCharacterOneStep() {
+        context = this;
+        if (context.characterEntity != null) {
+            context.currentTransform = context.characterEntity.GetTransform();
+            var newMotion = new Vector3(0, -1 * context.motionMultiplier, 0);
+            var newPosition = new Vector3(context.currentTransform.position.x + newMotion.x,
+                context.currentTransform.position.y + newMotion.y, context.currentTransform.position.z + newMotion.z);
+            context.characterEntity.SetPosition(newPosition, false);
+        }
     }
     
     /// @function ThirdPersonCharacter.MoveCharacter

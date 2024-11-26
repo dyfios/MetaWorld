@@ -98,7 +98,28 @@ module.exports = function() {
         });
     }
 
-    this.GetRows = async function(name, cols) {
+    this.GetRowsWithWhereStatement = async function (name, selection, whereText, orderingCriteria, callback) {
+        queryText = `SELECT ${selection} from ${name} WHERE ${whereText}`;
+        if (orderingCriteria != null && orderingCriteria != "") {
+            queryText = queryText + " ORDER BY " + orderingCriteria;
+        }
+
+        this.db.all(queryText, (err, rows) => {
+            if (err) {
+                //console.log("Error getting row.");
+                if (callback) callback(null);
+            } else {
+                if (rows) {
+                    if (callback) callback(rows);
+                } else {
+                    //console.log("Error getting row entry.");
+                    if (callback) callback(null);
+                }
+            }
+        });
+    }
+
+    this.GetRows = async function(name, cols, callback) {
         whereText = "";
         for (col in cols) {
             whereText = whereText + " " + col + " = " + cols[col] + " AND ";
@@ -108,21 +129,31 @@ module.exports = function() {
         }
         
         this.db.all(`SELECT * FROM ${name} WHERE ${whereText}`, (err, row) => {
-            
+            if (err) {
+                //console.log("Error getting row.");
+                if (callback) callback(null);
+            } else {
+                if (row) {
+                    if (callback) callback(row);
+                } else {
+                    //console.log("Error getting row entry.");
+                    if (callback) callback(null);
+                }
+            }
         });
     }
 
     this.GetAllRows = async function(name, callback) {
         this.db.all(`SELECT * FROM ${name}`, (err, rows) => {
             if (err) {
-                console.log("Error getting all rows.");
-                callback(null);
+                //console.log("Error getting all rows.");
+                if (callback) callback(null);
             } else {
                 if (rows) {
-                    callback(rows);
+                    if (callback) callback(rows);
                 } else {
-                    console.log("Error getting row entries.");
-                    callback(null);
+                    //console.log("Error getting row entries.");
+                    if (callback) callback(null);
                 }
             }
         });

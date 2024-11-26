@@ -19,7 +19,9 @@
         "sqlite3": "latest",
         "sqlite": "latest",
         "simplex-noise": "latest",
-        "alea": "latest"
+        "alea": "latest",
+        "pngjs": "latest",
+        "poisson-disk-sampling": "latest"
     },
     "engines": {
         "node": ">=6.0"

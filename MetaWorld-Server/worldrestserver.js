@@ -1,14 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const { minX } = require("./regiongenerator");
 
-module.exports = function(port, context, terrainGetAllFunction, terrainSetFunction, terrainModifyFunction,
+module.exports = function(port, context, terrainGetAllFunction, terrainSetFunction, terrainModifyFunction, terrainGetRangeFunction,
     entityGetAllFunction, entityPositionFunction, entityDeleteFunction, getTimeFunction) {
     let app = express();
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
 
     app.get("/getterrain", async function(req, res) {
-        terrainGetAllFunction(context, (result) => {
+        min_x = req.query.minX;
+        max_x = req.query.maxX;
+        min_y = req.query.minY;
+        max_y = req.query.maxY;
+        terrainGetRangeFunction(context, min_x, max_x, min_y, max_y, (result) => {
             res.send(JSON.stringify(result));
         });
     });
@@ -20,8 +25,9 @@ module.exports = function(port, context, terrainGetAllFunction, terrainSetFuncti
         operation = req.query.operation;
         brushType = req.query.brushType;
         layer = req.query.layer;
-
-        terrainModifyFunction(context, x, y, z, operation, brushType, layer);
+        brushSize = req.query.brushSize;
+        
+        terrainModifyFunction(context, x, y, z, operation, brushType, layer, brushSize);
 
         result = {
             "accepted": true
@@ -58,7 +64,7 @@ module.exports = function(port, context, terrainGetAllFunction, terrainSetFuncti
         res.send(JSON.stringify(result));
     });
 
-    app.get("/deletentity", async function(req, res) {
+    app.get("/deleteentity", async function(req, res) {
         instanceID = req.query.instanceID;
 
         entityDeleteFunction(context, instanceID);

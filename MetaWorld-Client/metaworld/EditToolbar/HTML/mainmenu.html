@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="assets/css/style.css" rel="stylesheet">
+		<meta name="transparent" content="true">
+	</head>
+	<body>
+		<div id="terrain-menu">
+			<div class="menu-title" id="terrain-menu-title">Terrain</div>
+			<div class="terrain-menu-left-panel">
+				<div class="terrain-menu-left-panel-btn-container" id="brush-increase-btn-container">
+					<button class="main-toolbar-btn" id="brush-increase-btn">
+						<div class="main-toolbar-btn-shortcut"></div>
+						<img draggable="false" src="assets/images/brush-increase-icon.png" width="39px" id="brush-increase-btn-img">
+					</button>
+					<div class="main-toolbar-btn-header" id="terrain-brush-size-label">Size: 1</div>
+					<button class="main-toolbar-btn" id="brush-decrease-btn">
+						<div class="main-toolbar-btn-shortcut"></div>
+						<img draggable="false" src="assets/images/brush-decrease-icon.png" width="39px" id="brush-decrease-btn-img">
+					</button>
+				</div>
+			</div>
+			<div class="terrain-menu-right-panel">
+				<div class="terrain-menu-materials-container" id="terrain-menu-materials-container">
+				</div>
+				<div class="terrain-menu-right-panel-btn-container" id="terrain-menu-right-panel-btn-container">
+					<button class="main-toolbar-small-btn" id="max-height-decrease-btn">
+						<div class="main-toolbar-btn-shortcut"></div>
+						<img draggable="false" src="assets/images/brush-decrease-icon.png" width="19px" id="max-height-decrease-btn-img">
+					</button>
+					<div class="main-toolbar-btn-info" id="terrain-max-height-label">Max Height: 1</div>
+					<button class="main-toolbar-small-btn" id="max-height-increase-btn">
+						<div class="main-toolbar-btn-shortcut"></div>
+						<img draggable="false" src="assets/images/brush-increase-icon.png" width="19px" id="max-height-increase-btn-img">
+					</button>
+				</div>
+			</div>
+		</div>
+		
+		<div id="entity-menu">
+			<div class="menu-title" id="entity-menu-title">Entities</div>
+			<div class="entity-menu-entities-container" id="entity-menu-entities-container">
+			</div>
+			<div class="entity-menu-lower-toolbar-btn-container" id="entity-lower-toolbar-btn-container">
+				<button class="entity-menu-lower-toolbar-btn" id="delete-btn">
+					<img draggable="false" src="assets/images/delete-icon.png" width="25px" id="delete-btn-img">
+					<div class="main-toolbar-btn-label" id="delete-btn-label">Delete</div>
+				</button>
+			</div>
+		</div>
+		
+		<div id="console">
+			<div class="menu-title" id="console-menu-title">Console</div>
+			<div class="console-menu-messages-container" id="console-menu-messages-container">
+			</div>
+			<div class="console-menu-lower-toolbar-container" id="console-lower-toolbar-container">
+				<input type="text" size=32 class="console-input" id="console-input"></input>
+				<button class="console-menu-lower-toolbar-btn" id="console-send-btn">
+					<img draggable="false" src="assets/images/send-icon.png" width="25px" id="send-btn-img">
+					<div class="main-toolbar-btn-label" id="send-btn-label">Send</div>
+				</button>
+			</div>
+		</div>
+		
+		<div id="main-toolbar">
+			<div class="main-toolbar-btn-container" id="terran-btn-container">
+				<button class="main-toolbar-btn" id="terrain-btn">
+					<div class="main-toolbar-btn-shortcut">t</div>
+					<img draggable="false" src="assets/images/dig-icon.png" width="39px" id="terrain-btn-img">
+					<div class="main-toolbar-btn-label" id="terrain-btn-label">Terrain</div>
+				</button>
+			</div>
+			<div class="main-toolbar-btn-container" id="entities-btn-container">
+				<button class="main-toolbar-btn" id="entities-btn">
+					<div class="main-toolbar-btn-shortcut">i</div>
+					<img draggable="false" src="assets/images/entity-icon.png" width="39px" id="entities-btn-img">
+					<div class="main-toolbar-btn-label" id="entities-btn-label">Entities</div>
+				</button>
+			</div>
+			<div class="main-toolbar-btn-container" id="entity-1-btn-container">
+				<button class="main-toolbar-btn" id="entity-1-btn">
+					<div class="main-toolbar-btn-shortcut">1</div>
+					<img draggable="false" src="assets/images/blank-icon.png" width="39px" id="entity-1-btn-img">
+					<div class="main-toolbar-btn-label" id="entity-1-btn-label">Entity 1</div>
+				</button>
+			</div>
+			<div class="main-toolbar-btn-container" id="entity-2-btn-container">
+				<button class="main-toolbar-btn" id="entity-2-btn">
+					<div class="main-toolbar-btn-shortcut">2</div>
+					<img draggable="false" src="assets/images/blank-icon.png" width="39px" id="entity-2-btn-img">
+					<div class="main-toolbar-btn-label" id="entity-2-btn-label">Entity 2</div>
+				</button>
+			</div>
+			<div class="main-toolbar-btn-container" id="entity-3-btn-container">
+				<button class="main-toolbar-btn" id="entity-3-btn">
+					<div class="main-toolbar-btn-shortcut">3</div>
+					<img draggable="false" src="assets/images/blank-icon.png" width="39px" id="entity-3-btn-img">
+					<div class="main-toolbar-btn-label" id="entity-3-btn-label">Entity 3</div>
+				</button>
+			</div>
+			<div class="main-toolbar-btn-container" id="entity-4-btn-container">
+				<button class="main-toolbar-btn" id="entity-4-btn">
+					<div class="main-toolbar-btn-shortcut">4</div>
+					<img draggable="false" src="assets/images/blank-icon.png" width="39px" id="entity-4-btn-img">
+					<div class="main-toolbar-btn-label" id="entity-4-btn-label">Entity 4</div>
+				</button>
+			</div>
+			<div class="main-toolbar-btn-container" id="console-btn-container">
+				<button class="main-toolbar-btn" id="console-btn">
+					<div class="main-toolbar-btn-shortcut">c</div>
+					<img draggable="false" src="assets/images/chat-icon.png" width="39px" id="console-btn-img">
+					<div class="main-toolbar-btn-label" id="console-btn-label">Console</div>
+				</button>
+			</div>
+		</div>
+		<script src="assets/scripts/mainmenu.js"></script>
+	</body>
+</html>

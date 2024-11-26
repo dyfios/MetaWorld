@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<veml xmlns="http://www.fivesqd.com/schemas/veml/1.3" xsi:schemaLocation="http://www.fivesqd.com/schemas/veml/1.3 schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<veml>
   <metadata>
     <title>MetaWorld Client v1.0-dev0</title>
-	<script>metaworld/Toolbar/Scripts/Toolbar.js</script>
+	<script>metaworld/EditToolbar/Scripts/toolbar.js</script>
 	<script>metaworld/vossynchronization.js</script>
 	<script>metaworld/thirdpersoncharacter.js</script>
 	<script>metaworld/worldconfiguration.js</script>
@@ -18,11 +17,173 @@
 	<inputevent input="endlook" event="EndLook();"></inputevent>
 	<inputevent input="left" event="OnLeftPress();"></inputevent>
 	<inputevent input="right" event="OnRightPress();"></inputevent>
-	<inputevent input="key" event="OnKey(?)"></inputevent>
+	<inputevent input="righttriggerpress" event="OnTriggerPress();"></inputevent>
+	<inputevent input="rightgrippress" event="OnGripPress();"></inputevent>
+	<inputevent input="key" event="OnKey(?);"></inputevent>
+	<inputevent input="endkey" event="OnKeyRelease(?);"></inputevent>
+	<inputevent input="lefttouchpadvaluechange" event="thirdPersonCharacter.MoveCharacter(?);"></inputevent>
+    <inputevent input="righttouchpadvaluechange" event="thirdPersonCharacter.LiftCharacter(?);"></inputevent>
+	<inputevent input="rightsecondarypress" event="ToggleVRMenu();"></inputevent>
+    <controlflags>
+      <left-vr-pointer>teleport</left-vr-pointer>
+      <right-vr-pointer>ui</right-vr-pointer>
+      <left-vr-poker>false</left-vr-poker>
+      <right-vr-poker>false</right-vr-poker>
+      <left-hand-interaction>false</left-hand-interaction>
+      <right-hand-interaction>false</right-hand-interaction>
+      <turn-locomotion>snap</turn-locomotion>
+      <joystick-motion>true</joystick-motion>
+      <left-grab-move>true</left-grab-move>
+      <right-grab-move>false</right-grab-move>
+      <two-handed-grab-move>false</two-handed-grab-move>
+    </controlflags>
   </metadata>
   <environment>
     <background>
       <color>gray</color>
     </background>
+    <entity xsi:type="canvasentity" tag="WASDControls">
+        <transform xsi:type="scaletransform">
+          <position x="0" y="0" z="0"></position>
+          <rotation x="1" y="1" z="0" w="1"></rotation>
+          <scale x="1" y="1" z="1"></scale>
+        </transform>
+        <entity xsi:type="buttonentity" tag="Up" on-click-event="thirdPersonCharacter.MoveCharacterOneStep(1, 0);">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.17" y="0.64"></position-percent>
+		    <size-percent x="0.1" y="0.1"></size-percent>
+          </transform>
+		  <entity xsi:type="imageentity" tag="UpImage">
+			<image-file>metaworld/ViewMenu/Images/arrow_up.png</image-file>
+			<transform xsi:type="canvastransform">
+				<position-percent x="0.5" y="0.5"></position-percent>
+				<size-percent x="1" y="1"></size-percent>
+			</transform>
+		  </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="Down" on-click-event="thirdPersonCharacter.MoveCharacterOneStep(-1, 0);">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.17" y="0.88"></position-percent>
+		    <size-percent x="0.1" y="0.1"></size-percent>
+          </transform>
+		  <entity xsi:type="imageentity" tag="DownImage">
+			<image-file>metaworld/ViewMenu/Images/arrow_down.png</image-file>
+			<transform xsi:type="canvastransform">
+				<position-percent x="0.5" y="0.5"></position-percent>
+				<size-percent x="1" y="1"></size-percent>
+			</transform>
+		  </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="Left" on-click-event="thirdPersonCharacter.MoveCharacterOneStep(0, 1);">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.07" y="0.76"></position-percent>
+		    <size-percent x="0.1" y="0.1"></size-percent>
+          </transform>
+		  <entity xsi:type="imageentity" tag="LeftImage">
+			<image-file>metaworld/ViewMenu/Images/arrow_left.png</image-file>
+			<transform xsi:type="canvastransform">
+				<position-percent x="0.5" y="0.5"></position-percent>
+				<size-percent x="1" y="1"></size-percent>
+			</transform>
+		  </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="Right" on-click-event="thirdPersonCharacter.MoveCharacterOneStep(0, -1);">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.27" y="0.76"></position-percent>
+		    <size-percent x="0.1" y="0.1"></size-percent>
+          </transform>
+		  <entity xsi:type="imageentity" tag="RightImage">
+			<image-file>metaworld/ViewMenu/Images/arrow_right.png</image-file>
+			<transform xsi:type="canvastransform">
+				<position-percent x="0.5" y="0.5"></position-percent>
+				<size-percent x="1" y="1"></size-percent>
+			</transform>
+		  </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="Jump" on-click-event="thirdPersonCharacter.LiftCharacterOneStep();">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.92" y="0.76"></position-percent>
+		    <size-percent x="0.1" y="0.1"></size-percent>
+          </transform>
+		  <entity xsi:type="textentity" tag="JumpText" font-size="14" text="Jump">
+              <transform xsi:type="canvastransform">
+	            <position-percent x="0.5" y="0.5"></position-percent>
+		        <size-percent x="1" y="1"></size-percent>
+              </transform>
+		    </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="Drop" on-click-event="thirdPersonCharacter.DropCharacterOneStep();">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.92" y="0.88"></position-percent>
+		    <size-percent x="0.1" y="0.1"></size-percent>
+          </transform>
+		  <entity xsi:type="textentity" tag="DropText" font-size="14" text="Drop">
+              <transform xsi:type="canvastransform">
+	            <position-percent x="0.5" y="0.5"></position-percent>
+		        <size-percent x="1" y="1"></size-percent>
+              </transform>
+		    </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="Mode" on-click-event="ToggleClientMode();">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.8" y="0.15"></position-percent>
+		    <size-percent x="0.1" y="0.07"></size-percent>
+          </transform>
+		  <entity xsi:type="textentity" tag="ModeText" font-size="14" text="Mode: unset">
+              <transform xsi:type="canvastransform">
+	            <position-percent x="0.5" y="0.5"></position-percent>
+		        <size-percent x="1" y="1"></size-percent>
+              </transform>
+		    </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="View" on-click-event="ToggleView();">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.92" y="0.15"></position-percent>
+		    <size-percent x="0.1" y="0.07"></size-percent>
+          </transform>
+		  <entity xsi:type="textentity" tag="ViewText" font-size="14" text="View: unset">
+              <transform xsi:type="canvastransform">
+	            <position-percent x="0.5" y="0.5"></position-percent>
+		        <size-percent x="1" y="1"></size-percent>
+              </transform>
+		    </entity>
+		</entity>
+		<entity xsi:type="buttonentity" tag="Fly" on-click-event="ToggleFly();">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.92" y="0.35"></position-percent>
+		    <size-percent x="0.1" y="0.07"></size-percent>
+          </transform>
+		  <entity xsi:type="textentity" tag="FlyText" font-size="14" text="Fly: unset">
+              <transform xsi:type="canvastransform">
+	            <position-percent x="0.5" y="0.5"></position-percent>
+		        <size-percent x="1" y="1"></size-percent>
+              </transform>
+		    </entity>
+		</entity>
+		<entity xsi:type="inputentity" tag="MoveSpeed" on-click-event="thirdPersonCharacter.MoveCharacterOneStep(-1, 0);">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.92" y="0.25"></position-percent>
+		    <size-percent x="0.1" y="0.07"></size-percent>
+          </transform>
+		</entity>
+		<entity xsi:type="textentity" tag="MoveSpeedText" font-size="14" text="Move Speed:">
+		  <transform xsi:type="canvastransform">
+			<position-percent x="0.8" y="0.25"></position-percent>
+			<size-percent x="0.1" y="0.07"></size-percent>
+		  </transform>
+		</entity>
+		<entity xsi:type="buttonentity" tag="ConsoleToggle" on-click-event="ToggleConsole();">
+          <transform xsi:type="canvastransform">
+	        <position-percent x="0.92" y="0.47"></position-percent>
+		    <size-percent x="0.1" y="0.07"></size-percent>
+          </transform>
+		  <entity xsi:type="textentity" tag="ConsoleText" font-size="14" text="Console: unset">
+              <transform xsi:type="canvastransform">
+	            <position-percent x="0.5" y="0.5"></position-percent>
+		        <size-percent x="1" y="1"></size-percent>
+              </transform>
+		    </entity>
+		</entity>
+    </entity>
   </environment>
 </veml>

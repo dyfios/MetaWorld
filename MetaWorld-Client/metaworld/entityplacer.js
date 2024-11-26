@@ -34,7 +34,19 @@ class EntityPlacer {
                 Logging.LogError("[EntityPlacer] Model Offset invalid.");
                 return;
             }
-            
+
+            if (Input.IsVR) {
+                var gridSnappedPosition = Input.GetRightHandPosition();
+                gridSnappedPosition = new Vector3(
+                    Math.round(gridSnappedPosition.x / context.gridSize.x) * context.gridSize.x + context.modelOffset.x,
+                    Math.round(gridSnappedPosition.y / context.gridSize.y) * context.gridSize.y + context.modelOffset.y,
+                    Math.round(gridSnappedPosition.z / context.gridSize.z) * context.gridSize.z + context.modelOffset.z);
+
+                context.placingEntity.SetPosition(gridSnappedPosition, false, false);
+                context.placingEntity.SetRotation(Input.GetRightHandRotation(), false, false);
+                return;
+            }
+
             var hitInfo = Input.GetPointerRaycast(Vector3.forward);
             if (hitInfo != null) {
                 if (hitInfo.entity != null) {
@@ -142,8 +154,7 @@ class EntityPlacer {
             }
             
             context.StopPlacing();
-            
-            // TODO.
+            WorldStorage.SetItem("ENTITY-DELETE-ENABLED", "TRUE");
         }
         
         this.ExitDeleteMode = function() {
@@ -153,7 +164,7 @@ class EntityPlacer {
                 return;
             }
             
-            // TODO.
+            WorldStorage.SetItem("ENTITY-DELETE-ENABLED", "FALSE");
         }
         
         this.ToggleOrientation = function() {

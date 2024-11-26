@@ -4,7 +4,7 @@ const sqliteDatabase = require("./sqliteDatabase");
 const BasicTerrainGenerator = require("./basicterraingenerator");
 const Time = require("./time");
 
-this.dbFile = "./world.db";
+this.dbFile = "./welcome_island/chunk-0.0.db";
 this.groundSeed = 1234;
 this.groundChunkSize = 512;
 this.groundChunkHeight = 32;
@@ -17,7 +17,7 @@ function StartServer(context, port) {
 
     time = new Time(context, 86400, 5);
 
-    worldRS = new worldrestserver(port, context, GetAllGround, SetGround, ModifyTerrain,
+    worldRS = new worldrestserver(port, context, GetAllGround, SetGround, ModifyTerrain, GetGroundInRange,
         GetAllEntities, PositionEntity, DeleteEntity, GetTime);
     
     console.log("Server Started.");
@@ -38,6 +38,73 @@ SetGround = async function(context, x, y, height, id) {
     }
 }
 
+GetGroundInRange = async function(context, minX, maxX, minY, maxY, callback) {
+    context.db.GetRowsWithWhereStatement("ground", "height",
+        `xindex >= ${minX} AND xindex <= ${maxX} AND yindex >= ${minY} AND yindex <= ${maxY}`,
+        "xindex, yindex",
+        (heights) => {
+        if (heights == null) {
+            callback({
+                "base_ground": {},
+                "ground_mods": {}
+            });
+            return;
+        }
+
+        heightsResult = [];
+        layersResult = [];
+        numRows = maxY - minY + 1;
+        itemsPerRow = heights.length / numRows;
+
+        rowNum = 0;
+        rowIndex = 0;
+
+        heightsResult[0] = [];
+        for (var height in heights) {
+            if (rowIndex >= itemsPerRow) {
+                rowNum++;
+                heightsResult[rowNum] = [];
+                rowIndex = 0;
+            }
+            heightsResult[rowNum].push(heights[height]["height"]);
+            rowIndex++;
+        }
+        //heightsResult = heightsResult[0].map((_, colIndex) => heightsResult.map(row => row[colIndex]));
+        context.db.GetRowsWithWhereStatement("ground", "layerid",
+            `xindex >= ${minX} AND xindex <= ${maxX} AND yindex >= ${minY} AND yindex <= ${maxY}`,
+            "xindex, yindex",
+            (layers) => {
+                rowNum = 0;
+                rowIndex = 0;
+
+                layersResult[0] = [];
+                for (var layer in layers) {
+                    if (rowIndex >= itemsPerRow) {
+                        rowNum++;
+                        layersResult[rowNum] = [];
+                        rowIndex = 0;
+                    }
+                    layersResult[rowNum].push(layers[layer]["layerid"]);
+                    rowIndex++;
+                }
+
+                layersResult = layersResult[0].map((_, colIndex) => layersResult.map(row => row[colIndex]));
+                ground = {
+                    "heights": heightsResult,
+                    "layers": layersResult
+                };
+
+                context.db.GetAllRows("ground_mods", (groundMods) => {
+                    result = {
+                        "base_ground": ground,
+                        "ground_mods": groundMods
+                    };
+                    callback(result);
+                });
+            });
+    });
+}
+
 GetAllGround = async function(context, callback) {
     context.db.GetAllRows("ground", (ground) => {
         context.db.GetAllRows("ground_mods", (groundMods) => {
@@ -50,17 +117,18 @@ GetAllGround = async function(context, callback) {
     });
 }
 
-ModifyTerrain = async function(context, x, y, z, operation, brushType, layer) {
+ModifyTerrain = async function(context, x, y, z, operation, brushType, layer, brushSize) {
     heights = await context.db.GetRows("ground_mods",
         { "x": x, "y": y, "z": z });
     if (heights == null || heights.length == 0) {
         await context.db.InsertIntoTable("ground_mods",
             { "x": x, "y": y, "z": z, "operation": "'" + operation + "'", "brushtype": "'" + brushType + "'",
-            "layer": layer }, false);
+            "layer": layer, "brushsize": brushSize }, false);
     }
     else {
         await context.db.UpdateInTable("ground_mods",
-            { "operation": operation, "brushtype": brushType, "layer": layer }, { "x": x, "y": y, "z": z });
+            { "operation": operation, "brushtype": brushType, "layer": layer, "brushsize": brushSize },
+            { "x": x, "y": y, "z": z });
     }
 }
 
@@ -83,12 +151,17 @@ PositionEntity = async function(context, entityID, variantID, instanceID, xPos, 
 }
 
 DeleteEntity = async function(context, instanceID) {
-    entities = await context.db.GetRows("entities",
+    context.db.GetRows("entities", { "instanceid": "'" + instanceID + "'" }, (entities) => {
+        if (entities != null && entities.length > 0) {
+            context.db.DeleteFromTable("entities", { "instanceid": "'" + instanceID + "'" });
+        }
+    });
+    /*entities = await context.db.GetRows("entities",
         { "instanceid": instanceID });
     
     if (entities != null && entities.length > 0) {
         await context.db.DeleteFromTable("entities", { "instanceid": instanceID });
-    }
+    }*/
 }
 
 GetAllEntities = async function(context, callback) {
@@ -115,7 +188,7 @@ CreateWorldDatabase = async function(context, dbFile, groundSeed, groundChunkSiz
 
     dbAlreadySetup = fs.existsSync(dbFile);
     await context.db.Open(dbFile);
-    if (!dbAlreadySetup) {
+    /*if (!dbAlreadySetup) {
         await CreateGroundTable(context);
         await CreateModificationsTable(context);
         await CreateEntitiesTable(context);
@@ -128,7 +201,7 @@ CreateWorldDatabase = async function(context, dbFile, groundSeed, groundChunkSiz
                 SetGround(context, i, j, chunkHeights[i][j], 0);
             }
         }
-    }
+    }*/
 }
 
 CreateGroundTable = async function(context) {
@@ -140,7 +213,7 @@ CreateGroundTable = async function(context) {
 CreateModificationsTable = async function(context) {
     await context.db.CreateTable("ground_mods", {
         "'operation'": "INT", "'x'": "INT", "'y'": "INT", "'z'": "INT",
-        "'brushtype'": "INT", "'layer'": "INT"
+        "'brushtype'": "INT", "'layer'": "INT", "'brushsize'": "INT"
     });
 }
 

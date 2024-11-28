@@ -1,10 +1,18 @@
 const express = require("express");
+const https = require("https");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 const { minX } = require("./regiongenerator");
 
 module.exports = function(port, context, terrainGetAllFunction, terrainSetFunction, terrainModifyFunction, terrainGetRangeFunction,
     entityGetAllFunction, entityPositionFunction, entityDeleteFunction, getTimeFunction) {
     let app = express();
+
+    const privateKey = fs.readFileSync('./private.key');
+    const certificate = fs.readFileSync('./certificate.crt');
+    const credentials = {key: privateKey, cert: certificate};
+    const httpsServer = https.createServer(credentials, app);
+
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
 

@@ -15,7 +15,7 @@
     "license": "MIT",
     "dependencies": {
         "@fivesquaredinteractive/vos-synchronization": "latest",
-        "express": "^4.17.3",
+        "express": "^4.21.2",
         "sqlite3": "latest",
         "sqlite": "latest",
         "simplex-noise": "latest",

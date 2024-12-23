@@ -47,8 +47,9 @@ class ThirdPersonCharacter {
         }
         
         this.GetPosition = function() {
-            if (this.characterEntityID != null) {
-                var ce = Entity.Get(this.characterEntityID);
+            var context = Context.GetContext("thirdPersonCharacterContext");
+            if (context.characterEntityID != null) {
+                var ce = Entity.Get(context.characterEntityID);
                 if (ce != null) {
                     return ce.GetPosition(false);
                 }

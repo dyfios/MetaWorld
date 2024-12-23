@@ -1,5 +1,5 @@
 const { argv } = require("process");
-const { spawn } = require('child_process');
+const { spawnSync } = require('child_process');
 
 this.minX = parseInt(argv[2]);
 this.maxX = parseInt(argv[3]);
@@ -11,10 +11,10 @@ this.groundChunkSize = argv[8];
 this.groundChunkHeight = argv[9];
 this.localNoiseFactor = argv[10];
 this.groundHeightmapScale = argv[11];
-this.largeFloraDensities = argv[12];
-this.mediumFloraDensities = argv[13];
-this.smallFloraDensities = argv[14];
-this.waterLevel = argv[15];
+this.waterLevel = argv[12];
+this.largeFloraDensities = argv[13];
+this.mediumFloraDensities = argv[14];
+this.smallFloraDensities = argv[15];
 
 this.layers = [];
 for (let i = 16; i < argv.length; i+= 2) {
@@ -31,9 +31,17 @@ for (let i = this.minX; i <= this.maxX; i++) {
             arguments.push(this.layers[layer]);
         }
         
-        let child = spawn('node', arguments);
+        let child = spawnSync('node', arguments);
         
-        child.stdout.on('data', (data) => {
+        var floraPlacerArgs = [ "floraplacer.js", this.chunkDirectory,
+            i.toString(), j.toString(), this.groundChunkSize,
+            this.groundHeightmapScale, this.largeFloraDensities,
+            this.mediumFloraDensities, this.smallFloraDensities,
+            this.waterLevel ];
+        
+        let floraPlacer = spawnSync('node', floraPlacerArgs);
+
+        /*child.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
             
@@ -64,6 +72,6 @@ for (let i = this.minX; i <= this.maxX; i++) {
                 });
             }
             console.log(`child process exited with code ${code}`);
-        });
+        });*/
     }
 }

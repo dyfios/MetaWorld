@@ -29,7 +29,7 @@ this.dbFile = "./chunk-0.0.db";
 this.layersFile = "./layers-0.0.png";
 this.heightsFile = "./heights-0.0.png";
 this.terrainFile = "./terrain-0.0.png";
-this.terrainSize = 1024;
+this.terrainSize = 512;
 
 GetAllGround = async function(context, callback) {
     context.db.GetAllRows("ground", (ground) => {
@@ -63,12 +63,15 @@ ReadDB = async function (context, callback) {
     });
 }
 
-this.terrainSize = parseInt(argv[2]);
+this.chunkXIndex = parseInt(argv[2]);
+this.chunkYIndex = parseInt(argv[3]);
+this.biomeID = parseInt(argv[4]);
+this.terrainSize = 512;
 
-this.dbFile = "./world/world-lowdetail.db";
-this.layersFile = "./layers-lowdetail.png";
-this.heightsFile = "./heights-lowdetail.png";
-this.terrainFile = "./terrain-lowdetail.png";
+this.dbFile = "./world/world-chunks/chunk-" + this.chunkXIndex + "." + this.chunkYIndex + ".db";
+//this.layersFile = "./images/layers-" + this.chunkXIndex + "." + this.chunkYIndex + ".png";
+//this.heightsFile = "./images/heights-" + this.chunkXIndex + "." + this.chunkYIndex + ".png";
+this.terrainFile = "./images/terrain-" + this.chunkXIndex + "." + this.chunkYIndex + ".png";
 
 /*let config = JSON.parse(fs.readFileSync("biomes.json", "utf8"));
 let layers = {};
@@ -79,14 +82,14 @@ for (biome in config["biomes"]) {
 }*/
 
 ReadDB(this, (result) => {
-    var layersArray = Array(this.terrainSize).fill().map(() => Array(this.terrainSize).fill(0));
+    //var layersArray = Array(this.terrainSize).fill().map(() => Array(this.terrainSize).fill(0));
     var heightsArray = Array(this.terrainSize).fill().map(() => Array(this.terrainSize).fill(0));
     result.forEach(function(value) {
-        layersArray[value["xindex"]][value["yindex"]] = value["layerid"];
+        //layersArray[value["xindex"]][value["yindex"]] = value["layerid"];
         heightsArray[value["xindex"]][value["yindex"]] = value["height"];
     });
     
-    var layersPNG = new PNG({
+    /*var layersPNG = new PNG({
         width: this.terrainSize,
         height: this.terrainSize,
         filterType: -1
@@ -96,7 +99,7 @@ ReadDB(this, (result) => {
         width: this.terrainSize,
         height: this.terrainSize,
         filterType: -1
-    });
+    });*/
 
     var terrainPNG = new PNG({
         width: this.terrainSize,
@@ -104,16 +107,16 @@ ReadDB(this, (result) => {
         filterType: -1
     });
 
-    for (var y = 0; y < layersPNG.height; y++) {
-        for (var x = 0; x < layersPNG.width; x++) {
-            var idx = (layersPNG.width * y + x) << 2;
+    for (var y = 0; y < terrainPNG.height; y++) {
+        for (var x = 0; x < terrainPNG.width; x++) {
+            var idx = (terrainPNG.width * y + x) << 2;
             /*if (layersArray[x][y] == tropicalRainforest.id) {
                 layersPNG.data[idx  ] = tropicalRainforest.r; // red
                 layersPNG.data[idx+1] = tropicalRainforest.g; // green
                 layersPNG.data[idx+2] = tropicalRainforest.b; // blue
                 layersPNG.data[idx+3] = tropicalRainforest.a; // alpha (0 is transparent)
             }*/
-            if (layersArray[x][y] == 7) {
+            /*if (layersArray[x][y] == 7) {
                 layersPNG.data[idx  ] = 209; // red
                 layersPNG.data[idx+1] = 214; // green
                 layersPNG.data[idx+2] = 222; // blue
@@ -147,7 +150,7 @@ ReadDB(this, (result) => {
             heightsPNG.data[idx  ] = heightsArray[x][y] / 2; // red
             heightsPNG.data[idx+1] = heightsArray[x][y] / 2; // green
             heightsPNG.data[idx+2] = heightsArray[x][y] / 2; // blue
-            heightsPNG.data[idx+3] = 255; // alpha (0 is transparent)
+            heightsPNG.data[idx+3] = 255; // alpha (0 is transparent)*/
 
             if (heightsArray[x][y] > 127) {
                 if (heightsArray[x][y] < 129) {
@@ -183,7 +186,7 @@ ReadDB(this, (result) => {
             }
         }
     }
-    layersPNG.pack().pipe(fs.createWriteStream(this.layersFile));
-    heightsPNG.pack().pipe(fs.createWriteStream(this.heightsFile));
+    //layersPNG.pack().pipe(fs.createWriteStream(this.layersFile));
+    //heightsPNG.pack().pipe(fs.createWriteStream(this.heightsFile));
     terrainPNG.pack().pipe(fs.createWriteStream(this.terrainFile));
 });

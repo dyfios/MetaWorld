@@ -5,7 +5,7 @@ CreateFloraDistribution = function(chunkSize, minDistance, maxDistance) {
         shape: [ chunkSize, chunkSize ],
         minDistance: minDistance,
         maxDistance: maxDistance,
-        tries: 10
+        tries: 3
     });
     var points = p.fill();
 

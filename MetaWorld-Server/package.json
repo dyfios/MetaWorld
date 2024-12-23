@@ -21,7 +21,8 @@
         "simplex-noise": "latest",
         "alea": "latest",
         "pngjs": "latest",
-        "poisson-disk-sampling": "latest"
+        "poisson-disk-sampling": "latest",
+        "sharp": "latest"
     },
     "engines": {
         "node": ">=6.0"

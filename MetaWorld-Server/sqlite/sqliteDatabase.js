@@ -23,6 +23,10 @@ module.exports = function() {
         await this.db.exec(`CREATE TABLE IF NOT EXISTS ${name} (` + colText + `)`);
     }
 
+    this.AddColumnToTable = async function (name, colName, colType) {
+        await this.db.exec(`ALTER TABLE ${name} ADD COLUMN ` + colName + " " + colType);
+    }
+
     this.TableExists = async function(name) {
         this.db.get(`IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'
             AND TABLE_NAME='${name}') SELECT 1 AS res ELSE SELECT 0 AS res`);
@@ -55,6 +59,33 @@ module.exports = function() {
             await this.db.run(`INSERT INTO ${name} (${colText}) SELECT ${valText}
                 WHERE NOT EXISTS (SELECT ${colText} FROM ${name} WHERE ${whereText})`);
         }
+    }
+
+    this.InsertBatchIntoTable = async function(name, cols, vals) {
+        colText = "";
+        valText = "";
+        for (col in cols) {
+            colText = colText + " " + cols[col] + ",";
+        }
+        for (valRow in vals) {
+            valText = valText + "(";
+            var rowEmpty = true;
+            for (val in vals[valRow]) {
+                valText = valText + vals[valRow][val] + ",";
+                rowEmpty = false;
+            }
+            if (!rowEmpty) {
+                valText = valText.substring(0, valText.length - 1);
+            }
+            valText = valText + "),";
+        }
+        if (colText.charAt(colText.length - 1) == ",") {
+            colText = colText.slice(0, -1);
+        }
+        if (valText.charAt(valText.length - 1) == ",") {
+            valText = valText.slice(0, -1);
+        }
+        await this.db.run(`INSERT INTO ${name} (${colText}) VALUES ${valText}`);
     }
     
     this.UpdateInTable = async function(name, setCols, searchCols) {

@@ -3,7 +3,6 @@ class EntityPlacer {
         this.placingEntity = null;
         this.modelOffset = null;
         this.placingOffset = null;
-        this.gridSize = Vector3.one;
         this.placementLocked = false;
         this.entityIndex = null;
         this.variantIndex = null;
@@ -35,13 +34,30 @@ class EntityPlacer {
                 return;
             }
 
+            var gridEnabled = false;
+            if (WorldStorage.GetItem("ENTITY-GRID-ENABLED") == "TRUE") {
+                gridEnabled = true;
+            }
+
+            var gridSize = WorldStorage.GetItem("ENTITY-GRID-SIZE");
+            if (gridSize === null || gridSize <= 0) {
+                gridSize = 1;
+            }
+
             if (Input.IsVR) {
                 var gridSnappedPosition = Input.GetRightHandPosition();
-                gridSnappedPosition = new Vector3(
-                    Math.round(gridSnappedPosition.x / context.gridSize.x) * context.gridSize.x + context.modelOffset.x,
-                    Math.round(gridSnappedPosition.y / context.gridSize.y) * context.gridSize.y + context.modelOffset.y,
-                    Math.round(gridSnappedPosition.z / context.gridSize.z) * context.gridSize.z + context.modelOffset.z);
-
+                if (gridEnabled) {
+                    gridSnappedPosition = new Vector3(
+                        Math.round(gridSnappedPosition.x / gridSize) * gridSize + context.modelOffset.x,
+                        Math.round(gridSnappedPosition.y / gridSize) * gridSize + context.modelOffset.y,
+                        Math.round(gridSnappedPosition.z / gridSize) * gridSize + context.modelOffset.z);
+                }
+                else {
+                    gridSnappedPosition = new Vector3(
+                        gridSnappedPosition.x + context.modelOffset.x,
+                        gridSnappedPosition.y + context.modelOffset.y,
+                        gridSnappedPosition.z + context.modelOffset.z);
+                }
                 context.placingEntity.SetPosition(gridSnappedPosition, false, false);
                 context.placingEntity.SetRotation(Input.GetRightHandRotation(), false, false);
                 return;
@@ -51,30 +67,38 @@ class EntityPlacer {
             if (hitInfo != null) {
                 if (hitInfo.entity != null) {
                     if (hitInfo.entity != context.placingEntity) {
-                        var gridSnappedPosition = new Vector3(
-                        Math.round(hitInfo.hitPoint.x / context.gridSize.x) * context.gridSize.x + context.modelOffset.x,
-                        Math.round(hitInfo.hitPoint.y / context.gridSize.y) * context.gridSize.y + context.modelOffset.y,
-                        Math.round(hitInfo.hitPoint.z / context.gridSize.z) * context.gridSize.z + context.modelOffset.z);
-                        
-                        if (hitInfo.hitPointNormal.x >= normalPlacementThreshold) {
-                            gridSnappedPosition.x += context.gridSize.x;
+                        var gridSnappedPosition;
+                        if (gridEnabled) {
+                            gridSnappedPosition = new Vector3(
+                                Math.round(hitInfo.hitPoint.x / gridSize) * gridSize + context.modelOffset.x,
+                                Math.round(hitInfo.hitPoint.y / gridSize) * gridSize + context.modelOffset.y,
+                                Math.round(hitInfo.hitPoint.z / gridSize) * gridSize + context.modelOffset.z);
+                            if (hitInfo.hitPointNormal.x >= normalPlacementThreshold) {
+                                gridSnappedPosition.x += gridSize;
+                            }
+                            else if (hitInfo.hitPointNormal.x <= -1 * normalPlacementThreshold) {
+                                gridSnappedPosition.x -= gridSize;
+                            }
+                            
+                            if (hitInfo.hitPointNormal.y >= normalPlacementThreshold) {
+                                //gridSnappedPosition.y += gridSize;
+                            }
+                            else if (hitInfo.hitPointNormal.y <= -1 * normalPlacementThreshold) {
+                                gridSnappedPosition.y -= gridSize;
+                            }
+                            
+                            if (hitInfo.hitPointNormal.z >= normalPlacementThreshold) {
+                                //gridSnappedPosition.z += gridSize;
+                            }
+                            else if (hitInfo.hitPointNormal.z <= -1 * normalPlacementThreshold) {
+                                gridSnappedPosition.z -= gridSize;
+                            }
                         }
-                        else if (hitInfo.hitPointNormal.x <= -1 * normalPlacementThreshold) {
-                            gridSnappedPosition.x -= context.gridSize.x;
-                        }
-                        
-                        if (hitInfo.hitPointNormal.y >= normalPlacementThreshold) {
-                            //gridSnappedPosition.y += context.gridSize.y;
-                        }
-                        else if (hitInfo.hitPointNormal.y <= -1 * normalPlacementThreshold) {
-                            gridSnappedPosition.y -= context.gridSize.y;
-                        }
-                        
-                        if (hitInfo.hitPointNormal.z >= normalPlacementThreshold) {
-                            //gridSnappedPosition.z += context.gridSize.z;
-                        }
-                        else if (hitInfo.hitPointNormal.z <= -1 * normalPlacementThreshold) {
-                            gridSnappedPosition.z -= context.gridSize.z;
+                        else {
+                            gridSnappedPosition = new Vector3(
+                                hitInfo.hitPoint.x + context.modelOffset.x,
+                                hitInfo.hitPoint.y + context.modelOffset.y,
+                                hitInfo.hitPoint.z + context.modelOffset.z);
                         }
                         
                         context.placingEntity.SetPosition(gridSnappedPosition, false, false);
@@ -83,7 +107,8 @@ class EntityPlacer {
             }
         }
         
-        this.StartPlacing = function(entityToPlace, entityIndex, variantIndex, entityID, variantID, instanceID, offset = Vector3.zero, placementOffset = Vector3.zero, gridSize = Vector3.one) {
+        this.StartPlacing = function(entityToPlace, entityIndex, variantIndex, entityID, variantID, modelPath, instanceID,
+                offset = Vector3.zero, rotation = Quaternion.identity, placementOffset = Vector3.zero) {
             WorldStorage.SetItem("TERRAIN-EDIT-LAYER", "-1");
             var context = Context.GetContext("entityPlacementContext");
             if (context == null) {
@@ -103,8 +128,8 @@ class EntityPlacer {
                 return;
             }
             
-            context.gridSize = gridSize;
             context.modelOffset = offset;
+            context.modelRotation = rotation;
             context.placingOffset = placementOffset;
             context.placingEntity = entityToPlace;
             context.placementLocked = true;
@@ -112,6 +137,7 @@ class EntityPlacer {
             context.variantIndex = variantIndex;
             context.entityID = entityID;
             context.variantID = variantID;
+            context.modelPath = modelPath;
             context.instanceID = instanceID;
             context.orientationIndex = 0;
             Context.DefineContext("entityPlacementContext", context);
@@ -124,6 +150,11 @@ class EntityPlacer {
                 return;
             }
             
+            var keepSpawning = false;
+            if (WorldStorage.GetItem("ENTITY-KEEP-SPAWNING") === "TRUE") {
+                keepSpawning = true;
+            }
+
             if (context.placingEntity == null) {
                 //Logging.LogWarning("[EntityPlacer] Placing Entity not assigned. Cannot stop placing.");
                 return;
@@ -133,16 +164,43 @@ class EntityPlacer {
                 return;
             }
             
-            var pos = context.placingEntity.GetPosition(false);
+            var pos = GetWorldPositionForRenderedPosition(context.placingEntity.GetPosition(false));
             var rot = context.placingEntity.GetRotation(false);
-            HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/positionentity?entityID=" + context.entityID
-                + "&variantID=" + context.variantID + "&instanceID='" + context.instanceID + "'&xPosition=" + pos.x + "&yPosition=" + pos.y + "&zPosition=" + pos.z
+            var terrainIndex = GetChunkIndexForWorldPos(pos);
+            var chunkPos = GetChunkPosForWorldPos(pos, terrainIndex);
+            HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/positionentity?chunkX="
+                + terrainIndex.x + "&chunkY=" + terrainIndex.y + "&entityID=" + context.entityID + "&variantID="
+                + context.variantID + "&instanceID='" + context.instanceID + "'&xPosition=" + chunkPos.x + "&yPosition="
+                + chunkPos.y + "&zPosition=" + chunkPos.z
                 + "&xRotation=" + rot.x + "&yRotation=" + rot.y + "&zRotation=" + rot.z + "&wRotation=" + rot.w, null);
             
             vosSynchronizer.SendEntityAddUpdate(context.instanceID, "{x:" + pos.x + ",y:" + pos.y + ",z:" + pos.z + "}",
                 "{x:" + rot.x + ",y:" + rot.y + ",z:" + rot.z + ",w:" + rot.w + "}");
             
+            context.placingEntity.SetParent(GetTerrainTileForIndex(terrainIndex));
             context.placingEntity = null;
+            
+            if (keepSpawning === true) {
+                var instanceUUID = UUID.NewUUID().ToString();
+                LoadEntity(instanceUUID, context.entityIndex, context.variantIndex, context.entityID, context.variantID,
+                    context.modelPath, context.modelOffset, context.placingOffset, context.modelRotation);
+            }
+
+            Context.DefineContext("entityPlacementContext", context);
+        }
+
+        this.CancelPlacing = function() {
+            var context = Context.GetContext("entityPlacementContext");
+            if (context == null) {
+                Logging.LogError("[EntityPlacer] Unable to get context.");
+                return;
+            }
+
+            if (context.placingEntity != null) {
+                context.placingEntity.Delete();
+                context.placingEntity = null;
+            }
+
             Context.DefineContext("entityPlacementContext", context);
         }
         

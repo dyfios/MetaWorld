@@ -1,5 +1,5 @@
 const BasicTerrainGenerator = require("./basicterraingenerator");
-const sqliteDatabase = require("./sqliteDatabase");
+const sqliteDatabase = require("../sqlite/sqliteDatabase");
 const fs = require("fs");
 
 this.dbFile = "./world-73-86.db";

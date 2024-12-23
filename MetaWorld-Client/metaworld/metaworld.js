@@ -10,13 +10,14 @@ let characterLoaded = false;
 let sessionJoined = false;
 let entityPlacer = new EntityPlacer();
 Context.DefineContext("ENTITYPLACERCONTEXT", entityPlacer);
-let worldRenderer = new WorldRenderer(Vector3.zero);
 let thirdPersonCharacter = null;
 let thirdPersonCharacterModel = null;
 let thirdPersonCharacterOffset = Vector3.zero;
 let thirdPersonCharacterRotation = Quaternion.identity;
 let thirdPersonCharacterLabelOffset = Vector3.zero;
+let worldStartPos = Vector3.zero;
 HandleQueryParams();
+let worldRenderer = new WorldRenderer(worldStartPos);
 
 let vosSynchronizer = null;
 
@@ -103,6 +104,16 @@ function HandleQueryParams() {
     var thirdPersonCharacterLabelOffsetZ = World.GetQueryParam("AVATAR_LABEL_OFFSET_Z");
     if (thirdPersonCharacterLabelOffsetX != null && thirdPersonCharacterLabelOffsetY != null && thirdPersonCharacterLabelOffsetZ != null) {
         thirdPersonCharacterLabelOffset = new Vector3(thirdPersonCharacterLabelOffsetX, thirdPersonCharacterLabelOffsetY, thirdPersonCharacterLabelOffsetZ);
+    }
+
+    var worldPosX = World.GetQueryParam("WORLD_POS_X");
+    var worldPosY = World.GetQueryParam("WORLD_POS_Y");
+    var worldPosZ = World.GetQueryParam("WORLD_POS_Z");
+    if (worldPosX != null && worldPosY != null && worldPosZ != null) {
+        worldStartPos = new Vector3(worldPosX, worldPosY, worldPosZ);
+    }
+    else {
+        // Set to a default.
     }
 }
 
@@ -302,6 +313,7 @@ function OnLeftPress() {
                 layerToDig = parseInt(WorldStorage.GetItem("TERRAIN-EDIT-LAYER"));
                 brushSize = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-SIZE"));
                 brushMinHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MIN-HEIGHT"));
+                terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
                 if (layerToDig > -1) {
                     alignedHitPoint = new Vector3(
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
@@ -309,7 +321,8 @@ function OnLeftPress() {
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
                     if (alignedHitPoint.y >= brushMinHeight) {
                         hitInfo.entity.Dig(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToDig, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
+                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "dig" +
                             "&brushType=roundedCube&layer=" + layerToDig + "&brushSize=" + brushSize, null);
                         vosSynchronizer.SendTerrainDigUpdate("{x:" + alignedHitPoint.x + ",y:" +
@@ -320,7 +333,9 @@ function OnLeftPress() {
 
             if (WorldStorage.GetItem("ENTITY-DELETE-ENABLED") == "TRUE") {
                 if (hitInfo.entity instanceof MeshEntity) {
-                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?instanceID="
+                    terrainIndex = GetTerrainTileIndexForEntity(hitInfo.entity);
+                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?chunkX=" +
+                        terrainIndex.x + "&chunkY=" + terrainIndex.y + "&instanceID="
                         + hitInfo.entity.id.ToString(), null);
                     vosSynchronizer.SendEntityDeleteUpdate(hitInfo.entity.id.ToString());
                     hitInfo.entity.Delete();
@@ -333,6 +348,8 @@ function OnLeftPress() {
 function OnRightPress() {
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     
+    entityPlacer.CancelPlacing();
+
     hitInfo = Input.GetPointerRaycast(Vector3.forward);
     
     if (hitInfo != null) {
@@ -341,6 +358,7 @@ function OnRightPress() {
                 layerToBuild = parseInt(WorldStorage.GetItem("TERRAIN-EDIT-LAYER"));
                 brushSize = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-SIZE"));
                 brushMaxHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MAX-HEIGHT"));
+                terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
                 if (layerToBuild > -1) {
                     alignedHitPoint = new Vector3(
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
@@ -348,7 +366,8 @@ function OnRightPress() {
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
                     if (alignedHitPoint.y <= brushMaxHeight) {
                         hitInfo.entity.Build(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToBuild, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
+                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "build" +
                             "&brushType=roundedCube&layer=" + layerToBuild + "&brushSize=" + brushSize, null);
                         vosSynchronizer.SendTerrainBuildUpdate("{x:" + alignedHitPoint.x + ",y:" +
@@ -373,14 +392,16 @@ function OnTriggerPress() {
                 layerToDig = parseInt(WorldStorage.GetItem("TERRAIN-EDIT-LAYER"));
                 brushSize = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-SIZE"));
                 brushMinHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MIN-HEIGHT"));
-                if (layerToDig > -1) {Logging.Log("sff");
+                terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
+                if (layerToDig > -1) {
                     alignedHitPoint = new Vector3(
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.y / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
-                    if (alignedHitPoint.y >= brushMinHeight) {Logging.Log("wwe");
+                    if (alignedHitPoint.y >= brushMinHeight) {
                         hitInfo.entity.Dig(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToDig, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
+                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "dig" +
                             "&brushType=roundedCube&layer=" + layerToDig + "&brushSize=" + brushSize, null);
                         vosSynchronizer.SendTerrainDigUpdate("{x:" + alignedHitPoint.x + ",y:" +
@@ -391,7 +412,9 @@ function OnTriggerPress() {
 
             if (WorldStorage.GetItem("ENTITY-DELETE-ENABLED") == "TRUE") {
                 if (hitInfo.entity instanceof MeshEntity) {
-                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?instanceID="
+                    terrainIndex = GetTerrainTileIndexForEntity(hitInfo.entity);
+                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?chunkX=" +
+                        terrainIndex.x + "&chunkY=" + terrainIndex.y + "&instanceID="
                         + hitInfo.entity.id.ToString(), null);
                     vosSynchronizer.SendEntityDeleteUpdate(hitInfo.entity.id.ToString());
                     hitInfo.entity.Delete();
@@ -412,6 +435,7 @@ function OnGripPress() {
                 layerToBuild = parseInt(WorldStorage.GetItem("TERRAIN-EDIT-LAYER"));
                 brushSize = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-SIZE"));
                 brushMaxHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MAX-HEIGHT"));
+                terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
                 if (layerToBuild > -1) {
                     alignedHitPoint = new Vector3(
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
@@ -419,7 +443,8 @@ function OnGripPress() {
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
                     if (alignedHitPoint.y <= brushMaxHeight) {
                         hitInfo.entity.Build(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToBuild, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
+                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "build" +
                             "&brushType=roundedCube&layer=" + layerToBuild + "&brushSize=" + brushSize, null);
                         vosSynchronizer.SendTerrainBuildUpdate("{x:" + alignedHitPoint.x + ",y:" +

@@ -1,13 +1,13 @@
-module.exports = function(context, secondsPerDay, updateFrequency) {
+module.exports = function(context, timeGetFunction, timeSetFunction, secondsPerDay, updateFrequency) {
     setInterval(async function() {
-        await context.db.GetAllRows("time", (rows) => {
-            if (rows == null) {
+        timeGetFunction(context, (row) => {
+            if (row == null) {
                 day = 0;
                 seconds = 0;
             }
             else {
-                day = rows[0].day;
-                seconds = rows[0].seconds;
+                day = row.day;
+                seconds = row.seconds;
 
                 seconds += updateFrequency;
                 if (seconds > secondsPerDay) {
@@ -15,7 +15,7 @@ module.exports = function(context, secondsPerDay, updateFrequency) {
                     day += 1;
                 }
             }
-            context.db.UpdateInTable("time", { "day": day, "seconds": seconds });
-        });
+            timeSetFunction(context, day, seconds);
+        })
     }, updateFrequency * 1000);
 }

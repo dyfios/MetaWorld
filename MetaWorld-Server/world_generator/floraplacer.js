@@ -1,6 +1,6 @@
 const { argv } = require("process");
 const ChunkFloraGenerator = require("./chunkfloragenerator");
-const sqliteDatabase = require("./sqliteDatabase");
+const sqliteDatabase = require("../sqlite/sqliteDatabase");
 const fs = require("fs");
 const path = require("path");
 const { v4: uuidv4 } = require('uuid');
@@ -39,7 +39,7 @@ PlaceFlora = async function(context, dbFile, groundChunkSize, groundHeightmapSca
     floraDensity = summedFloraWeights / numberOfFloraEntities;
     floraLocations = ChunkFloraGenerator.CreateFloraDistribution(
         groundChunkSize, 5 + ((1 - floraDensity) * 25),
-        100 + ((1 - floraDensity) * groundChunkSize));
+        200 + ((1 - floraDensity) * groundChunkSize));
     
     for (var floraLocation in floraLocations) {
         floraTypeCorrelator = Math.random() * summedFloraWeights;
@@ -73,7 +73,7 @@ PlaceFlora = async function(context, dbFile, groundChunkSize, groundHeightmapSca
         floraLocationHeight = GetGroundHeight(
             context, Math.round(floraLocations[floraLocation][0]), Math.round(floraLocations[floraLocation][1]),
             floraLocations[floraLocation][0], floraLocations[floraLocation][1], floraType, (x, y, ft, height) => {
-            if (height != null && height > waterLevel) {
+            if (height != null && height > context.waterLevel + 1) {
                 PositionEntity(context, ft["entity-id"], ft["variant-id"], "'" + uuidv4() + "'", y * groundHeightmapScale, -1, x * groundHeightmapScale, 0, 0, 0, 1);
             }
         });

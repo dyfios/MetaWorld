@@ -18,6 +18,23 @@ function OnSunLightEntityCreated(entity) {
     Context.DefineContext("SUNCONTEXT", context);
 }
 
+function UpdateSunTimeOfDay(timeOfDaySecs) {
+    var context = Context.GetContext("SUNCONTEXT");
+    var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
+    
+    if (timeOfDaySecs < 0 || timeOfDaySecs > configContext.worldConfig["day-length"]) {
+        Logging.LogError("Sun: Invalid timeOfDaySecs.");
+        return;
+    }
+    
+    if (context.sunEntity == null) {
+        Logging.LogError("Sun: sunEntity not set.");
+        return;
+    }
+    
+    context.sunEntity.SetEulerRotation(new Vector3(360 * (timeOfDaySecs / configContext.worldConfig["day-length"]) - 90, 0, 0), false);
+}
+
 class Sun {
     constructor(baseLightIntensity, sunLightIntensity) {
         this.baseLightIntensity = baseLightIntensity;
@@ -25,7 +42,7 @@ class Sun {
         this.baseLightEntity = null;
         this.sunEntity = null;
         
-        this.UpdateTimeOfDay = function(timeOfDaySecs) {
+        this.UpdateTimeOfDay = function(timeOfDaySecs) {Logging.Log("sadadfs ");
             var context = Context.GetContext("SUNCONTEXT");
             var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
             

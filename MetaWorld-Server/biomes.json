@@ -157,7 +157,7 @@
 			"name": "cold-desert",
 			"temperature": 0.2,
 			"moisture": 0.1,
-			"terrain-variability": 0.3,
+			"terrain-variability": 0.25,
 			"large-flora": 0.05,
 			"medium-flora": 0.1,
 			"small-flora": 0.3,
@@ -255,7 +255,7 @@
 			"name": "hot-desert",
 			"temperature": 0.9,
 			"moisture": 0.1,
-			"terrain-variability": 0.3,
+			"terrain-variability": 0.25,
 			"large-flora": 0.05,
 			"medium-flora": 0.1,
 			"small-flora": 0.1,
@@ -348,7 +348,7 @@
 			"name": "mountains",
 			"temperature": 0.2,
 			"moisture": 0.2,
-			"terrain-variability": 0.9,
+			"terrain-variability": 1,
 			"large-flora": 0.05,
 			"medium-flora": 0.1,
 			"small-flora": 0.2,
@@ -747,7 +747,7 @@
 			"name": "grassland",
 			"temperature": 0.5,
 			"moisture": 0.1,
-			"terrain-variability": 0.2,
+			"terrain-variability": 0.1,
 			"large-flora": 0.1,
 			"medium-flora": 0.1,
 			"small-flora": 0.9,
@@ -895,7 +895,7 @@
 			"name": "temperate-ocean",
 			"temperature": 0.5,
 			"moisture": 0.5,
-			"terrain-variability": 0.5,
+			"terrain-variability": 0.2,
 			"large-flora": 0.5,
 			"medium-flora": 0.5,
 			"small-flora": 0.5,
@@ -946,7 +946,7 @@
 					"layer": 1
 				},
 				"2": {
-					"max-height": 132,
+					"max-height": 129,
 					"layer": 2
 				},
 				"3": {
@@ -974,7 +974,7 @@
 				},
 				"oak-tree": {
 					"entity-id": 23,
-					"variant-id": 1,
+					"variant-id": 0,
 					"proportion": 0.3
 				}
 			},
@@ -1017,7 +1017,7 @@
 			"name": "cold-ocean",
 			"temperature": 0.2,
 			"moisture": 0.5,
-			"terrain-variability": 0.5,
+			"terrain-variability": 0.2,
 			"large-flora": 0.3,
 			"medium-flora": 0.3,
 			"small-flora": 0.3,
@@ -1068,7 +1068,7 @@
 					"layer": 1
 				},
 				"2": {
-					"max-height": 132,
+					"max-height": 129,
 					"layer": 2
 				},
 				"3": {
@@ -1096,7 +1096,7 @@
 				},
 				"oak-tree": {
 					"entity-id": 23,
-					"variant-id": 1,
+					"variant-id": 0,
 					"proportion": 0.2
 				},
 				"conifer": {
@@ -1149,7 +1149,7 @@
 			"name": "mediterranean",
 			"temperature": 0.5,
 			"moisture": 0.1,
-			"terrain-variability": 0.5,
+			"terrain-variability": 0.25,
 			"large-flora": 0.5,
 			"medium-flora": 0.5,
 			"small-flora": 0.5,
@@ -1287,7 +1287,7 @@
 			"name": "savanna",
 			"temperature": 0.9,
 			"moisture": 0.5,
-			"terrain-variability": 0.2,
+			"terrain-variability": 0.1,
 			"large-flora": 0.2,
 			"medium-flora": 0.4,
 			"small-flora": 0.7,
@@ -1420,7 +1420,7 @@
 			"name": "polar-desert",
 			"temperature": 0.1,
 			"moisture": 0.2,
-			"terrain-variability": 0.3,
+			"terrain-variability": 0.25,
 			"large-flora": 0,
 			"medium-flora": 0,
 			"small-flora": 0,
@@ -1908,7 +1908,7 @@
 			"name": "plains",
 			"temperature": 0.5,
 			"moisture": 0.5,
-			"terrain-variability": 0.1,
+			"terrain-variability": 0.01,
 			"large-flora": 0.1,
 			"medium-flora": 0.3,
 			"small-flora": 0.5,
@@ -2056,7 +2056,7 @@
 			"name": "hot-ocean",
 			"temperature": 0.9,
 			"moisture": 0.5,
-			"terrain-variability": 0.5,
+			"terrain-variability": 0.2,
 			"large-flora": 0.7,
 			"medium-flora": 0.7,
 			"small-flora": 0.7,
@@ -2321,7 +2321,7 @@
 			"name": "frozen-ocean",
 			"temperature": 0.1,
 			"moisture": 0.2,
-			"terrain-variability": 0.5,
+			"terrain-variability": 0.2,
 			"large-flora": 0,
 			"medium-flora": 0,
 			"small-flora": 0,
@@ -2528,7 +2528,7 @@
 			"name": "cold-plains",
 			"temperature": 0.2,
 			"moisture": 0.5,
-			"terrain-variability": 0.1,
+			"terrain-variability": 0.01,
 			"large-flora": 0.1,
 			"medium-flora": 0.2,
 			"small-flora": 0.6,

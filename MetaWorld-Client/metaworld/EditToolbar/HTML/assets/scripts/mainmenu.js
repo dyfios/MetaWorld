@@ -44,9 +44,9 @@ let terrainMaterialsContainer = document.getElementById("terrain-menu-materials-
 
 // Entities Menu.
 let entitiesGridToggle = document.getElementById("entities-grid-toggle");
-let entitiesGridSizeDecreaseButton = document.getElementById("entities-grid-size-decrease-btn");
+//let entitiesGridSizeDecreaseButton = document.getElementById("entities-grid-size-decrease-btn");
 let entitiesGridSizeInput = document.getElementById("entities-grid-size-input");
-let entitiesGridSizeIncreaseButton = document.getElementById("entities-grid-size-increase-btn");
+//let entitiesGridSizeIncreaseButton = document.getElementById("entities-grid-size-increase-btn");
 let entitiesFilterInput = document.getElementById("entities-entity-filter-input");
 let entitiesFilterButton = document.getElementById("entities-entity-filter-btn");
 let entitiesContainer = document.getElementById("entities-menu-entities-container");
@@ -186,6 +186,35 @@ terrainMinHeightInput.onchange = function() {
 terrainMaxHeightInput.onchange = function() {
     postWorldMessage("TOOLBAR.TERRAIN.SET-BRUSH-MAX-HEIGHT(" + terrainMaxHeightInput.value + ")");
 }
+
+terrainMinHeightInput.value = 1;
+terrainMaxHeightInput.value = 511;
+
+entitiesGridToggle.onclick = function() {
+    if (entitiesGridToggle.checked === true) {
+        postWorldMessage("TOOLBAR.ENTITY.ENABLE-GRID");
+    }
+    else {
+        postWorldMessage("TOOLBAR.ENTITY.DISABLE-GRID");
+    }
+}
+
+entitiesGridSizeInput.onchange = function() {
+    postWorldMessage("TOOLBAR.ENTITY.SET-GRID-SIZE(" + entitiesGridSizeInput.value + ")");
+}
+
+entitiesKeepSpawningToggle.onclick = function() {
+    if (entitiesKeepSpawningToggle.checked === true) {
+        postWorldMessage("TOOLBAR.ENTITY.KEEP-SPAWNING");
+    }
+    else {
+        postWorldMessage("TOOLBAR.ENTITY.DONT-KEEP-SPAWNING");
+    }
+}
+
+entitiesGridToggle.checked = true;
+entitiesGridSizeInput.value = 1;
+entitiesKeepSpawningToggle.checked = false;
 
 function SelectEntityButton(btn) {
     selectedEntityBtn = btn;

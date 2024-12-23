@@ -1,6 +1,6 @@
 const fs = require("fs");
 const PNG = require("pngjs").PNG;
-const sqliteDatabase = require("./sqliteDatabase");
+const sqliteDatabase = require("./sqlite/sqliteDatabase");
 
 let tropicalRainforest = { r: 0, g: 0, b: 0, a: 255, id: 0 };
 let coldDesert = { r: 64, g: 64, b: 64, a: 255, id: 1 };

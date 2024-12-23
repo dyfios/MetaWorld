@@ -1,6 +1,6 @@
 const { argv } = require("process");
 const ChunkTerrainGenerator = require("./chunkterraingenerator");
-const sqliteDatabase = require("./sqliteDatabase");
+const sqliteDatabase = require("../sqlite/sqliteDatabase");
 const fs = require("fs");
 const path = require("path");
 
@@ -35,15 +35,23 @@ CreateDatabase = async function (context, dbFile, groundSeed, groundChunkSize,
         chunkHeights = terrainGenerator.GetChunkHeights(xIndex, yIndex);
 
         for (let i = 0; i < groundChunkSize; i++) {
+            groundArray = [];
             for (let j = 0; j < groundChunkSize; j++) {
                 let layer = 0;
+                let reachedLastLayer = false;
                 for (var lyr in layers) {
                     if (chunkHeights[i][j] >= layers[lyr]["height"]) {
+                        reachedLastLayer = true;
+                    }
+                    else if (reachedLastLayer) {
                         layer = layers[lyr]["layer"];
+                        break;
                     }
                 }
-                SetGround(context, i, j, chunkHeights[i][j], layer);
+                groundArray.push([i, j, chunkHeights[i][j], layer]);
+                //SetGround(context, i, j, chunkHeights[i][j], layer);
             }
+            SetGround(context, ["xindex", "yindex", "height", "layerid"], groundArray);
         }
     }
 }
@@ -57,7 +65,7 @@ CreateGroundTable = async function(context) {
 CreateModificationsTable = async function(context) {
     await context.db.CreateTable("ground_mods", {
         "'operation'": "INT", "'x'": "INT", "'y'": "INT", "'z'": "INT",
-        "'brushtype'": "INT", "'layer'": "INT"
+        "'brushtype'": "INT", "'layer'": "INT", "'brushsize'": "INT"
     });
 }
 
@@ -76,8 +84,11 @@ CreateTimeTable = async function(context) {
     await context.db.InsertIntoTable("time", { "day": 0, "seconds": 0 });
 }
 
-SetGround = async function(context, x, y, height, id) {
-    context.db.GetRows("ground", { "xindex": x, "yindex": y }, (heights) => {
+SetGround = async function(context, cols, groundArray) {
+//SetGround = async function(context, x, y, height, id) {
+    context.db.InsertBatchIntoTable("ground", cols, groundArray);
+    
+    /*context.db.GetRows("ground", { "xindex": x, "yindex": y }, (heights) => {
         if (heights == null || heights.length == 0) {
             context.db.InsertIntoTable("ground",
                 { "xindex": x, "yindex": y, "height": height,
@@ -88,7 +99,7 @@ SetGround = async function(context, x, y, height, id) {
                 { "layerid": id },
                 { "xindex": x, "yindex": y, "height": height });
         }
-    });
+    });*/
 }
 
 GetGroundHeight = async function(context, x, y, callback) {

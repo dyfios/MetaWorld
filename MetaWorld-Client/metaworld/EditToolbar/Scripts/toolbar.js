@@ -173,10 +173,7 @@ function HandleToolbarMessage(msg) {
                             new Quaternion(worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.x,
                                 worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.y,
                                 worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.z,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.w),
-                            new Vector3(worldConfig.entitiesConfig[entity].variants[variant].grid_size.x,
-                                worldConfig.entitiesConfig[entity].variants[variant].grid_size.y,
-                                worldConfig.entitiesConfig[entity].variants[variant].grid_size.z));
+                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.w));
                         return;
                     }
                 }
@@ -253,6 +250,21 @@ function HandleToolbarMessage(msg) {
             mainToolbar.ExecuteJavaScript("UpdateMaxTerrainHeight(" + "5" + ");", null);
             WorldStorage.SetItem("TERRAIN-BRUSH-MAX-HEIGHT", brushSize - 1);
         }
+    }
+    else if (msg == "TOOLBAR.ENTITY.ENABLE-GRID") {
+        WorldStorage.SetItem("ENTITY-GRID-ENABLED", "TRUE");
+    }
+    else if (msg == "TOOLBAR.ENTITY.DISABLE-GRID") {
+        WorldStorage.SetItem("ENTITY-GRID-ENABLED", "FALSE");
+    }
+    else if (msg.startsWith("TOOLBAR.ENTITY.SET-GRID-SIZE")) {
+        WorldStorage.SetItem("ENTITY-GRID-SIZE", msg.substring(msg.indexOf("(") + 1, msg.indexOf(")")));
+    }
+    else if (msg == "TOOLBAR.ENTITY.KEEP-SPAWNING") {Logging.Log("a");
+        WorldStorage.SetItem("ENTITY-KEEP-SPAWNING", "TRUE");
+    }
+    else if (msg == "TOOLBAR.ENTITY.DONT-KEEP-SPAWNING") {Logging.Log("b");
+        WorldStorage.SetItem("ENTITY-KEEP-SPAWING", "FALSE");
     }
     else if (msg == "TOOLBAR.ENTITY.START-DELETING") {
         WorldStorage.SetItem("ENTITY-DELETE-ENABLED", "TRUE");
@@ -356,3 +368,9 @@ function ToggleVRMenu() {
         toolbarPanel.SetRotation(Input.GetLeftHandRotation(), false);
     }
 }
+
+WorldStorage.SetItem("TERRAIN-BRUSH-MIN-HEIGHT", "1");
+WorldStorage.SetItem("TERRAIN-BRUSH-MAX-HEIGHT", "511");
+WorldStorage.SetItem("ENTITY-GRID-SIZE", 1);
+WorldStorage.SetItem("ENTITY-GRID-ENABLED", "TRUE");
+WorldStorage.SetItem("ENTITY-KEEP-SPAWNING", "FALSE");

@@ -1,10 +1,11 @@
 const { argv } = require("process");
-const { spawn } = require("child_process");
-const sqliteDatabase = require("./sqliteDatabase");
+const { spawnSync } = require("child_process");
+const sqliteDatabase = require("../sqlite/sqliteDatabase");
 const fs = require('fs');
+const path = require("path");
 
 this.db = null;
-this.dbFile = "biomes.db";
+this.dbFile = "../world/world.db";
 
 this.minX = parseInt(argv[2]);
 this.maxX = parseInt(argv[3]);
@@ -50,7 +51,7 @@ OpenDB = async function (context, callback) {
     callback();
 }
 
-let config = JSON.parse(fs.readFileSync("biomes.json", "utf8"));
+let config = JSON.parse(fs.readFileSync("../biomes.json", "utf8"));
 
 OpenDB(this, () => {
     for (let i = this.minX; i <= this.maxX; i++) {
@@ -107,9 +108,12 @@ OpenDB(this, () => {
                     arguments.push(config["biomes"][biomeID.toString()]["terrain-layers"][layer]["layer"]);
                 }
                 
-                let child = spawn('node', arguments);
+                if (!fs.existsSync(path.join("../world", "world-chunks", "chunk-" + i + "." + j + ".db"))) {
+                    console.log("Creating " + i + "," + j);
+                    let child = spawnSync('node', arguments);
+                }
 
-                child.stdout.on('data', (data) => {
+                /*child.stdout.on('data', (data) => {
                     console.log(`stdout: ${data}`);
                 });
                     
@@ -119,7 +123,7 @@ OpenDB(this, () => {
                     
                 child.on('close', (code) => {
                     console.log(`child process exited with code ${code}`);
-                });
+                });*/
 
                 //console.log(config["biomes"][biomeID.toString()]["terrain-layers"]);
             });

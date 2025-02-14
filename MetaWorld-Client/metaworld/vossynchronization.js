@@ -20,42 +20,33 @@ class VOSSynchronizer {
         
         Context.DefineContext("VOSSynchronizationContext", this);
     }
-    
+
     Connect() {
+        var context = Context.GetContext("VOSSynchronizationContext");
         var onJoinedAction =
         `
-            context = Context.GetContext("VOSSynchronizationContext");
-            Logging.Log('[VOSSynchronization:Connect] Joined Session');
-            if (context.onJoinedSession != null) {
-                context.onJoinedSession();
-            }
-        `;
-        
-        var onConnectedAction =
-        `
-            context = Context.GetContext("VOSSynchronizationContext");
+            var context = Context.GetContext("VOSSynchronizationContext");
             if (context.OnConnected != null) {
                 context.OnConnected();
             }
             
             if (context.onMessage != null) {
-                VOSSynchronization.RegisterMessageCallback(context.host, context.port, context.onMessage);
+                VOSSynchronization.RegisterMessageCallback(context.sessionToConnectTo.id, context.onMessage);
             }
-            
-            if (context.sessionToConnectTo != null) {
-                context.clientID = VOSSynchronization.JoinSession(context.host, context.port, context.sessionToConnectTo.id,
-                    context.sessionToConnectTo.tag, ` + "`" + onJoinedAction + "`" + `
-                    );
-                Context.DefineContext("VOSSynchronizationContext", context);
+
+            Logging.Log('[VOSSynchronization:Connect] Joined Session');
+            if (context.onJoinedSession != null) {
+                context.onJoinedSession();
             }
         `;
-        
-        var result = null;
-        if (this.transport === "tcp") {
-            result = VOSSynchronization.ConnectToService(this.host, this.port, this.tls, onConnectedAction, VSSTransport.TCP);
+        Logging.Log(context.transport);
+        if (context.transport === "tcp" || context.transport === "TCP") {
+            VOSSynchronization.JoinSession(context.host, context.port, context.tls, context.sessionToConnectTo.id,
+                context.sessionToConnectTo.tag, onJoinedAction, VSSTransport.TCP);
         }
-        else if (this.transport === "websocket") {
-            result = VOSSynchronization.ConnectToService(this.host, this.port, this.tls, onConnectedAction, VSSTransport.WebSocket);
+        else if (context.transport === "websocket" || context.transport === "WEBSOCKET") {
+            VOSSynchronization.JoinSession(context.host, context.port, context.tls, context.sessionToConnectTo.id,
+                context.sessionToConnectTo.tag, onJoinedAction, VSSTransport.WebSocket);
         }
         else {
             Logging.LogError("[VOSSynchronization:Connect] Invalid transport.");
@@ -63,15 +54,15 @@ class VOSSynchronizer {
     }
     
     Disconnect() {
-        VOSSynchronization.DisconnectService(this.host, this.port);
+        //VOSSynchronization.DisconnectService(this.host, this.port);
     }
     
     AddEntity(entityID, deleteWithClient = false, resources = null) {
-        VOSSynchronization.StartSynchronizingEntity(this.host, this.port, entityID, deleteWithClient, resources);
+        VOSSynchronization.StartSynchronizingEntity(this.sessionToConnectTo.id, entityID, deleteWithClient, resources);
     }
     
     SendMessage(topic, message) {
-        VOSSynchronization.SendMessage(this.host, this.port, "CONSOLE." + topic, message);
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "CONSOLE." + topic, message);
     }
     
     SendEntityAddUpdate(entityID, position, rotation) {
@@ -81,7 +72,7 @@ class VOSSynchronizer {
             rotation: rotation
         };
         
-        VOSSynchronization.SendMessage(this.host, this.port, "ENTITY.ADD", JSON.stringify(messageInfo));
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "ENTITY.ADD", JSON.stringify(messageInfo));
     }
     
     SendEntityDeleteUpdate(entityID) {
@@ -89,7 +80,7 @@ class VOSSynchronizer {
             id: entityID
         };
         
-        VOSSynchronization.SendMessage(this.host, this.port, "ENTITY.DELETE", JSON.stringify(messageInfo));
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "ENTITY.DELETE", JSON.stringify(messageInfo));
     }
     
     SendEntityMoveUpdate(entityID, position, rotation) {
@@ -99,7 +90,7 @@ class VOSSynchronizer {
             rotation: rotation
         };
         
-        VOSSynchronization.SendMessage(this.host, this.port, "ENTITY.MOVE", JSON.stringify(messageInfo));
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "ENTITY.MOVE", JSON.stringify(messageInfo));
     }
     
     SendTerrainDigUpdate(position, brushType, lyr) {
@@ -109,7 +100,7 @@ class VOSSynchronizer {
             lyr: lyr
         };
         
-        VOSSynchronization.SendMessage(this.host, this.port, "TERRAIN.EDIT.DIG", JSON.stringify(messageInfo));
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "TERRAIN.EDIT.DIG", JSON.stringify(messageInfo));
     }
     
     SendTerrainBuildUpdate(position, brushType, lyr) {
@@ -119,6 +110,6 @@ class VOSSynchronizer {
             lyr: lyr
         };
         
-        VOSSynchronization.SendMessage(this.host, this.port, "TERRAIN.EDIT.BUILD", JSON.stringify(messageInfo));
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "TERRAIN.EDIT.BUILD", JSON.stringify(messageInfo));
     }
 }

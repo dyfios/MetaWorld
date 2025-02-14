@@ -31,7 +31,7 @@ Time.SetInterval(`
     
     if (!characterSynchronized) {
         if (characterLoaded && sessionJoined) {
-            vosSynchronizer.AddEntity(thirdPersonCharacter.characterEntityID, true);
+            //vosSynchronizer.AddEntity(thirdPersonCharacter.characterEntityID, true);
             sessionJoined = true;
             characterSynchronized = true;
         }
@@ -47,11 +47,9 @@ function SetUpSynchronizer() {
         };
         vosSynchronizer = new VOSSynchronizer(configContext.worldConfig["vos-synchronization-service"].host, configContext.worldConfig["vos-synchronization-service"].port,
             configContext.worldConfig["vos-synchronization-service"].tls, configContext.worldConfig["vos-synchronization-service"].transport, sessionInfo, OnConnect, OnJoinSession, "OnVSSMessage");
-        thirdPersonCharacter = new ThirdPersonCharacter(userName, null, -90, 90, 0.05, 0.05, startPos, OnCharacterLoaded, interfaceMode,
+        thirdPersonCharacter = new ThirdPersonCharacter(userName, null, -90, 90, 0.05, 0.05, startPos, OnCharacterLoaded, interfaceMode, true,
             thirdPersonCharacterModel, [ thirdPersonCharacterModel ], thirdPersonCharacterOffset, thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset);
-        //thirdPersonCharacter = new ThirdPersonCharacter(userName, null, -90, 90, 1, 0.1, startPos, OnCharacterLoaded, interfaceMode,
-        //    "file://C:/Users/dbake/Desktop/world/character.glb", [ "file://C:/Users/dbake/Desktop/world/character.glb" ], new Vector3(0, 0.45, 0), new Quaternion(0, 0, 0, 1), new Vector3(0, 2, 0));
-        vosSynchronizer.Connect();
+        //vosSynchronizer.Connect();
         ToggleView();
     }
 }
@@ -196,6 +194,38 @@ function ToggleView() {
             thirdPersonCharacter.SetMotionModeFree();
         }
     }
+}
+
+function DecreaseSpeed() {
+    speedText = Entity.GetByTag("SpeedText");
+    if (speedText == null) {
+        Logging.LogError("Unable to get speed text.");
+        return;
+    }
+
+    speed = parseFloat(speedText.GetText()) / 2;
+    if (speed <= 0.125) {
+        speed = 0.125
+    }
+    
+    speedText.SetText(speed.toString());
+    SetMotionMultiplier(speed);
+}
+
+function IncreaseSpeed() {
+    speedText = Entity.GetByTag("SpeedText");
+    if (speedText == null) {
+        Logging.LogError("Unable to get speed text.");
+        return;
+    }
+
+    speed = parseFloat(speedText.GetText()) * 2;
+    if (speed >= 32) {
+        speed = 32
+    }
+    
+    speedText.SetText(speed.toString());
+    SetMotionMultiplier(speed);
 }
 
 function ToggleFly() {

@@ -1,0 +1,26 @@
+{
+  "author": {
+    "name": "Dylan Baker"
+  },
+  "name": "@fivesquaredinteractive/vos-synchronization",
+  "description": "VOS Synchronization Service.",
+  "keywords": [
+    "VOS",
+    "Synchronization"
+  ],
+  "version": "1.2.0",
+  "main": "vossynchronizationservice.js",
+  "license": "MIT",
+  "dependencies": {
+    "mqtt": "latest",
+    "prompt-sync": "^4.1.6",
+    "prompt-sync-history": "latest",
+    "uuid": "latest"
+  },
+  "engines": {
+    "node": ">=6.0"
+  },
+  "bin": {
+    "vos-synchronization": "./vossynchronizationservice.js"
+  }
+}

@@ -1,0 +1,24 @@
+{
+    "server-name": "MetaWorld",
+    "bus-port": 5525,
+    "startup-apps": [
+        {
+            "name": "Rest Server",
+            "command": "node",
+            "args": [ "./world_server/restserver.js", 25252, "world", "world.db" ]
+        },
+        {
+            "name": "Synchronization Manager",
+            "command": "node",
+            "args": [ "./synchronization/synchronizationmanager.js", 15525, 15526 ]
+        }
+    ],
+    "message-triggered-apps": [
+        {
+            "name": "Message Test",
+            "topic": "vos/app/messagetest",
+            "command": "notepad.exe",
+            "default-args": [  ]
+        }
+    ]
+}

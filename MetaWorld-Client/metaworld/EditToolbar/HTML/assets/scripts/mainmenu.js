@@ -7,7 +7,6 @@ let entitiesBtn = document.getElementById("entities-btn");
 let entitiesBtnImg = document.getElementById("entities-btn-img");
 let entitiesBtnLbl = document.getElementById("entities-btn-label");
 let entitiesBtnContainer = document.getElementById("entities-btn-container");
-let terrainMenu = document.getElementById("terrain-menu");
 let brushIncreaseBtn = document.getElementById("brush-increase-btn");
 let brushIncreaseBtnImg = document.getElementById("brush-increase-btn-img");
 let brushIncreaseBtnLbl = document.getElementById("brush-increase-btn-label");
@@ -32,6 +31,9 @@ let vrMenuBackButton = document.getElementById("prev-menu-btn");
 let vrMenuForwardButton = document.getElementById("next-menu-btn");
 
 // Terrain Menu.
+let terrainMenuToggle = document.getElementById("terrain-menu-toggle");
+let terrainMenu = document.getElementById("terrain-menu");
+let terrainHideButton = document.getElementById("terrain-hide-btn");
 let terrainBrushTypeDropdown = document.getElementById("terrain-brush-type-dropdown");
 let terrainBrushSizeDecreaseButton = document.getElementById("terrain-brush-size-decrease-btn");
 let terrainBrushSizeLabel = document.getElementById("terrain-brush-size-label");
@@ -43,6 +45,9 @@ let terrainMaxHeightPickButton = document.getElementById("terrain-max-height-pic
 let terrainMaterialsContainer = document.getElementById("terrain-menu-materials-container");
 
 // Entities Menu.
+let entitiesMenuToggle = document.getElementById("entities-menu-toggle");
+let entitiesMenu = document.getElementById("entities-menu");
+let entitiesHideButton = document.getElementById("entities-hide-btn");
 let entitiesGridToggle = document.getElementById("entities-grid-toggle");
 //let entitiesGridSizeDecreaseButton = document.getElementById("entities-grid-size-decrease-btn");
 let entitiesGridSizeInput = document.getElementById("entities-grid-size-input");
@@ -54,6 +59,9 @@ let entitiesPlaceButton = document.getElementById("entities-place-button");
 let entitiesKeepSpawningToggle = document.getElementById("entities-keep-spawning-toggle");
 
 // Entity Info Menu.
+let entityInfoMenuToggle = document.getElementById("entity-info-menu-toggle");
+let entityInfoMenu = document.getElementById("entity-info-menu");
+let entityInfoHideButton = document.getElementById("entity-info-hide-btn");
 let entityInfoIDText = document.getElementById("entity-info-id-text");
 let entityInfoNameInput = document.getElementById("entity-info-name-input");
 let entityInfoMoveButton = document.getElementById("entity-info-move-button");
@@ -157,6 +165,30 @@ function SetEntityButtonImage(index, path) {
     else {
         console.error("SetEntityButtonImage: Invalid Index.");
     }
+}
+
+terrainMenuToggle.onclick = function() {
+    OpenTerrainMenu();
+}
+
+terrainHideButton.onclick = function() {
+    CloseTerrainMenu();
+}
+
+entitiesMenuToggle.onclick = function() {
+    OpenEntitiesMenu();
+}
+
+entitiesHideButton.onclick = function() {
+    CloseEntitiesMenu();
+}
+
+entityInfoMenuToggle.onclick = function() {
+    OpenEntityInfoMenu();
+}
+
+entityInfoHideButton.onclick = function() {
+    CloseEntityInfoMenu();
 }
 
 if (vrMenuBackButton != null) {
@@ -300,18 +332,35 @@ function UpdateMaxTerrainHeight(maxTerrainHeight) {
 
 function OpenTerrainMenu() {
     terrainMenu.style.visibility = "visible";
+    terrainMenuToggle.style.visibility = "hidden";
 }
 
 function CloseTerrainMenu() {
     terrainMenu.style.visibility = "hidden";
+    terrainMenuToggle.style.visibility = "visible";
 }
 
-function OpenEntityMenu() {
-    entityMenu.style.visibility = "visible";
+function OpenEntitiesMenu() {
+    entitiesMenu.style.visibility = "visible";
+    entitiesMenuToggle.style.visibility = "hidden";
 }
 
-function CloseEntityMenu() {
-    entityMenu.style.visibility = "hidden";
+function CloseEntitiesMenu() {
+    entitiesMenu.style.visibility = "hidden";
+    entitiesMenuToggle.style.visibility = "visible";
+}
+
+function OpenEntityInfoMenu() {
+    entityInfoMenu.style.visibility = "visible";
+    entityInfoMenuToggle.style.visibility = "hidden";
+}
+
+function CloseEntityInfoMenu() {
+    entityInfoMenu.style.visibility = "hidden";
+    entityInfoMenuToggle.style.visibility = "visible";
 }
 
 ToggleVRMenu();
+CloseTerrainMenu();
+CloseEntitiesMenu();
+CloseEntityInfoMenu();

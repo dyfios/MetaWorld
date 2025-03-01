@@ -10,9 +10,11 @@ function EnableTerrain(terrain) {
         Logging.LogError("EnableTerrain: Unable to get context.");
     }
     else {
-        rendererContext.chunkLoadInProgress = false;
+        rendererContext.regionLoadInProgress = false;
         HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] +
-            "/getentities?chunkX=" + terrainIndex.x + "&chunkY=" + terrainIndex.y, "OnEntitiesReceived");
+            "/getentities?regionX=" + terrainIndex.x + "&regionY=" + terrainIndex.y, "OnEntitiesReceived");
+        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] +
+            "/getregioninfo?regionX=" + terrainIndex.x + "&regionY=" + terrainIndex.y, "OnRegionInfoReceived");
     }
 }
 
@@ -67,13 +69,13 @@ async function OnTerrainReceived(terrainInfo) {
         return;
     }
     
-    if (terrainInfoObject["chunk_x"] == null) {
-        Logging.LogError("OnTerrainReceived: Unable to get chunk X index.");
+    if (terrainInfoObject["region_x"] == null) {
+        Logging.LogError("OnTerrainReceived: Unable to get region X index.");
         return;
     }
 
-    if (terrainInfoObject["chunk_y"] == null) {
-        Logging.LogError("OnTerrainReceived: Unable to get chunk Y index.");
+    if (terrainInfoObject["region_y"] == null) {
+        Logging.LogError("OnTerrainReceived: Unable to get region Y index.");
         return;
     }
 
@@ -127,7 +129,7 @@ async function OnTerrainReceived(terrainInfo) {
         terrainEntityLayerMasks[index] = new TerrainEntityLayerMask(512, 512);
     }
 
-    // Area for optimization: get in correct format to eliminate loop.
+    // Area for optimization: get in correct format to eliminate loop. This is adding bulk of delay.
     var yIdx = 0;
     var layersObject = terrainInfoObject["base_ground"]["layers"];
     for (var lyrRow in layersObject) {
@@ -221,11 +223,11 @@ async function OnTerrainReceived(terrainInfo) {
 
     var terrainEntity = TerrainEntity.CreateHybrid(null, 1024, 1024, 512, terrainInfoObject["base_ground"]["heights"],
         terrainEntityLayers, layerMasks, modifications,
-        GetRenderedPositionForWorldPosition(GetWorldPosForChunkIndex(
-            new Vector2Int(terrainInfoObject["chunk_x"], terrainInfoObject["chunk_y"]))),
-        /*new Quaternion(0, 0.7071, 0, 0.7071)*/ Quaternion.identity, null, "TerrainTile-" + terrainInfoObject["chunk_x"] + "." + terrainInfoObject["chunk_y"],
+        GetRenderedPositionForWorldPosition(GetWorldPosForRegionIndex(
+            new Vector2Int(terrainInfoObject["region_x"], terrainInfoObject["region_y"]))),
+        /*new Quaternion(0, 0.7071, 0, 0.7071)*/ Quaternion.identity, null, "TerrainTile-" + terrainInfoObject["region_x"] + "." + terrainInfoObject["region_y"],
         "EnableTerrain");
-    rendererContext.terrainTiles[terrainInfoObject["chunk_x"] + "." + terrainInfoObject["chunk_y"]] = terrainEntity;
+    rendererContext.terrainTiles[terrainInfoObject["region_x"] + "." + terrainInfoObject["region_y"]] = terrainEntity;
     
     Context.DefineContext("MainContext", this);
 }
@@ -235,17 +237,17 @@ function OnEntitiesReceived(entityInfo) {
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     var entities = JSON.parse(entityInfo);
     
-    if (entities["chunk_x"] == null) {
-        Logging.LogError("OnEntitiesReceived: Unable to get chunk X index.");
+    if (entities["region_x"] == null) {
+        Logging.LogError("OnEntitiesReceived: Unable to get region X index.");
         return;
     }
 
-    if (entities["chunk_y"] == null) {
-        Logging.LogError("OnEntitiesReceived: Unable to get chunk Y index.");
+    if (entities["region_y"] == null) {
+        Logging.LogError("OnEntitiesReceived: Unable to get region Y index.");
         return;
     }
     
-    var terrainTile = context.terrainTiles[entities["chunk_x"] + "." + entities["chunk_y"]];
+    var terrainTile = context.terrainTiles[entities["region_x"] + "." + entities["region_y"]];
     if (terrainTile == null) {
         Logging.LogError("OnEntitiesReceived: Unable to get terrain tile.");
         return;
@@ -255,9 +257,9 @@ function OnEntitiesReceived(entityInfo) {
         var entityName = WorldStorage.GetItem("METAWORLD.CONFIGURATION.ENTITYID." + entities.entities[entity].entityid);
         var variantName = WorldStorage.GetItem("METAWORLD.CONFIGURATION.VARIANTID."
             + entities.entities[entity].entityid + "." + entities.entities[entity].variantid);
-        var entityPos = //GetRenderedPositionForWorldPosition(GetWorldPosForChunkPos(
+        var entityPos = //GetRenderedPositionForWorldPosition(GetWorldPosForRegionPos(
             new Vector3(entities.entities[entity].xposition, entities.entities[entity].yposition, entities.entities[entity].zposition);//,
-            //new Vector2Int(entities["chunk_x"], entities["chunk_y"])));
+            //new Vector2Int(entities["region_x"], entities["region_y"])));
         //var entityRot = Quaternion.Combine(new Quaternion(entities.entities[entity].xrotation, entities.entities[entity].yrotation,
         //    entities.entities[entity].zrotation, entities.entities[entity].wrotation),
         //    new Quaternion(0, 0.7071, 0, 0.7071));
@@ -268,6 +270,35 @@ function OnEntitiesReceived(entityInfo) {
                 entities.entities[entity].zrotation, entities.entities[entity].wrotation), false, terrainTile);
     }
     context.worldLoaded = true;
+}
+
+function OnRegionInfoReceived(regionInfo) {
+    var context = Context.GetContext("WORLDRENDERERCONTEXT");
+    var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
+    var region = JSON.parse(regionInfo);
+    
+    if (region == null) {
+        Logging.LogError("OnRegionInfoReceived: Unable to get region info.");
+        return;
+    }
+
+    if (region["synchronizer_id"] == null || region["synchronizer_id"] == "") {
+        Logging.LogError("OnRegionInfoReceived: Unable to get synchronizer id.");
+        return;
+    }
+
+    if (region["synchronizer_tag"] == null || region["synchronizer_tag"] == "") {
+        Logging.LogError("OnRegionInfoReceived: Unable to get synchronizer tag.");
+        return;
+    }
+    VOSSynchronization.JoinSession(configContext.worldConfig["vos-synchronization-service"]["host"],
+        configContext.worldConfig["vos-synchronization-service"]["port"],
+        configContext.worldConfig["vos-synchronization-service"].tls,
+        region["synchronizer_id"], region["synchronizer_tag"], context.worldOffset, null,
+        configContext.worldConfig["vos-synchronization-service"].transport == "tcp" ?
+            VSSTransport.TCP : VSSTransport.WebSocket);
+    context.regionSynchronizers[terrainInfoObject["region_x"] + "." + terrainInfoObject["region_y"]]
+        = region["synchronizer_id"];
 }
 
 function OnTimeReceived(timeInfo) {
@@ -305,84 +336,86 @@ function WorldMaintenance() {
         if (characterContext.characterEntity != null) {
             renderedPos = characterContext.GetPosition();
         }
-        var newChunk = GetChunkIndexForWorldPos(GetWorldPositionForRenderedPosition(renderedPos));
-        if (rendererContext.currentChunk != newChunk) {
-            rendererContext.currentChunk = newChunk;
+        var newRegion = GetRegionIndexForWorldPos(GetWorldPositionForRenderedPosition(renderedPos));
+        if (rendererContext.currentRegion != newRegion) {
+            rendererContext.currentRegion = newRegion;
         }
-        //SwitchChunk(rendererContext.currentChunk);
-        EnsureChunksAreLoaded(rendererContext.currentChunk);
-        UnloadUnnecessaryChunks(rendererContext.currentChunk);
+        //SwitchRegion(rendererContext.currentRegion);
+        EnsureRegionsAreLoaded(rendererContext.currentRegion);
+        UnloadUnnecessaryRegions(rendererContext.currentRegion);
+
+        EnsureCharacterIsInCorrectSession();
     }
 }
 
-function SwitchChunk(chunkIdx) {
+function SwitchRegion(regionIdx) {
 
 }
 
-function EnsureChunksAreLoaded(centerChunkIdx) {
+function EnsureRegionsAreLoaded(centerRegionIdx) {
     var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
-    if (rendererContext.chunkLoadInProgress == true) {
+    if (rendererContext.regionLoadInProgress == true) {
         return;
     }
 
-    if (rendererContext.terrainTiles[centerChunkIdx.x + "." + centerChunkIdx.y] == null) {
-        LoadChunk(centerChunkIdx);
+    if (rendererContext.terrainTiles[centerRegionIdx.x + "." + centerRegionIdx.y] == null) {
+        LoadRegion(centerRegionIdx);
         return;
     }
 
-    if (rendererContext.terrainTiles[centerChunkIdx.x + "." + (centerChunkIdx.y + 1)] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x, centerChunkIdx.y + 1));
+    if (rendererContext.terrainTiles[centerRegionIdx.x + "." + (centerRegionIdx.y + 1)] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x, centerRegionIdx.y + 1));
         return;
     }
 
-    if (rendererContext.terrainTiles[(centerChunkIdx.x + 1) + "." + centerChunkIdx.y] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x + 1, centerChunkIdx.y));
+    if (rendererContext.terrainTiles[(centerRegionIdx.x + 1) + "." + centerRegionIdx.y] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x + 1, centerRegionIdx.y));
         return;
     }
 
-    if (rendererContext.terrainTiles[(centerChunkIdx.x + 1) + "." + (centerChunkIdx.y + 1)] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x + 1, centerChunkIdx.y + 1));
+    if (rendererContext.terrainTiles[(centerRegionIdx.x + 1) + "." + (centerRegionIdx.y + 1)] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x + 1, centerRegionIdx.y + 1));
         return;
     }
 
-    if (rendererContext.terrainTiles[centerChunkIdx.x + "." + (centerChunkIdx.y - 1)] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x, centerChunkIdx.y - 1));
+    if (rendererContext.terrainTiles[centerRegionIdx.x + "." + (centerRegionIdx.y - 1)] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x, centerRegionIdx.y - 1));
         return;
     }
 
-    if (rendererContext.terrainTiles[(centerChunkIdx.x - 1) + "." + centerChunkIdx.y] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x - 1, centerChunkIdx.y));
+    if (rendererContext.terrainTiles[(centerRegionIdx.x - 1) + "." + centerRegionIdx.y] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x - 1, centerRegionIdx.y));
         return;
     }
 
-    if (rendererContext.terrainTiles[(centerChunkIdx.x - 1) + "." + (centerChunkIdx.y - 1)] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x - 1, centerChunkIdx.y - 1));
+    if (rendererContext.terrainTiles[(centerRegionIdx.x - 1) + "." + (centerRegionIdx.y - 1)] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x - 1, centerRegionIdx.y - 1));
         return;
     }
 
-    if (rendererContext.terrainTiles[(centerChunkIdx.x - 1) + "." + (centerChunkIdx.y + 1)] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x - 1, centerChunkIdx.y + 1));
+    if (rendererContext.terrainTiles[(centerRegionIdx.x - 1) + "." + (centerRegionIdx.y + 1)] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x - 1, centerRegionIdx.y + 1));
         return;
     }
 
-    if (rendererContext.terrainTiles[(centerChunkIdx.x + 1) + "." + (centerChunkIdx.y - 1)] == null) {
-        LoadChunk(new Vector2Int(centerChunkIdx.x + 1, centerChunkIdx.y - 1));
+    if (rendererContext.terrainTiles[(centerRegionIdx.x + 1) + "." + (centerRegionIdx.y - 1)] == null) {
+        LoadRegion(new Vector2Int(centerRegionIdx.x + 1, centerRegionIdx.y - 1));
         return;
     }
 }
 
-function UnloadUnnecessaryChunks(centerChunkIdx) {
+function UnloadUnnecessaryRegions(centerRegionIdx) {
     var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
     for (const tile in rendererContext.terrainTiles) {
-        if (tile != centerChunkIdx.x + "." + centerChunkIdx.y &&
-            tile != centerChunkIdx.x + "." + (centerChunkIdx.y + 1) &&
-            tile != (centerChunkIdx.x + 1) + "." + centerChunkIdx.y &&
-            tile != (centerChunkIdx.x + 1) + "." + (centerChunkIdx.y + 1) &&
-            tile != centerChunkIdx.x + "." + (centerChunkIdx.y - 1) &&
-            tile != (centerChunkIdx.x - 1) + "." + centerChunkIdx.y &&
-            tile != (centerChunkIdx.x - 1) + "." + (centerChunkIdx.y - 1) &&
-            tile != (centerChunkIdx.x - 1) + "." + (centerChunkIdx.y + 1) &&
-            tile != (centerChunkIdx.x + 1) + "." + (centerChunkIdx.y - 1)
+        if (tile != centerRegionIdx.x + "." + centerRegionIdx.y &&
+            tile != centerRegionIdx.x + "." + (centerRegionIdx.y + 1) &&
+            tile != (centerRegionIdx.x + 1) + "." + centerRegionIdx.y &&
+            tile != (centerRegionIdx.x + 1) + "." + (centerRegionIdx.y + 1) &&
+            tile != centerRegionIdx.x + "." + (centerRegionIdx.y - 1) &&
+            tile != (centerRegionIdx.x - 1) + "." + centerRegionIdx.y &&
+            tile != (centerRegionIdx.x - 1) + "." + (centerRegionIdx.y - 1) &&
+            tile != (centerRegionIdx.x - 1) + "." + (centerRegionIdx.y + 1) &&
+            tile != (centerRegionIdx.x + 1) + "." + (centerRegionIdx.y - 1)
         ) {
             rendererContext.terrainTiles[tile].Delete(false);
             delete rendererContext.terrainTiles[tile];
@@ -390,44 +423,96 @@ function UnloadUnnecessaryChunks(centerChunkIdx) {
     }
 }
 
-function LoadChunk(chunkIdx) {
+function EnsureCharacterIsInCorrectSession() {
+    var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
+    var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
+    var characterContext = Context.GetContext("thirdPersonCharacterContext");
+
+    if (characterContext.characterEntity === null) {
+        return;
+    }
+
+    if (rendererContext) {
+
+    }
+
+    if (rendererContext.characterSynchronizer == null) {
+        if (rendererContext.regionSynchronizers[rendererContext.currentRegion.x
+            + "." + rendererContext.currentRegion.y] == null) {
+                return;
+        }
+
+        if (!VOSSynchronization.IsSessionEstablished(
+            rendererContext.regionSynchronizers[rendererContext.currentRegion.x
+            + "." + rendererContext.currentRegion.y])) {
+            return;
+        }
+
+        VOSSynchronization.StartSynchronizingEntity(
+            rendererContext.regionSynchronizers[rendererContext.currentRegion.x
+            + "." + rendererContext.currentRegion.y], characterContext.characterEntity.id, true);
+        rendererContext.characterSynchronizer
+            = rendererContext.currentRegion.x + "." + rendererContext.currentRegion.y;
+    }
+    else if (rendererContext.characterSynchronizer
+        != rendererContext.currentRegion.x + "." + rendererContext.currentRegion.y) {
+        VOSSynchronization.StopSynchronizingEntity(
+            rendererContext.regionSynchronizers[rendererContext.characterSynchronizer],
+            characterContext.characterEntity.id);
+        
+        if (!VOSSynchronization.IsSessionEstablished(
+            rendererContext.regionSynchronizers[rendererContext.currentRegion.x
+            + "." + rendererContext.currentRegion.y])) {
+            return;
+        }
+        rendererContext.characterSynchronizer = null;
+        
+        VOSSynchronization.StartSynchronizingEntity(
+            rendererContext.regionSynchronizers[rendererContext.currentRegion.x
+            + "." + rendererContext.currentRegion.y], characterContext.characterEntity.id, true);
+        rendererContext.characterSynchronizer
+            = rendererContext.currentRegion.x + "." + rendererContext.currentRegion.y;
+    }
+}
+
+function LoadRegion(regionIdx) {
     var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     if (rendererContext == null || configContext == null) {
-        Logging.LogError("LoadChunk: Unable to get contexts.");
+        Logging.LogError("LoadRegion: Unable to get contexts.");
     }
     else {
-        rendererContext.chunkLoadInProgress = true;
-        rendererContext.terrainTiles[(chunkIdx.x + "." + chunkIdx.y)] = "loading";
+        rendererContext.regionLoadInProgress = true;
+        rendererContext.terrainTiles[(regionIdx.x + "." + regionIdx.y)] = "loading";
         HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] +
-            "/getterrain?chunkX=" + chunkIdx.x + "&chunkY=" + chunkIdx.y +
+            "/getterrain?regionX=" + regionIdx.x + "&regionY=" + regionIdx.y +
             "&minX=0&maxX=512&minY=0&maxY=512", "OnTerrainReceived");
     }
 }
 
-function GetChunkIndexForWorldPos(worldPos) {
+function GetRegionIndexForWorldPos(worldPos) {
     var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     if (configContext == null || rendererContext == null) {
-        Logging.LogError("GetChunkIndexForWorldPos: Unable to get contexts.");
+        Logging.LogError("GetRegionIndexForWorldPos: Unable to get contexts.");
         return Vector2Int.zero;
     }
     else {
-        var chunkSize_meters = rendererContext.chunkSize * rendererContext.chunkScale;
-        return new Vector2Int(Math.floor(worldPos.x / chunkSize_meters), Math.floor(worldPos.z / chunkSize_meters));
+        var regionSize_meters = rendererContext.regionSize * rendererContext.regionScale;
+        return new Vector2Int(Math.floor(worldPos.x / regionSize_meters), Math.floor(worldPos.z / regionSize_meters));
     }
 }
 
-function GetWorldPosForChunkIndex(chunkIdx) {
+function GetWorldPosForRegionIndex(regionIdx) {
     var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     if (configContext == null || rendererContext == null) {
-        Logging.LogError("GetWorldPosForChunkIndex: Unable to get contexts.");
+        Logging.LogError("GetWorldPosForRegionIndex: Unable to get contexts.");
         return Vector3.zero;
     }
     else {
-        var chunkSize_meters = rendererContext.chunkSize * rendererContext.chunkScale;
-        return new Vector3(chunkIdx.x * chunkSize_meters, 0, chunkIdx.y * chunkSize_meters);
+        var regionSize_meters = rendererContext.regionSize * rendererContext.regionScale;
+        return new Vector3(regionIdx.x * regionSize_meters, 0, regionIdx.y * regionSize_meters);
     }
 }
 
@@ -455,30 +540,30 @@ function GetRenderedPositionForWorldPosition(worldPos) {
     }
 }
 
-function GetWorldPosForChunkPos(chunkPos, chunkIdx) {
+function GetWorldPosForRegionPos(regionPos, regionIdx) {
     var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     if (configContext == null || rendererContext == null) {
-        Logging.LogError("GetWorldPosForChunkPos: Unable to get contexts.");
+        Logging.LogError("GetWorldPosForRegionPos: Unable to get contexts.");
         return Vector3.zero;
     }
     else {
-        var chunkSize_meters = rendererContext.chunkSize * rendererContext.chunkScale;
-        return new Vector3(chunkIdx.x * chunkSize_meters + chunkPos.x, chunkPos.y, chunkIdx.y * chunkSize_meters + chunkPos.z);
+        var regionSize_meters = rendererContext.regionSize * rendererContext.regionScale;
+        return new Vector3(regionIdx.x * regionSize_meters + regionPos.x, regionPos.y, regionIdx.y * regionSize_meters + regionPos.z);
     }
 }
 
-function GetChunkPosForWorldPos(worldPos, chunkIdx) {
+function GetRegionPosForWorldPos(worldPos, regionIdx) {
     var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     if (configContext == null || rendererContext == null) {
-        Logging.LogError("GetWorldPosForChunkPos: Unable to get contexts.");
+        Logging.LogError("GetWorldPosForRegionPos: Unable to get contexts.");
         return Vector3.zero;
     }
     else {
-        var chunkSize_meters = rendererContext.chunkSize * rendererContext.chunkScale;
-        return new Vector3(worldPos.z - chunkIdx.y * chunkSize_meters, worldPos.y,
-            worldPos.x - chunkIdx.x * chunkSize_meters);
+        var regionSize_meters = rendererContext.regionSize * rendererContext.regionScale;
+        return new Vector3(worldPos.z - regionIdx.y * regionSize_meters, worldPos.y,
+            worldPos.x - regionIdx.x * regionSize_meters);
     }
 }
 
@@ -488,14 +573,16 @@ class WorldRenderer {
         this.terrainTiles = {};
         this.worldLoaded = false;
         this.worldLoadInitiated = false;
-        this.chunkLoadInProgress = false;
-        this.chunkSize = 512;
-        this.chunkScale = 2;
+        this.regionLoadInProgress = false;
+        this.regionSize = 512;
+        this.regionScale = 2;
         this.currentPos = startPos;
+        this.characterSynchronizer = null;
+        this.regionSynchronizers = {};
         Context.DefineContext("WORLDRENDERERCONTEXT", this);
-        this.currentChunk = GetChunkIndexForWorldPos(startPos);
-        this.worldOffset = new Vector3(this.currentChunk.x * this.chunkSize * this.chunkScale, startPos.y,
-            this.currentChunk.y * this.chunkSize * this.chunkScale);
+        this.currentRegion = GetRegionIndexForWorldPos(startPos);
+        this.worldOffset = new Vector3(this.currentRegion.x * this.regionSize * this.regionScale, startPos.y,
+            this.currentRegion.y * this.regionSize * this.regionScale);
         this.currentPos = startPos;
         Context.DefineContext("WORLDRENDERERCONTEXT", this);
         
@@ -511,14 +598,15 @@ class WorldRenderer {
                     if (configContext.worldConfig != null && context.worldLoaded == false && context.worldLoadInitiated == false) {
                         // Set up sun.
                         context.sun = new Sun(configContext.worldConfig["base-light-intensity"], configContext.worldConfig["sun-light-intensity"]);
+                        var sunContext = Context.GetContext("SUNCONTEXT");
 
                         // Set up sky.
-                        Environment.SetSkyTexture(configContext.worldURI + "/" + configContext.worldConfig["sky-texture"]);
+                        Environment.SetLiteDayNightSky(sunContext.sunEntity);
                         
                         HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/getbiomeinfo", "OnBiomeInfoReceived");
 
                         // Set up terrain.
-                        //LoadChunk(context.currentChunk);
+                        //LoadRegion(context.currentRegion);
                         context.worldLoadInitiated = true;
                         Context.DefineContext("WORLDRENDERERCONTEXT", context);
                         UpdateSunTimeOfDay(20000);

@@ -108,7 +108,7 @@ OpenDB(this, () => {
                     arguments.push(config["biomes"][biomeID.toString()]["terrain-layers"][layer]["layer"]);
                 }
                 
-                if (!fs.existsSync(path.join("../world", "world-chunks", "chunk-" + i + "." + j + ".db"))) {
+                if (!fs.existsSync(path.join("../world", "world-regions", "region-" + i + "." + j + ".db"))) {
                     console.log("Creating " + i + "," + j);
                     let child = spawnSync('node', arguments);
                 }

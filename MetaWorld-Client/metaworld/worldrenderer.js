@@ -225,7 +225,7 @@ async function OnTerrainReceived(terrainInfo) {
         terrainEntityLayers, layerMasks, modifications,
         GetRenderedPositionForWorldPosition(GetWorldPosForRegionIndex(
             new Vector2Int(terrainInfoObject["region_x"], terrainInfoObject["region_y"]))),
-        /*new Quaternion(0, 0.7071, 0, 0.7071)*/ Quaternion.identity, null, "TerrainTile-" + terrainInfoObject["region_x"] + "." + terrainInfoObject["region_y"],
+            Quaternion.identity, null, "TerrainTile-" + terrainInfoObject["region_x"] + "." + terrainInfoObject["region_y"],
         "EnableTerrain");
     rendererContext.terrainTiles[terrainInfoObject["region_x"] + "." + terrainInfoObject["region_y"]] = terrainEntity;
     
@@ -257,17 +257,14 @@ function OnEntitiesReceived(entityInfo) {
         var entityName = WorldStorage.GetItem("METAWORLD.CONFIGURATION.ENTITYID." + entities.entities[entity].entityid);
         var variantName = WorldStorage.GetItem("METAWORLD.CONFIGURATION.VARIANTID."
             + entities.entities[entity].entityid + "." + entities.entities[entity].variantid);
-        var entityPos = //GetRenderedPositionForWorldPosition(GetWorldPosForRegionPos(
+        var entityPos =
             new Vector3(entities.entities[entity].xposition, entities.entities[entity].yposition, entities.entities[entity].zposition);//,
-            //new Vector2Int(entities["region_x"], entities["region_y"])));
-        //var entityRot = Quaternion.Combine(new Quaternion(entities.entities[entity].xrotation, entities.entities[entity].yrotation,
-        //    entities.entities[entity].zrotation, entities.entities[entity].wrotation),
-        //    new Quaternion(0, 0.7071, 0, 0.7071));
-//Logging.Log(entityRot.x + " " + entityRot.y + " " + entityRot.z + " " + entityRot.w);
+        Logging.Log("q " + JSON.stringify(configContext.entitiesConfig[entityName].variants[variantName].scripts));
         LoadEntity(entities.entities[entity].instanceid, null, null, entities.entities[entity].entityid, entities.entities[entity].variantid,
             configContext.entitiesConfig[entityName].variants[variantName].model,
             entityPos, Vector3.zero, new Quaternion(entities.entities[entity].xrotation, entities.entities[entity].yrotation,
-                entities.entities[entity].zrotation, entities.entities[entity].wrotation), false, terrainTile);
+                entities.entities[entity].zrotation, entities.entities[entity].wrotation),
+                configContext.entitiesConfig[entityName].variants[variantName].scripts, false, terrainTile);
     }
     context.worldLoaded = true;
 }

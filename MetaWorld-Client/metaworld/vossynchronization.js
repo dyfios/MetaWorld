@@ -39,7 +39,7 @@ class VOSSynchronizer {
                 context.onJoinedSession();
             }
         `;
-        Logging.Log(context.transport);
+        
         if (context.transport === "tcp" || context.transport === "TCP") {
             VOSSynchronization.JoinSession(context.host, context.port, context.tls, context.sessionToConnectTo.id,
                 context.sessionToConnectTo.tag, onJoinedAction, VSSTransport.TCP);
@@ -72,7 +72,12 @@ class VOSSynchronizer {
             rotation: rotation
         };
         
-        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "ENTITY.ADD", JSON.stringify(messageInfo));
+        var context = Context.GetContext("VOSSynchronizationContext");
+        if (context.OnConnected != null) {
+            context.OnConnected();
+        }
+
+        VOSSynchronization.SendMessage(context.sessionToConnectTo.id, "ENTITY.ADD", JSON.stringify(messageInfo));
     }
     
     SendEntityDeleteUpdate(entityID) {
@@ -112,4 +117,52 @@ class VOSSynchronizer {
         
         VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "TERRAIN.EDIT.BUILD", JSON.stringify(messageInfo));
     }
+}
+
+function SendVSSEntityAddUpdate(sessionID, entityID, position, rotation) {
+    var messageInfo = {
+        id: entityID,
+        position: position,
+        rotation: rotation
+    };
+
+    VOSSynchronization.SendMessage(sessionID, "ENTITY.ADD", JSON.stringify(messageInfo));
+}
+
+function SendVSSEntityDeleteUpdate(sessionID, entityID) {
+    var messageInfo = {
+        id: entityID
+    };
+    
+    VOSSynchronization.SendMessage(sessionID, "ENTITY.DELETE", JSON.stringify(messageInfo));
+}
+
+function SendVSSEntityMoveUpdate(sessionID, entityID, position, rotation) {
+    var messageInfo = {
+        id: entityID,
+        position: position,
+        rotation: rotation
+    };
+    
+    VOSSynchronization.SendMessage(sessionID, "ENTITY.MOVE", JSON.stringify(messageInfo));
+}
+
+function SendVSSTerrainDigUpdate(sessionID, position, brushType, lyr) {
+    var messageInfo = {
+        position: position,
+        brushType: "'" + brushType + "'",
+        lyr: lyr
+    };
+    
+    VOSSynchronization.SendMessage(sessionID, "TERRAIN.EDIT.DIG", JSON.stringify(messageInfo));
+}
+
+function SendVSSTerrainBuildUpdate(sessionID, position, brushType, lyr) {
+    var messageInfo = {
+        position: position,
+        brushType: "'" + brushType + "'",
+        lyr: lyr
+    };
+    
+    VOSSynchronization.SendMessage(sessionID, "TERRAIN.EDIT.BUILD", JSON.stringify(messageInfo));
 }

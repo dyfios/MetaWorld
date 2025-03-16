@@ -18,6 +18,7 @@ let thirdPersonCharacterLabelOffset = Vector3.zero;
 let worldStartPos = Vector3.zero;
 HandleQueryParams();
 let worldRenderer = new WorldRenderer(worldStartPos);
+let scriptRunner = new ScriptRunner();
 
 let vosSynchronizer = null;
 
@@ -333,6 +334,8 @@ function OnJoinSession() {
 function OnLeftPress() {
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     
+    var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
+
     entityPlacer.StopPlacing();
     
     hitInfo = Input.GetPointerRaycast(Vector3.forward);
@@ -344,19 +347,20 @@ function OnLeftPress() {
                 brushSize = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-SIZE"));
                 brushMinHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MIN-HEIGHT"));
                 terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
-                if (layerToDig > -1) {
+                if (layerToDig > -1) { // TODO: replace with configured grid size.
                     alignedHitPoint = new Vector3(
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.y / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
                     if (alignedHitPoint.y >= brushMinHeight) {
                         hitInfo.entity.Dig(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToDig, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
-                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?regionX=" +
+                            terrainIndex.x + "&regionY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "dig" +
                             "&brushType=roundedCube&layer=" + layerToDig + "&brushSize=" + brushSize, null);
-                        vosSynchronizer.SendTerrainDigUpdate("{x:" + alignedHitPoint.x + ",y:" +
-                            alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube", layerToDig); // TODO add brush size.
+                        SendVSSTerrainDigUpdate(rendererContext.regionSynchronizers[terrainIndex.x + "." + terrainIndex.y],
+                            "{x:" + alignedHitPoint.x + ",y:" + alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}",
+                            "roundedcube", layerToDig); // TODO add brush size.
                     }
                 }
             }
@@ -364,10 +368,14 @@ function OnLeftPress() {
             if (WorldStorage.GetItem("ENTITY-DELETE-ENABLED") == "TRUE") {
                 if (hitInfo.entity instanceof MeshEntity) {
                     terrainIndex = GetTerrainTileIndexForEntity(hitInfo.entity);
-                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?chunkX=" +
-                        terrainIndex.x + "&chunkY=" + terrainIndex.y + "&instanceID="
+                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?regionX=" +
+                        terrainIndex.x + "&regionY=" + terrainIndex.y + "&instanceID="
                         + hitInfo.entity.id.ToString(), null);
-                    vosSynchronizer.SendEntityDeleteUpdate(hitInfo.entity.id.ToString());
+                    SendVSSEntityDeleteUpdate(
+                        rendererContext.regionSynchronizers[terrainIndex.x + "." + terrainIndex.y], hitInfo.entity.id.ToString());
+                    RemoveIntervalScripts(hitInfo.entity.id.ToString());
+                    
+                    RunOnDestroyScript(hitInfo.entity.id.ToString());
                     hitInfo.entity.Delete();
                 }
             }
@@ -378,6 +386,8 @@ function OnLeftPress() {
 function OnRightPress() {
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
     
+    var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
+
     entityPlacer.CancelPlacing();
 
     hitInfo = Input.GetPointerRaycast(Vector3.forward);
@@ -390,18 +400,19 @@ function OnRightPress() {
                 brushMaxHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MAX-HEIGHT"));
                 terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
                 if (layerToBuild > -1) {
-                    alignedHitPoint = new Vector3(
+                    alignedHitPoint = new Vector3( // TODO: replace with configured grid size.
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.y / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
                     if (alignedHitPoint.y <= brushMaxHeight) {
                         hitInfo.entity.Build(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToBuild, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
-                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?regionX=" +
+                            terrainIndex.x + "&regionY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "build" +
                             "&brushType=roundedCube&layer=" + layerToBuild + "&brushSize=" + brushSize, null);
-                        vosSynchronizer.SendTerrainBuildUpdate("{x:" + alignedHitPoint.x + ",y:" +
-                            alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube", layerToBuild); // TODO add brush size.
+                        SendVSSTerrainBuildUpdate(rendererContext.regionSynchronizers[terrainIndex.x + "." + terrainIndex.y],
+                            "{x:" + alignedHitPoint.x + ",y:" + alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube",
+                            layerToBuild); // TODO add brush size.
                     }
                 }
             }
@@ -411,6 +422,8 @@ function OnRightPress() {
 
 function OnTriggerPress() {
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
+
+    var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
 
     entityPlacer.StopPlacing();
 
@@ -424,18 +437,19 @@ function OnTriggerPress() {
                 brushMinHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MIN-HEIGHT"));
                 terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
                 if (layerToDig > -1) {
-                    alignedHitPoint = new Vector3(
+                    alignedHitPoint = new Vector3( // TODO: replace with configured grid size.
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.y / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
                     if (alignedHitPoint.y >= brushMinHeight) {
                         hitInfo.entity.Dig(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToDig, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
-                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?regionX=" +
+                            terrainIndex.x + "&regionY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "dig" +
                             "&brushType=roundedCube&layer=" + layerToDig + "&brushSize=" + brushSize, null);
-                        vosSynchronizer.SendTerrainDigUpdate("{x:" + alignedHitPoint.x + ",y:" +
-                            alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube", layerToDig); // TODO add brush size.
+                        SendVSSTerrainDigUpdate(rendererContext.regionSynchronizers[terrainIndex.x + "." + terrainIndex.y],
+                            "{x:" + alignedHitPoint.x + ",y:" + alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube",
+                            layerToDig); // TODO add brush size.
                     }
                 }
             }
@@ -443,10 +457,11 @@ function OnTriggerPress() {
             if (WorldStorage.GetItem("ENTITY-DELETE-ENABLED") == "TRUE") {
                 if (hitInfo.entity instanceof MeshEntity) {
                     terrainIndex = GetTerrainTileIndexForEntity(hitInfo.entity);
-                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?chunkX=" +
-                        terrainIndex.x + "&chunkY=" + terrainIndex.y + "&instanceID="
+                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/deleteentity?regionX=" +
+                        terrainIndex.x + "&regionY=" + terrainIndex.y + "&instanceID="
                         + hitInfo.entity.id.ToString(), null);
-                    vosSynchronizer.SendEntityDeleteUpdate(hitInfo.entity.id.ToString());
+                    SendVSSEntityDeleteUpdate(rendererContext.regionSynchronizers[terrainIndex.x + "." + terrainIndex.y],
+                        hitInfo.entity.id.ToString());
                     hitInfo.entity.Delete();
                 }
             }
@@ -456,6 +471,8 @@ function OnTriggerPress() {
 
 function OnGripPress() {
     var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
+
+    var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
 
     hitInfo = Input.GetPointerRaycast(Vector3.forward, 1);
 
@@ -467,18 +484,19 @@ function OnGripPress() {
                 brushMaxHeight = parseInt(WorldStorage.GetItem("TERRAIN-BRUSH-MAX-HEIGHT"));
                 terrainIndex = GetIndexForTerrainTile(hitInfo.entity);
                 if (layerToBuild > -1) {
-                    alignedHitPoint = new Vector3(
+                    alignedHitPoint = new Vector3( // TODO: replace with configured grid size.
                         Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.y / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
                         Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
                     if (alignedHitPoint.y <= brushMaxHeight) {
                         hitInfo.entity.Build(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToBuild, brushSize);
-                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?chunkX=" +
-                            terrainIndex.x + "&chunkY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
+                        HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?regionX=" +
+                            terrainIndex.x + "&regionY=" + terrainIndex.y + "&x=" + alignedHitPoint.x +
                             "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "build" +
                             "&brushType=roundedCube&layer=" + layerToBuild + "&brushSize=" + brushSize, null);
-                        vosSynchronizer.SendTerrainBuildUpdate("{x:" + alignedHitPoint.x + ",y:" +
-                            alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube", layerToBuild); // TODO add brush size.
+                        SendVSSTerrainBuildUpdate(rendererContext.regionSynchronizers[terrainIndex.x + "." + terrainIndex.y],
+                            "{x:" + alignedHitPoint.x + ",y:" + alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube",
+                            layerToBuild); // TODO add brush size.
                     }
                 }
             }

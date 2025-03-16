@@ -72,17 +72,6 @@ class WorldConfiguration {
                     if (context.entitiesConfig[entity].variants[variant].model == null) {
                         Logging.LogError("MetaWorld->ApplyEntitiesConfig: Invalid entity variant: " + entity + ":" + variant + " missing model");
                     }
-                    else if (context.entitiesConfig[entity].variants[variant].grid_size == null) {
-                        Logging.LogError("MetaWorld->ApplyEntitiesConfig: Invalid entity variant: " + entity + ":" + variant + " missing grid_size");
-                    }
-                    else if (context.entitiesConfig[entity].variants[variant].grid_size.x == null ||
-                        context.entitiesConfig[entity].variants[variant].grid_size.y == null ||
-                        context.entitiesConfig[entity].variants[variant].grid_size.z == null) {
-                        Logging.LogError("MetaWorld->ApplyEntitiesConfig: Invalid entity variant: " + entity + ":" + variant + " incomplete grid_size");
-                    }
-                    else if (context.entitiesConfig[entity].variants[variant].valid_orientations == null) {
-                        Logging.LogError("MetaWorld->ApplyEntitiesConfig: Invalid entity variant: " + entity + ":" + variant + " missing valid_orientations");
-                    }
                     else if (context.entitiesConfig[entity].variants[variant].display_name == null) {
                         Logging.LogError("MetaWorld->ApplyEntitiesConfig: Invalid entity variant: " + entity + ":" + variant + " missing display_name");
                     }
@@ -92,10 +81,10 @@ class WorldConfiguration {
                     else {
                         context.entitiesConfig[entity].variants[variant].model =
                             context.worldURI + "/" + context.worldConfig["entities-directory"] + "/"
-                            + entity + "/" + context.entitiesConfig[entity].variants[variant].model;
+                            + context.entitiesConfig[entity].variants[variant].model;
                         context.entitiesConfig[entity].variants[variant].thumbnail =
                             context.worldURI + "/" + context.worldConfig["entities-directory"] + "/"
-                            + entity + "/" + context.entitiesConfig[entity].variants[variant].thumbnail;
+                            + context.entitiesConfig[entity].variants[variant].thumbnail;
                     }
                     
                     for (var valid_orientation in context.entitiesConfig[entity].variants[variant].valid_orientations) {
@@ -181,12 +170,12 @@ class WorldConfiguration {
         
         this.GetWorldEntities = function() {
             var context = Context.GetContext("WORLDCONFIGCONTEXT");
-            HTTPNetworking.Fetch(context.worldURI + "/" + context.worldConfig["entities-directory"] + "/entities.json", "GotEntitiesConfig");
+            HTTPNetworking.Fetch(context.worldURI + "/entities.json", "GotEntitiesConfig");
         }
         
         this.GetWorldTerrain = function() {
             var context = Context.GetContext("WORLDCONFIGCONTEXT");
-            HTTPNetworking.Fetch(context.worldURI + "/" + context.worldConfig["terrain-directory"] + "/terrain.json", "GotTerrainConfig");
+            HTTPNetworking.Fetch(context.worldURI + "/terrain.json", "GotTerrainConfig");
         }
         
         this.ApplyWorldConfig = function(config) {

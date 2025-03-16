@@ -163,17 +163,8 @@ function HandleToolbarMessage(msg) {
                     if (worldConfig.entitiesConfig[entity].variants[variant].variant_id == variantID) {
                         LoadEntity(instanceUUID, entity, variant,
                         worldConfig.entitiesConfig[entity].id, worldConfig.entitiesConfig[entity].variants[variant].variant_id,
-                        worldConfig.entitiesConfig[entity].variants[variant].model,
-                            new Vector3(worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_offset.x,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_offset.y,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_offset.z),
-                            new Vector3(worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].placement_offset.x,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].placement_offset.y,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].placement_offset.z),
-                            new Quaternion(worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.x,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.y,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.z,
-                                worldConfig.entitiesConfig[entity].variants[variant].valid_orientations[0].model_rotation.w));
+                        worldConfig.entitiesConfig[entity].variants[variant].model, Vector3.zero, Vector3.zero, Quaternion.identity,
+                        worldConfig.entitiesConfig[entity].variants[variant].scripts);
                         return;
                     }
                 }
@@ -260,10 +251,10 @@ function HandleToolbarMessage(msg) {
     else if (msg.startsWith("TOOLBAR.ENTITY.SET-GRID-SIZE")) {
         WorldStorage.SetItem("ENTITY-GRID-SIZE", msg.substring(msg.indexOf("(") + 1, msg.indexOf(")")));
     }
-    else if (msg == "TOOLBAR.ENTITY.KEEP-SPAWNING") {Logging.Log("a");
+    else if (msg == "TOOLBAR.ENTITY.KEEP-SPAWNING") {
         WorldStorage.SetItem("ENTITY-KEEP-SPAWNING", "TRUE");
     }
-    else if (msg == "TOOLBAR.ENTITY.DONT-KEEP-SPAWNING") {Logging.Log("b");
+    else if (msg == "TOOLBAR.ENTITY.DONT-KEEP-SPAWNING") {
         WorldStorage.SetItem("ENTITY-KEEP-SPAWING", "FALSE");
     }
     else if (msg == "TOOLBAR.ENTITY.START-DELETING") {

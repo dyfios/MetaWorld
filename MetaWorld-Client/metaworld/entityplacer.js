@@ -10,6 +10,7 @@ class EntityPlacer {
         this.variantID = null;
         this.instanceID = null;
         this.orientationIndex = 0;
+        this.scripts = {};
         
         this.PlacementUpdate = function() {
             var normalPlacementThreshold = 0.5;
@@ -108,7 +109,7 @@ class EntityPlacer {
         }
         
         this.StartPlacing = function(entityToPlace, entityIndex, variantIndex, entityID, variantID, modelPath, instanceID,
-                offset = Vector3.zero, rotation = Quaternion.identity, placementOffset = Vector3.zero) {
+                offset = Vector3.zero, rotation = Quaternion.identity, scripts, placementOffset = Vector3.zero) {
             WorldStorage.SetItem("TERRAIN-EDIT-LAYER", "-1");
             var context = Context.GetContext("entityPlacementContext");
             if (context == null) {
@@ -140,13 +141,21 @@ class EntityPlacer {
             context.modelPath = modelPath;
             context.instanceID = instanceID;
             context.orientationIndex = 0;
+            context.scripts = scripts;
             Context.DefineContext("entityPlacementContext", context);
+            entityToPlace.SetHighlight(true);
         }
         
         this.StopPlacing = function() {
             var context = Context.GetContext("entityPlacementContext");
             if (context == null) {
                 Logging.LogError("[EntityPlacer] Unable to get context.");
+                return;
+            }
+
+            var rendererContext = Context.GetContext("WORLDRENDERERCONTEXT");
+            if (rendererContext == null) {
+                Logging.LogError("[EntityPlacer] Unable to get renderer context.");
                 return;
             }
             
@@ -166,18 +175,43 @@ class EntityPlacer {
             
             var pos = GetWorldPositionForRenderedPosition(context.placingEntity.GetPosition(false));
             var rot = context.placingEntity.GetRotation(false);
-            var terrainIndex = GetChunkIndexForWorldPos(pos);
-            var chunkPos = GetChunkPosForWorldPos(pos, terrainIndex);
-            HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/positionentity?chunkX="
-                + terrainIndex.x + "&chunkY=" + terrainIndex.y + "&entityID=" + context.entityID + "&variantID="
-                + context.variantID + "&instanceID='" + context.instanceID + "'&xPosition=" + chunkPos.x + "&yPosition="
-                + chunkPos.y + "&zPosition=" + chunkPos.z
+            var terrainIndex = GetRegionIndexForWorldPos(pos);
+            var regionPos = GetRegionPosForWorldPos(pos, terrainIndex);
+            HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/positionentity?regionX="
+                + terrainIndex.x + "&regionY=" + terrainIndex.y + "&entityID=" + context.entityID + "&variantID="
+                + context.variantID + "&instanceID='" + context.instanceID + "'&xPosition=" + regionPos.x + "&yPosition="
+                + regionPos.y + "&zPosition=" + regionPos.z
                 + "&xRotation=" + rot.x + "&yRotation=" + rot.y + "&zRotation=" + rot.z + "&wRotation=" + rot.w, null);
             
-            vosSynchronizer.SendEntityAddUpdate(context.instanceID, "{x:" + pos.x + ",y:" + pos.y + ",z:" + pos.z + "}",
+            var regionIndex = GetRegionIndexForWorldPos(pos);
+            SendVSSEntityAddUpdate(rendererContext.regionSynchronizers[regionIndex.x + "." + regionIndex.y],
+                context.instanceID, "{x:" + pos.x + ",y:" + pos.y + ",z:" + pos.z + "}",
                 "{x:" + rot.x + ",y:" + rot.y + ",z:" + rot.z + ",w:" + rot.w + "}");
             
+            if (context.scripts != null) {
+                AddScriptEntity(context.placingEntity, context.scripts);
+
+                RunOnCreateScript(context.placingEntity.id);
+
+                if (context.scripts["0_25_update"]) {
+                    Add0_25IntervalScript(context.placingEntity, context.scripts["0_25_update"]);
+                }
+
+                if (context.scripts["0_5_update"]) {
+                    Add0_5IntervalScript(context.placingEntity, context.scripts["0_5_update"]);
+                }
+
+                if (context.scripts["1_0_update"]) {
+                    Add1_0IntervalScript(context.placingEntity, context.scripts["1_0_update"]);
+                }
+
+                if (context.scripts["2_0_update"]) {
+                    Add2_0IntervalScript(context.placingEntity, context.scripts["2_0_update"]);
+                }
+            }
+
             context.placingEntity.SetParent(GetTerrainTileForIndex(terrainIndex));
+            context.placingEntity.SetHighlight(false);
             context.placingEntity = null;
             
             if (keepSpawning === true) {

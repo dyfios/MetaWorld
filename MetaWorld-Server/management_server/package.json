@@ -4,7 +4,7 @@
   "description": "Management API for MetaWorld Worlds.",
   "main": "metaworldmanagementapi.js",
   "scripts": {
-    "test": "node metaworldmanagementapi.js"
+    "test": "node metaworldmanagementapi.js config.json"
   },
   "author": "Dylan Z. Baker",
   "license": "MIT",

@@ -10,6 +10,7 @@
 	<script>metaworld/sun.js</script>
 	<script>metaworld/worldrenderer.js</script>
 	<script>metaworld/loadingindicator.js</script>
+	<script>metaworld/scriptrunner.js</script>
     <script>metaworld/metaworld.js</script>
 	<inputevent input="move" event="Move(?);"></inputevent>
     <inputevent input="endmove" event="EndMove();"></inputevent>

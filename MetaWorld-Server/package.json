@@ -15,14 +15,14 @@
     "license": "MIT",
     "dependencies": {
         "@fivesquaredinteractive/vos-synchronization": "latest",
-        "express": "^4.17.3",
-        "sqlite3": "latest",
-        "sqlite": "latest",
-        "simplex-noise": "latest",
         "alea": "latest",
+        "express": "^4.21.2",
         "pngjs": "latest",
         "poisson-disk-sampling": "latest",
-        "sharp": "latest"
+        "sharp": "latest",
+        "simplex-noise": "latest",
+        "sqlite": "latest",
+        "sqlite3": "latest"
     },
     "engines": {
         "node": ">=6.0"

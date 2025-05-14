@@ -2,6 +2,16 @@ const fs = require("fs");
 const sqliteDatabase = require("../sqlite/sqliteDatabase");
 const { exit } = require("process");
 
+const defaultRegionOwner = "";
+const defaultOwnerRead = 1;
+const defaultOwnerWrite = 1;
+const defaultOwnerUse = 1;
+const defaultOwnerTake = 1;
+const defaultOtherRead = 0;
+const defaultOtherWrite = 0;
+const defaultOtherUse = 0;
+const defaultOtherTake = 0;
+
 async function CreateWorld(context, dbFile) {
     console.log("Creating world " + dbFile + "...");
 
@@ -35,7 +45,10 @@ CreateTimeTable = async function(context) {
 
 CreateBiomesTable = async function(context) {
     await context.db.CreateTable("biomes", {
-        "'xindex'": "INT", "'yindex'": "INT", "'biomeid'": "INT", "'state'": "INT"
+        "'xindex'": "INT", "'yindex'": "INT", "'biomeid'": "INT", "'state'": "INT",
+        "'owner'": "STRING",
+        "'ownerread'": "INT", "'ownerwrite'": "INT", "'owneruse'": "INT", "'ownertake'": "INT",
+        "'otherread'": "INT", "'otherwrite'": "INT", "'otheruse'": "INT", "'othertake'": "INT"
     });
     // TODO populate biomes.
 }
@@ -45,7 +58,11 @@ SetBiome = async function(context, x, y, biome) {
         { "xindex": x, "yindex": y });
     if (biomes == null || biomes.length == 0) {
         await context.db.InsertIntoTable("biomes",
-            { "xindex": x, "yindex": y, "biomeid": biome, "state": -1 }, false);
+            { "xindex": x, "yindex": y, "biomeid": biome, "state": -1,
+                "owner": defaultRegionOwner,
+                "ownerread": defaultOwnerRead, "ownerwrite": defaultOwnerWrite, "owneruse": defaultOwnerUse, "ownertake": defaultOwnerTake,
+                "otherread": defaultOtherRead, "otherwrite": defaultOtherWrite, "otheruse": defaultOtherUse, "othertake": defaultOtherTake
+             }, false);
     }
     else {
         await context.db.UpdateInTable("biomes",

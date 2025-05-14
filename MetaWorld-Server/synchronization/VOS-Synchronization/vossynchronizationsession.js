@@ -105,6 +105,7 @@ module.exports = function(id, tag) {
      * @param {*} labelOffset Label Offset.
      * @param {*} clientToDeleteWith Client to Delete With.
      * @param {*} onClickEvent On Click Event.
+     * @param {*} wheels Wheels.
      */
     this.AddEntityWithScale = function(id, tag, type, path, parent, position,
         rotation, scale, resources, length, width, height, heights,
@@ -113,7 +114,7 @@ module.exports = function(id, tag) {
         text, fontSize, angularVelocity, velocity, stationary,
         angularDrag, centerOfMass, drag, gravitational, mass,
         terrainModifications, modelOffset, modelRotation, labelOffset,
-        clientToDeleteWith, onClickEvent) {
+        clientToDeleteWith, onClickEvent, wheels) {
         for (entity in this.entities) {
             if (entity.uuid == id) {
                 console.warn(`[VOSSynchronizationSession->AddEntityWithScale] Duplicate UUID: ${id}. Skipping`);
@@ -124,7 +125,8 @@ module.exports = function(id, tag) {
             rotation, scale, false, false, resources, onClickEvent, length, width, height, heights,
             diffuseTextures, normalTextures, maskTextures, specularValues, metallicValues, smoothnessValues,
             layerMask, subType, text, fontSize, angularVelocity, velocity, stationary, angularDrag, centerOfMass,
-            drag, gravitational, mass, terrainModifications, modelOffset, modelRotation, labelOffset);
+            drag, gravitational, mass, terrainModifications, modelOffset, modelRotation, labelOffset, wheels,
+            null);
         this.entities.push(newEntity);
         this.clients.forEach(client => {
             if (client.uuid == clientToDeleteWith) {
@@ -172,6 +174,7 @@ module.exports = function(id, tag) {
      * @param {*} labelOffset Label Offset.
      * @param {*} clientToDeleteWith Client to Delete With.
      * @param {*} onClickEvent On Click Event.
+     * @param {*} wheels Wheels.
      */
     this.AddEntityWithSize = function(id, tag, type, path, parent, position,
         rotation, size, resources, length, width, height, heights,
@@ -179,7 +182,7 @@ module.exports = function(id, tag) {
         metallicValues, smoothnessValues, layerMask, subType, text, fontSize,
         angularVelocity, velocity, stationary, angularDrag, centerOfMass, drag,
         gravitational, mass, terrainModifications, modelOffset, modelRotation, labelOffset,
-        clientToDeleteWith, onClickEvent) {
+        clientToDeleteWith, onClickEvent, wheels) {
         for (entity in this.entities) {
             if (entity.uuid == id) {
                 console.warn(`[VOSSynchronizationSession->AddEntityWithSize] Duplicate UUID: ${id}. Skipping`);
@@ -190,7 +193,8 @@ module.exports = function(id, tag) {
             rotation, size, true, false, resources, onClickEvent, length, width, height, heights,
             diffuseTextures, normalTextures, maskTextures, specularValues, metallicValues, smoothnessValues,
             layerMask, subType, text, fontSize, angularVelocity, velocity, stationary, angularDrag, centerOfMass,
-            drag, gravitational, mass, terrainModifications, modelOffset, modelRotation, labelOffset);
+            drag, gravitational, mass, terrainModifications, modelOffset, modelRotation, labelOffset, wheels,
+            null);
         this.entities.push(newEntity);
         for (client in this.clients) {
             if (client.uuid == clientToDeleteWith) {
@@ -213,9 +217,10 @@ module.exports = function(id, tag) {
      * @param {*} fontSize Font Size.
      * @param {*} clientToDeleteWith Client to Delete With.
      * @param {*} onClickEvent On Click Event.
+     * @param {*} options Options
      */
     this.AddEntityWithCanvasTransform = function(id, tag, type, path, parent, positionPercent,
-        sizePercent, subType, text, fontSize, clientToDeleteWith, onClickEvent) {
+        sizePercent, subType, text, fontSize, clientToDeleteWith, onClickEvent, options) {
         for (entity in this.entities) {
             if (entity.uuid == id) {
                 console.warn(`[VOSSynchronizationSession->AddEntityWithCanvasTransform] Duplicate UUID: ${id}. Skipping`);
@@ -225,7 +230,8 @@ module.exports = function(id, tag) {
         let newEntity = new vosEntity(id, tag, type, path, parent, positionPercent,
             null, sizePercent, false, true, resources, onClickEvent, null, null, null, null,
             null, null, null, null, null, null,
-            null, subType, text, fontSize, null, null, null, null, null, null, null, null, null, null, null, null);
+            null, subType, text, fontSize, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, options);
         this.entities.push(newEntity);
         for (client in this.clients) {
             if (client.uuid == clientToDeleteWith) {

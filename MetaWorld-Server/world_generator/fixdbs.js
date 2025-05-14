@@ -23,7 +23,16 @@ fs.readdir(argv[2], (err, files) => {
         files.forEach((file) => {
         if (file.endsWith(".db")) {
             OpenDB(path.join(argv[2], file), (db) => {
-                db.AddColumnToTable("'ground_mods'", "brushsize", "INT");
+                //db.AddColumnToTable("'entities'", "state", "STRING");
+                db.AddColumnToTable("'entities'", "owner", "STRING");
+                db.AddColumnToTable("'entities'", "ownerRead", "INTEGER");
+                db.AddColumnToTable("'entities'", "ownerWrite", "INTEGER");
+                db.AddColumnToTable("'entities'", "ownerUse", "INTEGER");
+                db.AddColumnToTable("'entities'", "ownerTake", "INTEGER");
+                db.AddColumnToTable("'entities'", "otherRead", "INTEGER");
+                db.AddColumnToTable("'entities'", "otherWrite", "INTEGER");
+                db.AddColumnToTable("'entities'", "otherUse", "INTEGER");
+                db.AddColumnToTable("'entities'", "otherTake", "INTEGER");
             });
         }
         });

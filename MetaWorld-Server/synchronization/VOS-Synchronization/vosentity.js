@@ -40,6 +40,8 @@
  * @param {*} modelOffset Model Offset.
  * @param {*} modelRotation Model Rotation.
  * @param {*} labelOffset Label Offset.
+ * @param {*} wheels Wheels.
+ * @param {*} options Options.
  */
 module.exports = function(uuid, tag, type, path, parent,
     position, rotation, scalesize, isSize, isSizePercent,
@@ -48,7 +50,8 @@ module.exports = function(uuid, tag, type, path, parent,
     metallicValues, smoothnessValues, layerMask, subType,
     text, fontSize, angularVelocity, velocity, stationary,
     angularDrag, centerOfMass, drag, gravitational, mass,
-    terrainModifications, modelOffset, modelRotation, labelOffset) {
+    terrainModifications, modelOffset, modelRotation, labelOffset,
+    wheels, options) {
         this.uuid = uuid;
         this.tag = tag;
         this.type = type;
@@ -89,4 +92,6 @@ module.exports = function(uuid, tag, type, path, parent,
         this.modelOffset = modelOffset;
         this.modelRotation = modelRotation;
         this.labelOffset = labelOffset;
+        this.wheels = wheels;
+        this.options = options;
 };

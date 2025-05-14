@@ -4,6 +4,16 @@ const sqliteDatabase = require("../sqlite/sqliteDatabase");
 const fs = require("fs");
 const path = require("path");
 
+const defaultEntityOwner = "";
+const defaultOwnerRead = 1;
+const defaultOwnerWrite = 1;
+const defaultOwnerUse = 1;
+const defaultOwnerTake = 1;
+const defaultOtherRead = 0;
+const defaultOtherWrite = 0;
+const defaultOtherUse = 0;
+const defaultOtherTake = 0;
+
 this.chunkDirectory = ".";
 this.dbFile = "./chunk-x-y.db";
 this.groundSeed = 1234;
@@ -73,7 +83,11 @@ CreateEntitiesTable = async function(context) {
     await context.db.CreateTable("entities", {
         "'entityid'": "INT", "'variantid'": "INT", "'instanceid'": "STRING",
         "'xposition'": "FLOAT", "'yposition'": "FLOAT", "zposition": "FLOAT",
-        "'xrotation'": "FLOAT", "'yrotation'": "FLOAT", "'zrotation'": "FLOAT", "'wrotation'": "FLOAT"
+        "'xrotation'": "FLOAT", "'yrotation'": "FLOAT", "'zrotation'": "FLOAT",
+        "'wrotation'": "FLOAT", "'state'": "STRING",
+        "'owner'": "STRING",
+        "'ownerread'": "INT", "'ownerwrite'": "INT", "'owneruse'": "INT", "'ownertake'": "INT",
+        "'otherread'": "INT", "'otherwrite'": "INT", "'otheruse'": "INT", "'othertake'": "INT"
     });
 }
 
@@ -124,7 +138,11 @@ PositionEntity = async function(context, entityID, variantID, instanceID, xPos, 
             context.db.InsertIntoTable("entities",
                 { "entityid": entityID, "variantid": variantID, "instanceid": instanceID,
                     "xposition": xPos, "yposition": yPos, "zposition": zPos,
-                    "xrotation": xRot, "yrotation": yRot, "zrotation": zRot, "wrotation": wRot }, false);
+                    "xrotation": xRot, "yrotation": yRot, "zrotation": zRot, "wrotation": wRot,
+                "owner": defaultEntityOwner,
+                "ownerread": defaultOwnerRead, "ownerwrite": defaultOwnerWrite, "owneruse": defaultOwnerUse, "ownertake": defaultOwnerTake,
+                "otherread": defaultOtherRead, "otherwrite": defaultOtherWrite, "otheruse": defaultOtherUse, "othertake": defaultOtherTake },
+                false);
         }
         else {
             context.db.UpdateInTable("entities",

@@ -22,6 +22,176 @@ module.exports = function() {
      */
     this.VERSION = "1.2.0"
 
+    /*
+     * Callback for Session Creation.
+     */
+    this.sessionCreatedCallback = null;
+
+    /*
+     * Callback for Session Deletion.
+     */
+    this.sessionDeletedCallback = null;
+
+    /*
+     * Callback for Session Joining.
+     */
+    this.sessionJoinedCallback = null;
+
+    /*
+     * Callback for Session Exiting.
+     */
+    this.sessionExitedCallback = null;
+
+    /*
+     * Callback for Container Entity Creation.
+     */
+    this.containerEntityCreatedCallback = null;
+
+    /*
+     * Callback for Mesh Entity Creation.
+     */
+    this.meshEntityCreatedCallback = null;
+
+    /*
+     * Callback for Character Entity Creation.
+     */
+    this.characterEntityCreatedCallback = null;
+
+    /*
+     * Callback for Button Entity Creation.
+     */
+    this.buttonEntityCreatedCallback = null;
+
+    /*
+     * Callback for Canvas Entity Creation.
+     */
+    this.canvasEntityCreatedCallback = null;
+
+    /*
+     * Callback for Input Entity Creation.
+     */
+    this.inputEntityCreatedCallback = null;
+
+    /*
+     * Callback for Light Entity Creation.
+     */
+    this.lightEntityCreatedCallback = null;
+
+    /*
+     * Callback for Terrain Entity Creation.
+     */
+    this.terrainEntityCreatedCallback = null;
+
+    /*
+     * Callback for Text Entity Creation.
+     */
+    this.textEntityCreatedCallback = null;
+
+    /*
+     * Callback for Voxel Entity Creation.
+     */
+    this.voxelEntityCreatedCallback = null;
+
+    /*
+     * Callback for Airplane Entity Creation.
+     */
+    this.airplaneEntityCreatedCallback = null;
+
+    /*
+     * Callback for Audio Entity Creation.
+     */
+    this.audioEntityCreatedCallback = null;
+
+    /*
+     * Callback for Automobile Entity Creation.
+     */
+    this.automobileEntityCreatedCallback = null;
+
+    /*
+     * Callback for Dropdown Entity Creation.
+     */
+    this.dropdownEntityCreatedCallback = null;
+
+    /*
+     * Callback for HTML Entity Creation.
+     */
+    this.htmlEntityCreatedCallback = null;
+
+    /*
+     * Callback for Image Entity Creation.
+     */
+    this.imageEntityCreatedCallback = null;
+
+    /*
+     * Callback for Message Sending.
+     */
+    this.messageSentCallback = null;
+
+    /*
+     * Callback for Entity Deletion.
+     */
+    this.entityDeletedCallback = null;
+
+    /*
+     * Callback for Entity Removal.
+     */
+    this.entityRemovedCallback = null;
+
+    /*
+     * Callback for Entity Positioning.
+     */
+    this.entityPositionedCallback = null;
+
+    /*
+     * Callback for Entity Rotating.
+     */
+    this.entityRotatedCallback = null;
+
+    /*
+     * Callback for Entity Scaling.
+     */
+    this.entityScaledCallback = null;
+
+    /*
+     * Callback for Entity Sizing.
+     */
+    this.entitySizedCallback = null;
+
+    /*
+     * Callback for Terrain Entity Modification.
+     */
+    this.terrainEntityModifiedCallback = null;
+
+    /*
+     * Callback for Entity Canvas Type Setting.
+     */
+    this.entityCanvasTypeSetCallback = null;
+
+    /*
+     * Callback for Entity Highlight State Setting.
+     */
+    this.entityHighlightStateSetCallback = null;
+
+    /*
+     * Callback for Entity Motion State Setting.
+     */
+    this.entityMotionStateSetCallback = null;
+
+    /*
+     * Callback for Parent Entity Setting.
+     */
+    this.parentEntitySetCallback = null;
+
+    /*
+     * Callback for Entity Physical State Setting.
+     */
+    this.entityPhysicalStateSetCallback = null;
+
+    /*
+     * Callback for Entity Visibility Setting.
+     */
+    this.entityVisibilitySetCallback = null;
+
     /**
      * Callback for checking Create Session Authorization.
      */
@@ -101,6 +271,36 @@ module.exports = function() {
      * Callback for checking Create Voxel Entity Authorization.
      */
     this.createVoxelEntityAuthCallback = null;
+
+    /**
+     * Callback for checking Create Airplane Entity Authorization.
+     */
+    this.createAirplaneEntityAuthCallback = null;
+
+    /**
+     * Callback for checking Create Audio Entity Authorization.
+     */
+    this.createAudioEntityAuthCallback = null;
+
+    /**
+     * Callback for checking Create Automobile Entity Authorization.
+     */
+    this.createAutomobileEntityAuthCallback = null;
+
+    /**
+     * Callback for checking Create Dropdown Entity Authorization.
+     */
+    this.createDropdownEntityAuthCallback = null;
+
+    /**
+     * Callback for checking Create HTML Entity Authorization.
+     */
+    this.createHTMLEntityAuthCallback = null;
+
+    /**
+     * Callback for checking Create Image Entity Authorization.
+     */
+    this.createImageEntityAuthCallback = null;
 
     /**
      * Callback for checking Send Message Authorization.
@@ -222,8 +422,10 @@ module.exports = function() {
             });
         });
     
+        const ProcessMessageWithContext = ProcessMessage.bind(this);
+
         client.on('message', function(topic, message) {
-            ProcessMessage(topic, message);
+            ProcessMessageWithContext(topic, message);
         });
     }
 
@@ -241,6 +443,10 @@ module.exports = function() {
             "session-tag": tag
         };
         SendMessage("vos/session/new", JSON.stringify(messageToSend));
+        if (this.sessionCreatedCallback) {
+            this.sessionCreatedCallback(messageToSend["session-id"],
+                messageToSend["session-tag"]);
+        }
     }
 
     /**
@@ -255,6 +461,9 @@ module.exports = function() {
             "session-id": id
         };
         SendMessage("vos/session/closed", JSON.stringify(messageToSend));
+        if (this.sessionDeletedCallback) {
+            this.sessionDeletedCallback(messageToSend["session-id"]);
+        }
     }
 
     /**
@@ -272,6 +481,10 @@ module.exports = function() {
             "client-tag": clientTag
         };
         SendMessage("vos/status/" + session.id + "/newclient", JSON.stringify(messageToSend));
+        if (this.sessionJoinedCallback) {
+            this.sessionJoinedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["client-tag"]);
+        }
     }
 
     /**
@@ -287,6 +500,9 @@ module.exports = function() {
             "client-id": clientID
         };
         SendMessage("vos/status/" + session.id + "/clientleft", JSON.stringify(messageToSend));
+        if (this.sessionExitedCallback) {
+            this.sessionExitedCallback(messageToSend["session-id"], messageToSend["client-id"]);
+        }
     }
 
     /**
@@ -308,7 +524,7 @@ module.exports = function() {
             null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
             { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-            null, null, null, clientToDeleteWith, null);
+            null, null, null, clientToDeleteWith, null, null);
         messageToSend = {
             "message-id": uuidv4(),
             "session-id": session.id,
@@ -321,6 +537,11 @@ module.exports = function() {
             "scale": scale
         };
         SendMessage("vos/status/" + session.id + "/createcontainerentity", JSON.stringify(messageToSend));
+        if (this.containerEntityCreatedCallback) {
+            this.containerEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["position"], messageToSend["rotation"], messageToSend["scale"]);
+        }
     }
 
     /**
@@ -345,7 +566,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
 
             messageToSend = {
                 "message-id": uuidv4(),
@@ -361,6 +582,12 @@ module.exports = function() {
                 "size": scale
             };
             SendMessage("vos/status/" + session.id + "/createmeshentity", JSON.stringify(messageToSend));
+            if (this.meshEntityCreatedCallback) {
+                this.meshEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["resources"], messageToSend["position"],
+                    messageToSend["rotation"], null, messageToSend["size"]);
+            }
         }
         else {
             session.AddEntityWithScale(entityID, entityTag, "mesh", path,
@@ -368,7 +595,7 @@ module.exports = function() {
             null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
             { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-            null, null, null, clientToDeleteWith, null);
+            null, null, null, clientToDeleteWith, null, null);
             messageToSend = {
                 "message-id": uuidv4(),
                 "session-id": session.id,
@@ -383,6 +610,12 @@ module.exports = function() {
                 "scale": scale
             };
             SendMessage("vos/status/" + session.id + "/createmeshentity", JSON.stringify(messageToSend));
+            if (this.meshEntityCreatedCallback) {
+                this.meshEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["resources"], messageToSend["position"],
+                    messageToSend["rotation"], messageToSend["scale"], null);
+            }
         }
     }
 
@@ -408,7 +641,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                modelOffset, modelRotation, labelOffset, clientToDeleteWith, null);
+                modelOffset, modelRotation, labelOffset, clientToDeleteWith, null, null);
             messageToSend = {
                 "message-id": uuidv4(),
                 "session-id": session.id,
@@ -425,6 +658,13 @@ module.exports = function() {
                 "size": scale
             };
             SendMessage("vos/status/" + session.id + "/createcharacterentity", JSON.stringify(messageToSend));
+            if (this.characterEntityCreatedCallback) {
+                this.characterEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["model-offset"], messageToSend["model-rotation"],
+                    messageToSend["label-offset"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"]);
+            }
         }
         else {
             session.AddEntityWithScale(entityID, entityTag, "character", path,
@@ -432,7 +672,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                modelOffset, modelRotation, labelOffset, clientToDeleteWith, null);
+                modelOffset, modelRotation, labelOffset, clientToDeleteWith, null, null);
             messageToSend = {
                 "message-id": uuidv4(),
                 "session-id": session.id,
@@ -449,6 +689,13 @@ module.exports = function() {
                 "scale": scale
             };
             SendMessage("vos/status/" + session.id + "/createcharacterentity", JSON.stringify(messageToSend));
+            if (this.characterEntityCreatedCallback) {
+                this.characterEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["model-offset"], messageToSend["model-rotation"],
+                    messageToSend["label-offset"], messageToSend["position"], messageToSend["rotation"],
+                    messageToSend["scale"], null);
+            }
         }
     }
 
@@ -467,7 +714,7 @@ module.exports = function() {
         positionPercent, sizePercent, clientToDeleteWith, onClick) {
             session.AddEntityWithCanvasTransform(entityID, entityTag, "button", null,
             parentID, positionPercent, sizePercent, null, null, null,
-            clientToDeleteWith, onClick);
+            clientToDeleteWith, onClick, null);
         messageToSend = {
             "message-id": uuidv4(),
             "session-id": session.id,
@@ -481,6 +728,12 @@ module.exports = function() {
             "on-click": onClick
         };
         SendMessage("vos/status/" + session.id + "/createbuttonentity", JSON.stringify(messageToSend));
+        if (this.buttonEntityCreatedCallback) {
+            this.buttonEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["path"], messageToSend["position-percent"], messageToSend["rotation-percent"],
+                messageToSend["on-click"]);
+        }
     }
 
     /**
@@ -504,7 +757,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             messageToSend = {
                 "message-id": uuidv4(),
                 "session-id": session.id,
@@ -518,6 +771,12 @@ module.exports = function() {
                 "size": scale
             };
             SendMessage("vos/status/" + session.id + "/createcanvasentity", JSON.stringify(messageToSend));
+            if (this.canvasEntityCreatedCallback) {
+                this.canvasEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"]);
+            }
         }
         else {
             session.AddEntityWithScale(entityID, entityTag, "canvas", path,
@@ -525,7 +784,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             messageToSend = {
                 "message-id": uuidv4(),
                 "session-id": session.id,
@@ -539,6 +798,12 @@ module.exports = function() {
                 "scale": scale
             };
             SendMessage("vos/status/" + session.id + "/createcanvasentity", JSON.stringify(messageToSend));
+            if (this.canvasEntityCreatedCallback) {
+                this.canvasEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"],
+                    messageToSend["scale"], null);
+            }
         }
     }
 
@@ -556,7 +821,7 @@ module.exports = function() {
         positionPercent, sizePercent, clientToDeleteWith) {
             session.AddEntityWithCanvasTransform(entityID, entityTag, "input", null,
             parentID, positionPercent, sizePercent, null, null, null,
-            clientToDeleteWith, null);
+            clientToDeleteWith, null, null);
         messageToSend = {
             "message-id": uuidv4(),
             "session-id": session.id,
@@ -569,6 +834,11 @@ module.exports = function() {
             "size-percent": sizePercent
         };
         SendMessage("vos/status/" + session.id + "/createinputentity", JSON.stringify(messageToSend));
+        if (this.inputEntityCreatedCallback) {
+            this.inputEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["path"], messageToSend["position-percent"], messageToSend["size-percent"]);
+        }
     }
 
     /**
@@ -589,7 +859,7 @@ module.exports = function() {
             null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
             { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-            null, null, null, clientToDeleteWith, null);
+            null, null, null, clientToDeleteWith, null, null);
         messageToSend = {
             "message-id": uuidv4(),
             "session-id": session.id,
@@ -602,6 +872,11 @@ module.exports = function() {
             "rotation": rotation
         };
         SendMessage("vos/status/" + session.id + "/createlightentity", JSON.stringify(messageToSend));
+        if (this.lightEntityCreatedCallback) {
+            this.lightEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["path"], messageToSend["position"], messageToSend["rotation"]);
+        }
     }
 
     /**
@@ -639,7 +914,7 @@ module.exports = function() {
             specularValues, metallicValues, smoothnessValues, layerMask, type, null, null,
             { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
             { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, modifications,
-            null, null, null, clientToDeleteWith, null);
+            null, null, null, clientToDeleteWith, null, null);
         messageToSend = {
             "message-id": uuidv4(),
             "session-id": session.id,
@@ -665,6 +940,16 @@ module.exports = function() {
             "modifications": modifications
         };
         SendMessage("vos/status/" + session.id + "/createterrainentity", JSON.stringify(messageToSend));
+        if (this.terrainEntityCreatedCallback) {
+            this.terrainEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["path"], messageToSend["position"], messageToSend["rotation"], 
+                messageToSend["length"], messageToSend["width"], messageToSend["height"],
+                messageToSend["heights"], messageToSend["diffuse-texture"], messageToSend["normal-texture"],
+                messageToSend["mask-texture"], messageToSend["specular-values"],
+                messageToSend["metallic-values"], messageToSend["smoothness-values"],
+                messageToSend["layer-mask"], messageToSend["type"], messageToSend["modifications"]);
+        }
     }
 
     /**
@@ -683,7 +968,7 @@ module.exports = function() {
         positionPercent, sizePercent, clientToDeleteWith, text, fontSize) {
             session.AddEntityWithCanvasTransform(entityID, entityTag, "text", null,
             parentID, positionPercent, sizePercent, null, text, fontSize,
-            clientToDeleteWith, null);
+            clientToDeleteWith, null, null);
         messageToSend = {
             "message-id": uuidv4(),
             "session-id": session.id,
@@ -698,6 +983,12 @@ module.exports = function() {
             "font-size": fontSize
         };
         SendMessage("vos/status/" + session.id + "/createtextentity", JSON.stringify(messageToSend));
+        if (this.textEntityCreatedCallback) {
+            this.textEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["path"], messageToSend["position-percent"],
+                messageToSend["size-percent"], messageToSend["text"], messageToSend["font-size"]);
+        }
     }
 
     /**
@@ -722,7 +1013,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             messageToSend = {
                 "message-id": uuidv4(),
                 "session-id": session.id,
@@ -736,6 +1027,12 @@ module.exports = function() {
                 "size": scale
             };
             SendMessage("vos/status/" + session.id + "/createvoxelentity", JSON.stringify(messageToSend));
+            if (this.voxelEntityCreatedCallback) {
+                this.voxelEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"]);
+            }
         }
         else {
             session.AddEntityWithScale(entityID, entityTag, "voxel", path,
@@ -743,7 +1040,7 @@ module.exports = function() {
             null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
             { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-            null, null, null, clientToDeleteWith, null);
+            null, null, null, clientToDeleteWith, null, null);
             messageToSend = {
                 "message-id": uuidv4(),
                 "session-id": session.id,
@@ -757,6 +1054,401 @@ module.exports = function() {
                 "scale": scale
             };
             SendMessage("vos/status/" + session.id + "/createvoxelentity", JSON.stringify(messageToSend));
+            if (this.voxelEntityCreatedCallback) {
+                this.voxelEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"],
+                    messageToSend["scale"], null);
+            }
+        }
+    }
+
+    /**
+     * @function CreateAirplaneEntity Create a Airplane Entity.
+     * @param {*} session Session.
+     * @param {*} entityID Entity ID.
+     * @param {*} entityTag Entity Tag.
+     * @param {*} path Path.
+     * @param {*} parentID Parent ID.
+     * @param {*} position Position.
+     * @param {*} rotation Rotation.
+     * @param {*} scale Scale.
+     * @param {*} isSize Whether or not the scale is a size.
+     * @param {*} resources Resources.
+     * @param {*} clientToDeleteWith Client to delete entity with.
+     */
+    this.CreateAirplaneEntity = function(session, entityID, entityTag, path, parentID,
+        position, rotation, scale, isSize, mass, meshPosition, meshRotation,
+        clientToDeleteWith) {
+        if (isSize) {
+            session.AddEntityWithSize(entityID, entityTag, "airplane", path,
+                parentID, position, rotation, scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, mass, null,
+                meshPosition, meshRotation, null, clientToDeleteWith, null, null);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "size": scale,
+                "mass": mass,
+                "mesh-position": meshPosition,
+                "mesh-rotation": meshRotation
+            };
+            SendMessage("vos/status/" + session.id + "/createairplaneentity", JSON.stringify(messageToSend));
+            if (this.airplaneEntityCreatedCallback) {
+                this.airplaneEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"]);
+            }
+        }
+        else {
+            session.AddEntityWithScale(entityID, entityTag, "airplane", path,
+            parentID, position, rotation, scale, null,
+            null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+            { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+            meshPosition, meshRotation, null, clientToDeleteWith, null, null);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "scale": scale,
+                "mass": mass,
+                "mesh-position": meshPosition,
+                "mesh-rotation": meshRotation
+            };
+            SendMessage("vos/status/" + session.id + "/createairplaneentity", JSON.stringify(messageToSend));
+            if (this.airplaneEntityCreatedCallback) {
+                this.airplaneEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"], messageToSend["mesh-position"], messageToSend["mesh-rotation"],
+                    messageToSend["mass"])
+            }
+        }
+    }
+
+    /**
+     * @function CreateAudioEntity Create a Audio Entity.
+     * @param {*} session Session.
+     * @param {*} entityID Entity ID.
+     * @param {*} entityTag Entity Tag.
+     * @param {*} path Path.
+     * @param {*} parentID Parent ID.
+     * @param {*} position Position.
+     * @param {*} rotation Rotation.
+     * @param {*} scale Scale.
+     * @param {*} isSize Whether or not the scale is a size.
+     * @param {*} resources Resources.
+     * @param {*} clientToDeleteWith Client to delete entity with.
+     */
+    this.CreateAudioEntity = function(session, entityID, entityTag, path, parentID,
+        position, rotation, scale, isSize, resources, clientToDeleteWith) {
+        if (isSize) {
+            session.AddEntityWithSize(entityID, entityTag, "audio", path,
+                parentID, position, rotation, scale, resources,
+                null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+                null, null, null, clientToDeleteWith, null, null);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "size": scale
+            };
+            SendMessage("vos/status/" + session.id + "/createaudioentity", JSON.stringify(messageToSend));
+            if (this.audioEntityCreatedCallback) {
+                this.audioEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"]);
+            }
+        }
+        else {
+            session.AddEntityWithScale(entityID, entityTag, "audio", path,
+            parentID, position, rotation, scale, resources,
+            null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+            { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+            null, null, null, clientToDeleteWith, null, null);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "scale": scale
+            };
+            SendMessage("vos/status/" + session.id + "/createaudioentity", JSON.stringify(messageToSend));
+            if (this.audioEntityCreatedCallback) {
+                this.audioEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"],
+                    messageToSend["scale"], null);
+            }
+        }
+    }
+
+    /**
+     * @function CreateAutomobileEntity Create a Automobile Entity.
+     * @param {*} session Session.
+     * @param {*} entityID Entity ID.
+     * @param {*} entityTag Entity Tag.
+     * @param {*} path Path.
+     * @param {*} parentID Parent ID.
+     * @param {*} position Position.
+     * @param {*} rotation Rotation.
+     * @param {*} scale Scale.
+     * @param {*} isSize Whether or not the scale is a size.
+     * @param {*} resources Resources.
+     * @param {*} clientToDeleteWith Client to delete entity with.
+     */
+    this.CreateAutomobileEntity = function(session, entityID, entityTag, path, parentID,
+        position, rotation, scale, isSize, mass, meshPosition, meshRotation, wheels,
+        clientToDeleteWith) {
+        if (isSize) {
+            session.AddEntityWithSize(entityID, entityTag, "automobile", path,
+                parentID, position, rotation, scale, null,
+                null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, mass, null,
+                meshPosition, meshRotation, null, clientToDeleteWith, null, wheels);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "size": scale,
+                "mass": mass,
+                "mesh-position": meshPosition,
+                "mesh-rotation": meshRotation,
+                "wheels": wheels
+            };
+            SendMessage("vos/status/" + session.id + "/createautomobileentity", JSON.stringify(messageToSend));
+            if (this.automobileEntityCreatedCallback) {
+                this.automobileEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"], messageToSend["mesh-position"], messageToSend["mesh-rotation"],
+                    messageToSend["mass"], messageToSend["automobile-entity-type"], messageToSend["wheels"]);
+            }
+        }
+        else {
+            session.AddEntityWithScale(entityID, entityTag, "automobile", path,
+            parentID, position, rotation, scale, null,
+            null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+            { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, mass, null,
+            meshPosition, meshRotation, null, clientToDeleteWith, null, wheels);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "scale": scale,
+                "mass": mass,
+                "mesh-position": meshPosition,
+                "mesh-rotation": meshRotation,
+                "wheels": wheels
+            };
+            SendMessage("vos/status/" + session.id + "/createautomobileentity", JSON.stringify(messageToSend));
+            if (this.automobileEntityCreatedCallback) {
+                this.automobileEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"],
+                    messageToSend["scale"], null, messageToSend["mesh-position"], messageToSend["mesh-rotation"],
+                    messageToSend["mass"], messageToSend["automobile-entity-type"], messageToSend["wheels"]);
+            }
+        }
+    }
+
+    /**
+     * @function CreateDropdownEntity Create a Dropdown Entity.
+     * @param {*} session Session.
+     * @param {*} entityID Entity ID.
+     * @param {*} entityTag Entity Tag.
+     * @param {*} path Path.
+     * @param {*} parentID Parent ID.
+     * @param {*} position Position.
+     * @param {*} rotation Rotation.
+     * @param {*} scale Scale.
+     * @param {*} isSize Whether or not the scale is a size.
+     * @param {*} resources Resources.
+     * @param {*} clientToDeleteWith Client to delete entity with.
+     */
+    this.CreateDropdownEntity = function(session, entityID, entityTag, path, parentID,
+        positionPercent, sizePercent, onChange, options, clientToDeleteWith) {
+        session.AddEntityWithCanvasTransform(entityID, entityTag, "dropdown", null,
+            parentID, positionPercent, sizePercent, null,
+            null, null, clientToDeleteWith, onChange, options);
+        messageToSend = {
+            "message-id": uuidv4(),
+            "session-id": session.id,
+            "client-id": clientID,
+            "entity-id": entityID,
+            "tag": entityTag,
+            "parent-id": parentID,
+            "path": path,
+            "position-percent": positionPercent,
+            "size-percent": sizePercent,
+            "on-change": onChange,
+            "options": options
+        };
+        SendMessage("vos/status/" + session.id + "/createdropdownentity", JSON.stringify(messageToSend));
+        if (this.dropdownEntityCreatedCallback) {
+            this.dropdownEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["path"], messageToSend["position-percent"], messageToSend["size-percent"],
+                messageToSend["on-change"], messageToSend["options"]);
+        }
+    }
+
+    /**
+     * @function CreateHTMLEntity Create a HTML Entity.
+     * @param {*} session Session.
+     * @param {*} entityID Entity ID.
+     * @param {*} entityTag Entity Tag.
+     * @param {*} path Path.
+     * @param {*} parentID Parent ID.
+     * @param {*} position Position.
+     * @param {*} rotation Rotation.
+     * @param {*} scale Scale.
+     * @param {*} isSize Whether or not the scale is a size.
+     * @param {*} resources Resources.
+     * @param {*} clientToDeleteWith Client to delete entity with.
+     */
+    this.CreateHTMLEntity = function(session, entityID, entityTag, path, parentID,
+        position, rotation, scale, isSize, resources, clientToDeleteWith) {
+        if (isSize) {
+            session.AddEntityWithSize(entityID, entityTag, "html", path,
+                parentID, position, rotation, scale, resources,
+                null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+                null, null, null, clientToDeleteWith, null, null, onMessage);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "size": scale,
+                "on-message": onMessage
+            };
+            SendMessage("vos/status/" + session.id + "/createhtmlentity", JSON.stringify(messageToSend));
+            if (this.htmlEntityCreatedCallback) {
+                this.htmlEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"], null,
+                    messageToSend["size"], messageToSend["on-message"]);
+            }
+        }
+        else {
+            session.AddEntityWithScale(entityID, entityTag, "html", path,
+            parentID, position, rotation, scale, resources,
+            null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+            { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+            null, null, null, clientToDeleteWith, null, null, onMessage);
+            messageToSend = {
+                "message-id": uuidv4(),
+                "session-id": session.id,
+                "client-id": clientID,
+                "entity-id": entityID,
+                "tag": entityTag,
+                "parent-id": parentID,
+                "path": path,
+                "position": position,
+                "rotation": rotation,
+                "scale": scale,
+                "on-message": onMessage
+            };
+            SendMessage("vos/status/" + session.id + "/createhtmlentity", JSON.stringify(messageToSend));
+            if (this.htmlEntityCreatedCallback) {
+                this.htmlEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                    messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                    messageToSend["path"], messageToSend["position"], messageToSend["rotation"],
+                    messageToSend["scale"], null, messageToSend["on-message"]);
+            }
+        }
+    }
+
+    /**
+     * @function CreateImageEntity Create a Image Entity.
+     * @param {*} session Session.
+     * @param {*} entityID Entity ID.
+     * @param {*} entityTag Entity Tag.
+     * @param {*} path Path.
+     * @param {*} parentID Parent ID.
+     * @param {*} position Position.
+     * @param {*} rotation Rotation.
+     * @param {*} scale Scale.
+     * @param {*} isSize Whether or not the scale is a size.
+     * @param {*} resources Resources.
+     * @param {*} clientToDeleteWith Client to delete entity with.
+     */
+    this.CreateImageEntity = function(session, entityID, entityTag, path, parentID,
+        positionPercent, sizePercent, imageFile, clientToDeleteWith) {
+        session.AddEntityWithCanvasTransform(entityID, entityTag, "image", imageFile,
+            parentID, positionPercent, sizePercent, null, null, null, clientToDeleteWith,
+            null, null);
+        messageToSend = {
+            "message-id": uuidv4(),
+            "session-id": session.id,
+            "client-id": clientID,
+            "entity-id": entityID,
+            "tag": entityTag,
+            "parent-id": parentID,
+            "position-percent": positionPercent,
+            "size-percent": sizePercent,
+            "image-file": imageFile
+        };
+        SendMessage("vos/status/" + session.id + "/createimageentity", JSON.stringify(messageToSend));
+        if (this.imageEntityCreatedCallbackEntityCreatedCallback) {
+            this.imageEntityCreatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["tag"], messageToSend["parent-id"],
+                messageToSend["path"], messageToSend["position-percent"], messageToSend["size-percent"],
+                messageToSend["image-file"]);
         }
     }
 
@@ -774,6 +1466,10 @@ module.exports = function() {
             "message": message
         };
         SendMessage("vos/status/" + session.id + "/message/create", JSON.stringify(messageToSend));
+        if (this.messageSentCallback) {
+            this.messageSentCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["topic"], messageToSend["message"]);
+        }
     }
 
     /**
@@ -790,6 +1486,10 @@ module.exports = function() {
             "entity-id": entityID
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/delete", JSON.stringify(messageToSend));
+        if (this.entityDeletedCallback) {
+            this.entityDeletedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"]);
+        }
     }
 
     /**
@@ -806,6 +1506,10 @@ module.exports = function() {
             "entity-id": entityID
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/remove", JSON.stringify(messageToSend));
+        if (this.entityRemovedCallback) {
+            this.entityRemovedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"]);
+        }
     }
 
     /**
@@ -824,6 +1528,10 @@ module.exports = function() {
             "position": position
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/position", JSON.stringify(messageToSend));
+        if (this.entityPositionedCallback) {
+            this.entityPositionedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["position"]);
+        }
     }
 
     /**
@@ -842,6 +1550,10 @@ module.exports = function() {
             "rotation": rotation
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/rotation", JSON.stringify(messageToSend));
+        if (this.entityRotatedCallback) {
+            this.entityRotatedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["rotation"]);
+        }
     }
 
     /**
@@ -860,6 +1572,10 @@ module.exports = function() {
             "scale": scale
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/scale", JSON.stringify(messageToSend));
+        if (this.entityScaledCallback) {
+            this.entityScaledCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["scale"]);
+        }
     }
 
     /**
@@ -878,6 +1594,10 @@ module.exports = function() {
             "size": size
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/size", JSON.stringify(messageToSend));
+        if (this.entitySizedCallback) {
+            this.entitySizedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["size"]);
+        }
     }
 
     /**
@@ -903,6 +1623,11 @@ module.exports = function() {
             "layer": layer
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/terrain-mod", JSON.stringify(messageToSend));
+        if (this.terrainEntityModifiedCallback) {
+            this.terrainEntityModifiedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["modification"], messageToSend["position"],
+                messageToSend["brush-type"], messageToSend["layer"]);
+        }
     }
 
     /**
@@ -921,6 +1646,10 @@ module.exports = function() {
             "canvas-type": type
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/canvastype", JSON.stringify(messageToSend));
+        if (this.entityCanvasTypeSetCallback) {
+            this.entityCanvasTypeSetCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["canvas-type"]);
+        }
     }
 
     /**
@@ -939,6 +1668,10 @@ module.exports = function() {
             "highlighted": highlighted
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/highlight", JSON.stringify(messageToSend));
+        if (this.entityHighlightStateSetCallback) {
+            this.entityHighlightStateSetCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["highlighted"]);
+        }
     }
 
     /**
@@ -961,6 +1694,11 @@ module.exports = function() {
             "stationary": stationary
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/motion", JSON.stringify(messageToSend));
+        if (this.entityMotionStateSetCallback) {
+            this.entityMotionStateSetCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["angular-velocity"], messageToSend["velocity"],
+                messageToSend["stationary"]);
+        }
     }
 
     /**
@@ -979,6 +1717,10 @@ module.exports = function() {
             "parent-id": parentID
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/parent", JSON.stringify(messageToSend));
+        if (this.parentEntitySetCallback) {
+            this.parentEntitySetCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["parent-id"]);
+        }
     }
 
     /**
@@ -1005,6 +1747,11 @@ module.exports = function() {
             "mass": mass
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/physicalproperties", JSON.stringify(messageToSend));
+        if (this.entityPhysicalStateSetCallback) {
+            this.entityPhysicalStateSetCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["angular-drag"], messageToSend["center-of-mass"],
+                messageToSend["drag"], messageToSend["gravitational"], messageToSend["mass"]);
+        }
     }
 
     /**
@@ -1023,6 +1770,10 @@ module.exports = function() {
             "visible": visibility
         };
         SendMessage("vos/status/" + session.id + "/entity/" + entityID + "/visibility", JSON.stringify(messageToSend));
+        if (this.terrainEntityModifiedCallback) {
+            this.terrainEntityModifiedCallback(messageToSend["session-id"], messageToSend["client-id"],
+                messageToSend["entity-id"], messageToSend["visible"]);
+        }
     }
 
     /**
@@ -1064,7 +1815,7 @@ module.exports = function() {
      * @param {*} topic Topic.
      * @param {*} message Message.
      */
-    function ProcessMessage(topic, message) {
+    async function ProcessMessage(topic, message) {
         //Log(`[VOSSynchronizationService] ${topic} ${message}`);
         parsedMessage = JSON.parse(message);
         switch (topic.toLowerCase()) {
@@ -1074,7 +1825,12 @@ module.exports = function() {
                 returnMessage = message;
                 returnMessage["message-id"] = uuidv4();
                 delete returnMessage["client-id"];
+                delete returnMessage["client-token"];
                 SendMessage(returnTopic, returnMessage);
+                if (this.sessionCreatedCallback) {
+                    this.sessionCreatedCallback(returnMessage["session-id"],
+                        returnMessage["session-tag"]);
+                }
                 break;
 
             case "vos/session/destroy":
@@ -1083,15 +1839,24 @@ module.exports = function() {
                 returnMessage = message;
                 returnMessage["message-id"] = uuidv4();
                 delete returnMessage["client-id"];
+                delete returnMessage["client-token"];
                 SendMessage(returnTopic, returnMessage);
+                if (this.sessionDeletedCallback) {
+                    this.sessionDeletedCallback(returnMessage["session-id"]);
+                }
                 break;
 
             case "vos/session/join":
-                HandleJoinSessionMessage(JSON.parse(message));
+                result = await this.HandleJoinSessionMessage(JSON.parse(message));
                 returnTopic = `vos/status/${parsedMessage["session-id"]}/newclient`;
                 returnMessage = message;
                 returnMessage["message-id"] = uuidv4();
+                delete returnMessage["client-token"];
                 SendMessage(returnTopic, returnMessage);
+                if (this.sessionJoinedCallback) {
+                    this.sessionJoinedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                        returnMessage["client-tag"]);
+                }
                 break;
             
             case "vos/session/exit":
@@ -1099,7 +1864,11 @@ module.exports = function() {
                 returnTopic = `vos/status/${parsedMessage["session-id"]}/clientleft`;
                 returnMessage = message;
                 returnMessage["message-id"] = uuidv4();
+                delete returnMessage["client-token"];
                 SendMessage(returnTopic, returnMessage);
+                if (this.sessionExitedCallback) {
+                    this.sessionExitedCallback(returnMessage["session-id"], returnMessage["client-id"]);
+                }
                 break;
 
             case "vos/session/heartbeat":
@@ -1112,6 +1881,7 @@ module.exports = function() {
                 returnMessage = JSON.parse(message);
                 returnMessage["message-id"] = uuidv4();
                 delete returnMessage["client-id"];
+                delete returnMessage["client-token"];
                 if (state != null) {
                     clients = [];
                     state.clients.forEach(cl => {
@@ -1167,8 +1937,14 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.containerEntityCreatedCallback) {
+                        this.containerEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["position"], returnMessage["rotation"], returnMessage["scale"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createcharacterentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createcharacterentity", "");
@@ -1182,8 +1958,16 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.characterEntityCreatedCallback) {
+                        this.characterEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["model-offset"], returnMessage["model-rotation"],
+                            returnMessage["label-offset"], returnMessage["position"], returnMessage["rotation"],
+                            returnMessage["scale"], returnMessage["size"]);
+                    }
                 }    
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createmeshentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createmeshentity", "");
@@ -1197,8 +1981,15 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.meshEntityCreatedCallback) {
+                        this.meshEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["resources"], returnMessage["position"],
+                            returnMessage["rotation"], returnMessage["scale"], returnMessage["size"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createbuttonentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createbuttonentity", "");
@@ -1212,8 +2003,15 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.buttonEntityCreatedCallback) {
+                        this.buttonEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position-percent"], returnMessage["rotation-percent"],
+                            returnMessage["on-click"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createcanvasentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createcanvasentity", "");
@@ -1227,8 +2025,15 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.canvasEntityCreatedCallback) {
+                        this.canvasEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"],
+                            returnMessage["scale"], returnMessage["size"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createinputentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createinputentity", "");
@@ -1242,8 +2047,14 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.inputEntityCreatedCallback) {
+                        this.inputEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position-percent"], returnMessage["size-percent"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createlightentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createlightentity", "");
@@ -1257,8 +2068,14 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.lightEntityCreatedCallback) {
+                        this.lightEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createterrainentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createterrainentity", "");
@@ -1272,8 +2089,19 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.terrainEntityCreatedCallback) {
+                        this.terrainEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"], 
+                            returnMessage["length"], returnMessage["width"], returnMessage["height"],
+                            returnMessage["heights"], returnMessage["diffuse-texture"], returnMessage["normal-texture"],
+                            returnMessage["mask-texture"], returnMessage["specular-values"],
+                            returnMessage["metallic-values"], returnMessage["smoothness-values"],
+                            returnMessage["layer-mask"], returnMessage["type"], returnMessage["modifications"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createtextentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createtextentity", "");
@@ -1287,8 +2115,15 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.textEntityCreatedCallback) {
+                        this.textEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position-percent"],
+                            returnMessage["size-percent"], returnMessage["text"], returnMessage["font-size"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/createvoxelentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createvoxelentity", "");
@@ -1302,8 +2137,149 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.voxelEntityCreatedCallback) {
+                        this.voxelEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"], null,
+                            returnMessage["size"]);
+                    }
+                }
+                else if (topic.startsWith("vos/request/") && topic.endsWith("/createairplaneentity")) {
+                    sessionUUID = topic.replace("vos/request/", "").replace("/createairplaneentity", "");
+                    session = GetSynchronizedSession(sessionUUID);
+                    if (session == null) {
+                        console.error(`[VOSSynchronizationService->ProcessMessage] Unknown session ID ${sessionUUID}`);
+                        return;
+                    }
+                    entityUUID = HandleCreateAirplaneEntityMessage(session, JSON.parse(message));
+                    returnTopic = topic.replace("vos/request/", "vos/status/");
+                    returnMessage = message;
+                    returnMessage["message-id"] = uuidv4();
+                    delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
+                    message["entity-id"] = entityUUID;
+                    SendMessage(returnTopic, returnMessage);
+                    if (this.airplaneEntityCreatedCallback) {
+                        this.airplaneEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"], null,
+                            returnMessage["size"], returnMessage["mesh-position"], returnMessage["mesh-rotation"],
+                            returnMessage["mass"]);
+                    }
+                }
+                else if (topic.startsWith("vos/request/") && topic.endsWith("/createaudioentity")) {
+                    sessionUUID = topic.replace("vos/request/", "").replace("/createaudioentity", "");
+                    session = GetSynchronizedSession(sessionUUID);
+                    if (session == null) {
+                        console.error(`[VOSSynchronizationService->ProcessMessage] Unknown session ID ${sessionUUID}`);
+                        return;
+                    }
+                    entityUUID = HandleCreateAudioEntityMessage(session, JSON.parse(message));
+                    returnTopic = topic.replace("vos/request/", "vos/status/");
+                    returnMessage = message;
+                    returnMessage["message-id"] = uuidv4();
+                    delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
+                    message["entity-id"] = entityUUID;
+                    SendMessage(returnTopic, returnMessage);
+                    if (this.audioEntityCreatedCallback) {
+                        this.audioEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"], null,
+                            returnMessage["size"]);
+                    }
+                }
+                else if (topic.startsWith("vos/request/") && topic.endsWith("/createautomobileentity")) {
+                    sessionUUID = topic.replace("vos/request/", "").replace("/createautomobileentity", "");
+                    session = GetSynchronizedSession(sessionUUID);
+                    if (session == null) {
+                        console.error(`[VOSSynchronizationService->ProcessMessage] Unknown session ID ${sessionUUID}`);
+                        return;
+                    }
+                    entityUUID = HandleCreateAutomobileEntityMessage(session, JSON.parse(message));
+                    returnTopic = topic.replace("vos/request/", "vos/status/");
+                    returnMessage = message;
+                    returnMessage["message-id"] = uuidv4();
+                    delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
+                    message["entity-id"] = entityUUID;
+                    SendMessage(returnTopic, returnMessage);
+                    if (this.automobileEntityCreatedCallback) {
+                        this.automobileEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"], null,
+                            returnMessage["size"], returnMessage["mesh-position"], returnMessage["mesh-rotation"],
+                            returnMessage["mass"], returnMessage["automobile-entity-type"], returnMessage["wheels"]);
+                    }
+                }
+                else if (topic.startsWith("vos/request/") && topic.endsWith("/createdropdownentity")) {
+                    sessionUUID = topic.replace("vos/request/", "").replace("/createdropdownentity", "");
+                    session = GetSynchronizedSession(sessionUUID);
+                    if (session == null) {
+                        console.error(`[VOSSynchronizationService->ProcessMessage] Unknown session ID ${sessionUUID}`);
+                        return;
+                    }
+                    entityUUID = HandleCreateDropdownEntityMessage(session, JSON.parse(message));
+                    returnTopic = topic.replace("vos/request/", "vos/status/");
+                    returnMessage = message;
+                    returnMessage["message-id"] = uuidv4();
+                    delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
+                    message["entity-id"] = entityUUID;
+                    SendMessage(returnTopic, returnMessage);
+                    if (this.dropdownEntityCreatedCallback) {
+                        this.dropdownEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position-percent"], returnMessage["size-percent"],
+                            returnMessage["on-change"], returnMessage["options"]);
+                    }
+                }
+                else if (topic.startsWith("vos/request/") && topic.endsWith("/createhtmlentity")) {
+                    sessionUUID = topic.replace("vos/request/", "").replace("/createhtmlentity", "");
+                    session = GetSynchronizedSession(sessionUUID);
+                    if (session == null) {
+                        console.error(`[VOSSynchronizationService->ProcessMessage] Unknown session ID ${sessionUUID}`);
+                        return;
+                    }
+                    entityUUID = HandleCreateHTMLEntityMessage(session, JSON.parse(message));
+                    returnTopic = topic.replace("vos/request/", "vos/status/");
+                    returnMessage = message;
+                    returnMessage["message-id"] = uuidv4();
+                    delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
+                    message["entity-id"] = entityUUID;
+                    SendMessage(returnTopic, returnMessage);
+                    if (this.htmlEntityCreatedCallback) {
+                        this.htmlEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position"], returnMessage["rotation"], null,
+                            returnMessage["size"], returnMessage["on-message"]);
+                    }
+                }
+                else if (topic.startsWith("vos/request/") && topic.endsWith("/createimageentity")) {
+                    sessionUUID = topic.replace("vos/request/", "").replace("/createimageentity", "");
+                    session = GetSynchronizedSession(sessionUUID);
+                    if (session == null) {
+                        console.error(`[VOSSynchronizationService->ProcessMessage] Unknown session ID ${sessionUUID}`);
+                        return;
+                    }
+                    entityUUID = HandleCreateImageEntityMessage(session, JSON.parse(message));
+                    returnTopic = topic.replace("vos/request/", "vos/status/");
+                    returnMessage = message;
+                    returnMessage["message-id"] = uuidv4();
+                    delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
+                    message["entity-id"] = entityUUID;
+                    SendMessage(returnTopic, returnMessage);
+                    if (this.imageEntityCreatedCallback) {
+                        this.imageEntityCreatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["tag"], returnMessage["parent-id"],
+                            returnMessage["path"], returnMessage["position-percent"],
+                            returnMessage["size-percent"], returnMessage["image-file"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("/message/create")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/message/create", "");
@@ -1317,8 +2293,13 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     message["entity-id"] = entityUUID;
                     SendMessage(returnTopic, returnMessage);
+                    if (this.messageSentCallback) {
+                        this.messageSentCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["topic"], returnMessage["message"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("delete")) {
                     ids = topic.replace("vos/request/", "").replace("/delete", "").split("/entity/");
@@ -1338,7 +2319,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityDeletedCallback) {
+                        this.entityDeletedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("remove")) {
                     ids = topic.replace("vos/request/", "").replace("/remove", "").split("/entity/");
@@ -1358,7 +2344,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityRemovedCallback) {
+                        this.entityRemovedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("position")) {
                     ids = topic.replace("vos/request/", "").replace("/position", "").split("/entity/");
@@ -1378,7 +2369,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityPositionedCallback) {
+                        this.entityPositionedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["position"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("rotation")) {
                     ids = topic.replace("vos/request/", "").replace("/rotation", "").split("/entity/");
@@ -1398,7 +2394,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityRotatedCallback) {
+                        this.entityRotatedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["rotation"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("scale")) {
                     ids = topic.replace("vos/request/", "").replace("/scale", "").split("/entity/");
@@ -1418,7 +2419,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityScaledCallback) {
+                        this.entityScaledCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["scale"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("size")) {
                     ids = topic.replace("vos/request/", "").replace("/size", "").split("/entity/");
@@ -1438,7 +2444,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entitySizedCallback) {
+                        this.entitySizedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["size"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("terrain-mod")) {
                     ids = topic.replace("vos/request/", "").replace("/terrain-mod", "").split("/entity/");
@@ -1458,7 +2469,13 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.terrainEntityModifiedCallback) {
+                        this.terrainEntityModifiedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["modification"], returnMessage["position"],
+                            returnMessage["brush-type"], returnMessage["layer"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("canvastype")) {
                     ids = topic.replace("vos/request/", "").replace("/canvastype", "").split("/entity/");
@@ -1478,7 +2495,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityCanvasTypeSetCallback) {
+                        this.entityCanvasTypeSetCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["canvas-type"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("highlight")) {
                     ids = topic.replace("vos/request/", "").replace("/highlight", "").split("/entity/");
@@ -1498,7 +2520,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityHighlightStateSetCallback) {
+                        this.entityHighlightStateSetCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["highlighted"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("motion")) {
                     ids = topic.replace("vos/request/", "").replace("/motion", "").split("/entity/");
@@ -1518,7 +2545,13 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityMotionStateSetCallback) {
+                        this.entityMotionStateSetCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["angular-velocity"], returnMessage["velocity"],
+                            returnMessage["stationary"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("parent")) {
                     ids = topic.replace("vos/request/", "").replace("/parent", "").split("/entity/");
@@ -1538,7 +2571,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.parentEntitySetCallback) {
+                        this.parentEntitySetCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["parent-id"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("physicalproperties")) {
                     ids = topic.replace("vos/request/", "").replace("/physicalproperties", "").split("/entity/");
@@ -1558,7 +2596,13 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.entityPhysicalStateSetCallback) {
+                        this.entityPhysicalStateSetCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["angular-drag"], returnMessage["center-of-mass"],
+                            returnMessage["drag"], returnMessage["gravitational"], returnMessage["mass"]);
+                    }
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("visibility")) {
                     ids = topic.replace("vos/request/", "").replace("/visibility", "").split("/entity/");
@@ -1578,7 +2622,12 @@ module.exports = function() {
                     returnMessage = message;
                     returnMessage["message-id"] = uuidv4();
                     delete returnMessage["client-id"];
+                    delete returnMessage["client-token"];
                     SendMessage(returnTopic, returnMessage);
+                    if (this.terrainEntityModifiedCallback) {
+                        this.terrainEntityModifiedCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["entity-id"], returnMessage["visible"]);
+                    }
                 }
                 else {
                     //Log(`[VOSSynchronizationService] Skipping message topic ${topic}`);
@@ -1678,7 +2727,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Create Session Message does not contain: client-id");
             return;
         }
-        if (CanCreateSession(data["client-id"])) {
+        if (CanCreateSession(data["client-id"], data["client-token"])) {
             Log(`[VOSSynchronizationService] Creating session ${data["session-id"]}, ${data["session-tag"]}`);
             CreateSynchronizedSession(data["session-id"], data["session-tag"]);
         }
@@ -1701,7 +2750,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Create Session Message does not contain: client-id");
             return;
         }
-        if (CanDestroySession(data["client-id"])) {
+        if (CanDestroySession(data["client-id"], data["client-token"])) {
             Log(`[VOSSynchronizationService] Destroying session ${data["session-id"]}`);
             DestroySynchronizedSession(data["session-id"], data["session-tag"]);
         }
@@ -1715,33 +2764,33 @@ module.exports = function() {
      * @function HandleJoinSessionMessage Handle a Join Session Message.
      * @param {*} data Data.
      */
-    function HandleJoinSessionMessage(data) {
+   this.HandleJoinSessionMessage = async function(data) {
         if (!data.hasOwnProperty("session-id")) {
             console.warn("[VOSSynchronizationService] Join Session Message does not contain: session-id");
-            return;
+            return false;
         }
         if (!data.hasOwnProperty("client-id")) {
             console.warn("[VOSSynchronizationService] Join Session Message does not contain: client-id");
-            return;
+            return false;
         }
         if (!data.hasOwnProperty("client-tag")) {
             console.warn("[VOSSynchronizationService] Join Session Message does not contain: client-tag");
-            return;
+            return false;
         }
-        if (CanJoinSession(data["client-id"], data["session-id"])) {
+        if (await CanJoinSession(data["client-id"], data["client-token"], data["session-id"], this.joinSessionAuthCallback)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]}:${data["client-tag"]} is joining session ${data["session-id"]}`);
             sessionToJoin = GetSynchronizedSession(data["session-id"]);
             if (sessionToJoin == null) {
                 console.warn("[VOSSynchronizationService] Unable to find session to join");
-                return;
+                return false;
             }
             sessionToJoin.AddClient(data["client-id"], data["client-tag"]);
+            return true;
         }
         else {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to join session ${data["session-id"]}`);
-            return;
+            return false;
         }
-        
     }
 
     /**
@@ -1757,11 +2806,11 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Exit Session Message does not contain: client-id");
             return;
         }
-        if (CanExitSession(data["client-id"], data["session-id"])) {
+        if (CanExitSession(data["client-id"], data["client-token"], data["session-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is exiting session ${data["session-id"]}`);
             sessionToExit = GetSynchronizedSession(data["session-id"]);
             if (sessionToJoin == null) {
-                console.warn("[VOSSynchronizationService] Unable to find session to exit");
+                //console.warn("[VOSSynchronizationService] Unable to find session to exit");
                 return;
             }
             sessionToExit.RemoveClient(data["client-id"]);
@@ -1785,7 +2834,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Heartbeat Message does not contain: client-id");
             return;
         }
-        if (CanGiveHeartbeat(data["client-id"], data["session-id"])) {
+        if (CanGiveHeartbeat(data["client-id"], data["client-token"], data["session-id"])) {
             //Log(`[VOSSynchronizationService] Client ${data["client-id"]} gave heartbeat for session ${data["session-id"]}`);
             sessionToHeartbeat = GetSynchronizedSession(data["session-id"]);
             if (sessionToHeartbeat == null) {
@@ -1812,10 +2861,10 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Session State Message does not contain: client-id");
             return;
         }
-        if (CanGetSessionState(data["client-id"], data["session-id"])) {
+        if (CanGetSessionState(data["client-id"], data["client-token"], data["session-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is requesting session ${data["session-id"]} state`);
             sessionToGetStateFor = GetSynchronizedSession(data["session-id"]);
-            if (sessionToJoin == null) {
+            if (sessionToGetStateFor == null) {
                 console.warn("[VOSSynchronizationService] Unable to find session to get state for");
                 return;
             }
@@ -1889,7 +2938,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateContainerEntity(data["client-id"], session.id)) {
+        if (!CanCreateContainerEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a container entity in session ${session.id}`);
             return;
         }
@@ -1917,7 +2966,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else if (data.hasOwnProperty("size")) {
@@ -1938,7 +2987,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
@@ -2013,7 +3062,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateMeshEntity(data["client-id"], session.id)) {
+        if (!CanCreateMeshEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a mesh entity in session ${session.id}`);
             return;
         }
@@ -2041,7 +3090,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else if (data.hasOwnProperty("size")) {
@@ -2062,7 +3111,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
@@ -2195,7 +3244,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateCharacterEntity(data["client-id"], session.id)) {
+        if (!CanCreateCharacterEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a character entity in session ${session.id}`);
             return;
         }
@@ -2223,7 +3272,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                data["model-offset"], data["model-rotation"], data["label-offset"], clientToDeleteWith, null);
+                data["model-offset"], data["model-rotation"], data["label-offset"], clientToDeleteWith, null, null);
             return entityuuid;
         }
         else if (data.hasOwnProperty("size")) {
@@ -2244,7 +3293,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                data["model-offset"], data["model-rotation"], data["label-offset"], clientToDeleteWith, null);
+                data["model-offset"], data["model-rotation"], data["label-offset"], clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
@@ -2297,7 +3346,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateButtonEntity(data["client-id"], session.id)) {
+        if (!CanCreateButtonEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a button entity in session ${session.id}`);
             return;
         }
@@ -2321,8 +3370,8 @@ module.exports = function() {
                 return;
             }
             session.AddEntityWithCanvasTransform(entityuuid, data.tag, "button", null,
-                data.parent-uuid, data["position-percent"], data["size-percent"],
-                null, null, null, clientToDeleteWith, entity["on-click"]);
+                data["parent-uuid"], data["position-percent"], data["size-percent"],
+                null, null, null, clientToDeleteWith, entity["on-click"], null);
             return entityuuid;
         }
         else {
@@ -2393,7 +3442,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateCanvasEntity(data["client-id"], session.id)) {
+        if (!CanCreateCanvasEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a canvas entity in session ${session.id}`);
             return;
         }
@@ -2421,7 +3470,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else if (data.hasOwnProperty("size")) {
@@ -2442,7 +3491,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
@@ -2491,7 +3540,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateInputEntity(data["client-id"], session.id)) {
+        if (!CanCreateInputEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a input entity in session ${session.id}`);
             return;
         }
@@ -2515,8 +3564,8 @@ module.exports = function() {
                 return;
             }
             session.AddEntityWithCanvasTransform(entityuuid, data.tag, "input", null,
-                data.parent-uuid, data["position-percent"], data["size-percent"],
-                null, null, null, clientToDeleteWith, null);
+                data["parent-uuid"], data["position-percent"], data["size-percent"],
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
@@ -2587,7 +3636,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateLightEntity(data["client-id"], session.id)) {
+        if (!CanCreateLightEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a light entity in session ${session.id}`);
             return;
         }
@@ -2602,7 +3651,7 @@ module.exports = function() {
             null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
             { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-            null, null, null, clientToDeleteWith, null);
+            null, null, null, clientToDeleteWith, null, null);
         return entityuuid;
     }
 
@@ -2668,7 +3717,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateTerrainEntity(data["client-id"], session.id)) {
+        if (!CanCreateTerrainEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a terrain entity in session ${session.id}`);
             return;
         }
@@ -2750,7 +3799,7 @@ module.exports = function() {
                 data["metallic-values"], data["smoothness-values"], data["layer-mask"], data["type"],
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, data["terrain-modification"],
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else if (data.hasOwnProperty("size")) {
@@ -2773,7 +3822,7 @@ module.exports = function() {
                 data["metallic-values"], data["smoothness-values"], data["layer-mask"], data["type"],
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, data["terrain-modification"],
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
@@ -2822,7 +3871,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateTextEntity(data["client-id"], session.id)) {
+        if (!CanCreateTextEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a text entity in session ${session.id}`);
             return;
         }
@@ -2854,8 +3903,8 @@ module.exports = function() {
                 return;
             }
             session.AddEntityWithCanvasTransform(entityuuid, data.tag, "text", null,
-                data.parent-uuid, data["position-percent"], data["size-percent"],
-                null, entity.text, entity["font-size"],  clientToDeleteWith, null);
+                data["parent-uuid"], data["position-percent"], data["size-percent"],
+                null, entity.text, entity["font-size"],  clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
@@ -2926,7 +3975,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to create entity in");
             return;
         }
-        if (!CanCreateVoxelEntity(data["client-id"], session.id)) {
+        if (!CanCreateVoxelEntity(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a voxel entity in session ${session.id}`);
             return;
         }
@@ -2954,7 +4003,7 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else if (data.hasOwnProperty("size")) {
@@ -2975,11 +4024,687 @@ module.exports = function() {
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
                 { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
-                null, null, null, clientToDeleteWith, null);
+                null, null, null, clientToDeleteWith, null, null);
             return entityuuid;
         }
         else {
             console.warn("[VOSSynchronizationService] Create Voxel Entity Message does not contain: scale");
+            return;
+        }
+    }
+
+    /**
+     * @function HandleCreateAirplaneEntityMessage Handle a Create Airplane Entity Message.
+     * @param {*} session Session.
+     * @param {*} data Data.
+     */
+    function HandleCreateAirplaneEntityMessage(session, data) {
+        if (!data.hasOwnProperty("delete-with-client")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: delete-with-client");
+            return;
+        }
+        if (!data.hasOwnProperty("entity-id")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: entity-id");
+            return;
+        }
+        if (!data.hasOwnProperty("tag")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: tag");
+            return;
+        }
+        if (!data.hasOwnProperty("path")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: path");
+            return;
+        }
+        if (!data.hasOwnProperty("mesh-position")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: mesh-position");
+            return;
+        }
+        if (!data.hasOwnProperty("mesh-rotation")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: mesh-rotation");
+            return;
+        }
+        if (!data.hasOwnProperty("mass")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: mass");
+            return;
+        }
+        if (!data.hasOwnProperty("position")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: position");
+            return;
+        }
+        else {
+            if (!data.position.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: position.x");
+                return;
+            }
+            if (!data.position.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: position.y");
+                return;
+            }
+            if (!data.position.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: position.z");
+                return;
+            }
+        }
+        if (!data.hasOwnProperty("rotation")) {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: rotation");
+            return;
+        }
+        else {
+            if (!data.rotation.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: rotation.x");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: rotation.y");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: rotation.z");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("w")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: rotation.w");
+                return;
+            }
+        }
+        if (session == null) {
+            console.warn("[VOSSynchronizationService] No session to create entity in");
+            return;
+        }
+        if (!CanCreateAirplaneEntity(data["client-id"], data["client-token"], session.id)) {
+            Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create an airplane entity in session ${session.id}`);
+            return;
+        }
+        clientToDeleteWith = null;
+        if (data["delete-with-client"] == true) {
+            clientToDeleteWith = data["client-id"];
+        }
+        
+        entityuuid = data["entity-id"];
+        if (data.hasOwnProperty("scale")) {
+            if (!data.scale.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: scale.x");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: scale.y");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: scale.z");
+                return;
+            }
+            session.AddEntityWithScale(entityuuid, data.tag, "airplane", data.path,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, data.mass, null,
+                data["mesh-position"], data["mesh-rotation"], null, clientToDeleteWith, null, null);
+            return entityuuid;
+        }
+        else if (data.hasOwnProperty("size")) {
+            if (!data.size.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: size.x");
+                return;
+            }
+            if (!data.size.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: size.y");
+                return;
+            }
+            if (!data.size.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: size.z");
+                return;
+            }
+            session.AddEntityWithSize(entityuuid, data.tag, "airplane", data.path,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, data.mass, null,
+                data["mesh-position"], data["mesh-rotation"], null, clientToDeleteWith, null, null);
+            return entityuuid;
+        }
+        else {
+            console.warn("[VOSSynchronizationService] Create Airplane Entity Message does not contain: scale");
+            return;
+        }
+    }
+
+    /**
+     * @function HandleCreateAudioEntityMessage Handle a Create Audio Entity Message.
+     * @param {*} session Session.
+     * @param {*} data Data.
+     */
+    function HandleCreateAudioEntityMessage(session, data) {
+        if (!data.hasOwnProperty("delete-with-client")) {
+            console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: delete-with-client");
+            return;
+        }
+        if (!data.hasOwnProperty("entity-id")) {
+            console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: entity-id");
+            return;
+        }
+        if (!data.hasOwnProperty("tag")) {
+            console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: tag");
+            return;
+        }
+        if (!data.hasOwnProperty("position")) {
+            console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: position");
+            return;
+        }
+        else {
+            if (!data.position.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: position.x");
+                return;
+            }
+            if (!data.position.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: position.y");
+                return;
+            }
+            if (!data.position.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: position.z");
+                return;
+            }
+        }
+        if (!data.hasOwnProperty("rotation")) {
+            console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: rotation");
+            return;
+        }
+        else {
+            if (!data.rotation.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: rotation.x");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: rotation.y");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: rotation.z");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("w")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: rotation.w");
+                return;
+            }
+        }
+        if (session == null) {
+            console.warn("[VOSSynchronizationService] No session to create entity in");
+            return;
+        }
+        if (!CanCreateAudioEntity(data["client-id"], data["client-token"], session.id)) {
+            Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create an audio entity in session ${session.id}`);
+            return;
+        }
+        clientToDeleteWith = null;
+        if (data["delete-with-client"] == true) {
+            clientToDeleteWith = data["client-id"];
+        }
+        
+        entityuuid = data["entity-id"];
+        if (data.hasOwnProperty("scale")) {
+            if (!data.scale.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: scale.x");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: scale.y");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: scale.z");
+                return;
+            }
+            session.AddEntityWithScale(entityuuid, data.tag, "audio", null,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+                null, null, null, clientToDeleteWith, null, null);
+            return entityuuid;
+        }
+        else if (data.hasOwnProperty("size")) {
+            if (!data.size.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: size.x");
+                return;
+            }
+            if (!data.size.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: size.y");
+                return;
+            }
+            if (!data.size.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: size.z");
+                return;
+            }
+            session.AddEntityWithSize(entityuuid, data.tag, "audio", null,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+                null, null, null, clientToDeleteWith, null, null);
+            return entityuuid;
+        }
+        else {
+            console.warn("[VOSSynchronizationService] Create Audio Entity Message does not contain: scale");
+            return;
+        }
+    }
+
+    /**
+     * @function HandleCreateAutomobileEntityMessage Handle a Create Automobile Entity Message.
+     * @param {*} session Session.
+     * @param {*} data Data.
+     */
+    function HandleCreateAutomobileEntityMessage(session, data) {
+        if (!data.hasOwnProperty("delete-with-client")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: delete-with-client");
+            return;
+        }
+        if (!data.hasOwnProperty("entity-id")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: entity-id");
+            return;
+        }
+        if (!data.hasOwnProperty("tag")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: tag");
+            return;
+        }
+        if (!data.hasOwnProperty("path")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: path");
+            return;
+        }
+        if (!data.hasOwnProperty("mesh-position")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: mesh-position");
+            return;
+        }
+        if (!data.hasOwnProperty("mesh-rotation")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: mesh-rotation");
+            return;
+        }
+        if (!data.hasOwnProperty("mass")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: mass");
+            return;
+        }
+        if (!data.hasOwnProperty("automobile-entity-type")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: automobile-entity-type");
+            return;
+        }
+        if (!data.hasOwnProperty("wheels")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: wheels");
+            return;
+        }
+        if (!data.hasOwnProperty("position")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: position");
+            return;
+        }
+        else {
+            if (!data.position.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: position.x");
+                return;
+            }
+            if (!data.position.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: position.y");
+                return;
+            }
+            if (!data.position.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: position.z");
+                return;
+            }
+        }
+        if (!data.hasOwnProperty("rotation")) {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: rotation");
+            return;
+        }
+        else {
+            if (!data.rotation.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: rotation.x");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: rotation.y");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: rotation.z");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("w")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: rotation.w");
+                return;
+            }
+        }
+        if (session == null) {
+            console.warn("[VOSSynchronizationService] No session to create entity in");
+            return;
+        }
+        if (!CanCreateAutomobileEntity(data["client-id"], data["client-token"], session.id)) {
+            Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create an automobile entity in session ${session.id}`);
+            return;
+        }
+        clientToDeleteWith = null;
+        if (data["delete-with-client"] == true) {
+            clientToDeleteWith = data["client-id"];
+        }
+        
+        entityuuid = data["entity-id"];
+        if (data.hasOwnProperty("scale")) {
+            if (!data.scale.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: scale.x");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: scale.y");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: scale.z");
+                return;
+            }
+            session.AddEntityWithScale(entityuuid, data.tag, "automobile", data.path,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, data["automobile-entity-type"],
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, data.mass, null,
+                data["mesh-position"], data["mesh-rotation"], null, clientToDeleteWith, null, data.wheels);
+            return entityuuid;
+        }
+        else if (data.hasOwnProperty("size")) {
+            if (!data.size.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: size.x");
+                return;
+            }
+            if (!data.size.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: size.y");
+                return;
+            }
+            if (!data.size.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: size.z");
+                return;
+            }
+            session.AddEntityWithSize(entityuuid, data.tag, "automobile", data.path,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, data.mass, null,
+                data["mesh-position"], data["mesh-rotation"], null, clientToDeleteWith, null, data.wheels);
+            return entityuuid;
+        }
+        else {
+            console.warn("[VOSSynchronizationService] Create Automobile Entity Message does not contain: scale");
+            return;
+        }
+    }
+
+    /**
+     * @function HandleCreateDropdownEntityMessage Handle a Create Dropdown Entity Message.
+     * @param {*} session Session.
+     * @param {*} data Data.
+     */
+    function HandleCreateDropdownEntityMessage(session, data) {
+        if (!data.hasOwnProperty("delete-with-client")) {
+            console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: delete-with-client");
+            return;
+        }
+        if (!data.hasOwnProperty("entity-id")) {
+            console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: entity-id");
+            return;
+        }
+        if (!data.hasOwnProperty("tag")) {
+            console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: tag");
+            return;
+        }
+        if (!data.hasOwnProperty("position-percent")) {
+            console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: position");
+            return;
+        }
+        else {
+            if (!data.position.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: position.x");
+                return;
+            }
+            if (!data.position.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: position.y");
+                return;
+            }
+            if (!data.position.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: position.z");
+                return;
+            }
+        }
+        if (session == null) {
+            console.warn("[VOSSynchronizationService] No session to create entity in");
+            return;
+        }
+        if (!CanCreateDropdownEntity(data["client-id"], data["client-token"], session.id)) {
+            Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a dropdown entity in session ${session.id}`);
+            return;
+        }
+        clientToDeleteWith = null;
+        if (data["delete-with-client"] == true) {
+            clientToDeleteWith = data["client-id"];
+        }
+        
+        entityuuid = data["entity-id"];
+        if (data.hasOwnProperty("size-percent")) {
+            if (!data.size.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: size.x");
+                return;
+            }
+            if (!data.size.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: size.y");
+                return;
+            }
+            if (!data.size.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Dropdown Entity Message does not contain: size.z");
+                return;
+            }
+            session.AddEntityWithCanvasTransform(entityuuid, data.tag, "dropdown", null,
+                data["parent-uuid"], data["position-percent"], data["size-percent"],
+                null, null, null, clientToDeleteWith, data["on-change"], data.options);
+            return entityuuid;
+        }
+        else {
+            console.warn("[VOSSynchronizationService] Create Dropdown Entity Message does not contain: size-percent");
+            return;
+        }
+    }
+
+    /**
+     * @function HandleCreateHTMLEntityMessage Handle a Create HTML Entity Message.
+     * @param {*} session Session.
+     * @param {*} data Data.
+     */
+    function HandleCreateHTMLEntityMessage(session, data) {
+        if (!data.hasOwnProperty("delete-with-client")) {
+            console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: delete-with-client");
+            return;
+        }
+        if (!data.hasOwnProperty("entity-id")) {
+            console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: entity-id");
+            return;
+        }
+        if (!data.hasOwnProperty("tag")) {
+            console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: tag");
+            return;
+        }
+        if (!data.hasOwnProperty("on-message")) {
+            console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: on-message");
+            return;
+        }
+        if (!data.hasOwnProperty("position")) {
+            console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: position");
+            return;
+        }
+        else {
+            if (!data.position.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: position.x");
+                return;
+            }
+            if (!data.position.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: position.y");
+                return;
+            }
+            if (!data.position.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: position.z");
+                return;
+            }
+        }
+        if (!data.hasOwnProperty("rotation")) {
+            console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: rotation");
+            return;
+        }
+        else {
+            if (!data.rotation.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: rotation.x");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: rotation.y");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: rotation.z");
+                return;
+            }
+            if (!data.rotation.hasOwnProperty("w")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: rotation.w");
+                return;
+            }
+        }
+        if (session == null) {
+            console.warn("[VOSSynchronizationService] No session to create entity in");
+            return;
+        }
+        if (!CanCreateHTMLEntity(data["client-id"], data["client-token"], session.id)) {
+            Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create an html entity in session ${session.id}`);
+            return;
+        }
+        clientToDeleteWith = null;
+        if (data["delete-with-client"] == true) {
+            clientToDeleteWith = data["client-id"];
+        }
+        
+        entityuuid = data["entity-id"];
+        if (data.hasOwnProperty("scale")) {
+            if (!data.scale.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: scale.x");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: scale.y");
+                return;
+            }
+            if (!data.scale.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: scale.z");
+                return;
+            }
+            session.AddEntityWithScale(entityuuid, data.tag, "html", null,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+                null, null, null, clientToDeleteWith, data["on-message"], null);
+            return entityuuid;
+        }
+        else if (data.hasOwnProperty("size")) {
+            if (!data.size.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: size.x");
+                return;
+            }
+            if (!data.size.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: size.y");
+                return;
+            }
+            if (!data.size.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: size.z");
+                return;
+            }
+            session.AddEntityWithSize(entityuuid, data.tag, "html", null,
+                data["parent-uuid"], data.position, data.rotation, data.scale, null,
+                null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, true,
+                { x: 0, y: 0, z: 0 }, 0, { x: 0, y: 0, z: 0 }, false, 0, null,
+                null, null, null, clientToDeleteWith, data["on-message"], null);
+            return entityuuid;
+        }
+        else {
+            console.warn("[VOSSynchronizationService] Create HTML Entity Message does not contain: scale");
+            return;
+        }
+    }
+
+    /**
+     * @function HandleCreateImageEntityMessage Handle a Create Image Entity Message.
+     * @param {*} session Session.
+     * @param {*} data Data.
+     */
+    function HandleCreateImageEntityMessage(session, data) {
+        if (!data.hasOwnProperty("delete-with-client")) {
+            console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: delete-with-client");
+            return;
+        }
+        if (!data.hasOwnProperty("entity-id")) {
+            console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: entity-id");
+            return;
+        }
+        if (!data.hasOwnProperty("tag")) {
+            console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: tag");
+            return;
+        }
+        if (!data.hasOwnProperty("image-file")) {
+            console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: image-file");
+            return;
+        }
+        if (!data.hasOwnProperty("position-percent")) {
+            console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: position");
+            return;
+        }
+        else {
+            if (!data.position.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: position.x");
+                return;
+            }
+            if (!data.position.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: position.y");
+                return;
+            }
+            if (!data.position.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: position.z");
+                return;
+            }
+        }
+        if (session == null) {
+            console.warn("[VOSSynchronizationService] No session to create entity in");
+            return;
+        }
+        if (!CanCreateImageEntity(data["client-id"], data["client-token"], session.id)) {
+            Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to create a image entity in session ${session.id}`);
+            return;
+        }
+        clientToDeleteWith = null;
+        if (data["delete-with-client"] == true) {
+            clientToDeleteWith = data["client-id"];
+        }
+        
+        entityuuid = data["entity-id"];
+        if (data.hasOwnProperty("size-percent")) {
+            if (!data.size.hasOwnProperty("x")) {
+                console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: size.x");
+                return;
+            }
+            if (!data.size.hasOwnProperty("y")) {
+                console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: size.y");
+                return;
+            }
+            if (!data.size.hasOwnProperty("z")) {
+                console.warn("[VOSSynchronizationService] Image Entity Message does not contain: size.z");
+                return;
+            }
+            session.AddEntityWithCanvasTransform(entityuuid, data.tag, "image", data["image-file"],
+                data["parent-uuid"], data["position-percent"], data["size-percent"],
+                null, null, null, clientToDeleteWith, null, null);
+            return entityuuid;
+        }
+        else {
+            console.warn("[VOSSynchronizationService] Create Image Entity Message does not contain: size-percent");
             return;
         }
     }
@@ -3006,7 +4731,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] No session to send message in");
             return;
         }
-        if (!CanSendMessage(data["client-id"], session.id)) {
+        if (!CanSendMessage(data["client-id"], data["client-token"], session.id)) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to send a message in session ${session.id}`);
             return;
         }
@@ -3022,7 +4747,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Delete Entity Message does not contain: entity-id");
             return;
         }
-        if (!CanDeleteEntity(data["client-id"], session.id)) {
+        if (!CanDeleteEntity(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to delete an entity in session ${session.id}`);
             return;
         }
@@ -3039,7 +4764,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Remove Entity Message does not contain: entity-id");
             return;
         }
-        if (!CanRemoveEntity(data["client-id"], session.id)) {
+        if (!CanRemoveEntity(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to remove an entity in session ${session.id}`);
             return;
         }
@@ -3074,10 +4799,10 @@ module.exports = function() {
                 return;
             }
         }
-        if (!CanPositionEntity(data["client-id"], session.id)) {
+        if (!CanPositionEntity(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to position an entity in session ${session.id}`);
             return;
-        }Log(JSON.stringify(data.position));
+        }
         session.PositionEntity(data["entity-id"], data.position);
     }
 
@@ -3113,7 +4838,7 @@ module.exports = function() {
                 return;
             }
         }
-        if (!CanRotateEntity(data["client-id"], session.id)) {
+        if (!CanRotateEntity(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to rotate an entity in session ${session.id}`);
             return;
         }
@@ -3148,7 +4873,7 @@ module.exports = function() {
                 return;
             }
         }
-        if (!CanScaleEntity(data["client-id"], session.id)) {
+        if (!CanScaleEntity(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to scale an entity in session ${session.id}`);
             return;
         }
@@ -3183,7 +4908,7 @@ module.exports = function() {
                 return;
             }
         }
-        if (!CanSizeEntity(data["client-id"], session.id)) {
+        if (!CanSizeEntity(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to size an entity in session ${session.id}`);
             return;
         }
@@ -3225,7 +4950,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Modify Terrain Entity Message does not contain: layer");
             return;
         }
-        if (!CanModifyTerrainEntity(data["client-id"], session.id)) {
+        if (!CanModifyTerrainEntity(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to modify a terrain entity in session ${session.id}`);
             return;
         }
@@ -3247,7 +4972,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Canvas Type Entity Message does not contain: canvas-type");
             return;
         }
-        if (!CanSetEntityCanvasType(data["client-id"], session.id)) {
+        if (!CanSetEntityCanvasType(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to set entity canvas type in session ${session.id}`);
             return;
         }
@@ -3268,7 +4993,7 @@ module.exports = function() {
             console.warn("[VOSSynchronizationService] Highlight State Entity Message does not contain: highlighted");
             return;
         }
-        if (!CanSetEntityHighlightState(data["client-id"], session.id)) {
+        if (!CanSetEntityHighlightState(data["client-id"], data["client-token"], session.id, data["entity-id"])) {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to set entity highlight state in session ${session.id}`);
             return;
         }
@@ -3373,9 +5098,9 @@ module.exports = function() {
      * @param {*} clientID Client ID.
      * @returns Whether or not the client can create a session.
      */
-    this.CanCreateSession = function(clientID) {
+    this.CanCreateSession = function(clientID, clientToken) {
         if (this.createSessionAuthCallback != null) {
-            if (this.createSessionAuthCallback(clientID) != true) {
+            if (this.createSessionAuthCallback(clientID, clientToken) != true) {
                 return false;
             }
         }
@@ -3388,9 +5113,9 @@ module.exports = function() {
      * @param {*} clientID Client ID.
      * @returns Whether or not the client can destroy a session.
      */
-    this.CanDestroySession = function(clientID) {
+    this.CanDestroySession = function(clientID, clientToken) {
         if (this.destroySessionAuthCallback != null) {
-            if (this.destroySessionAuthCallback(clientID) != true) {
+            if (this.destroySessionAuthCallback(clientID, clientToken) != true) {
                 return false;
             }
         }
@@ -3404,9 +5129,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can join a session.
      */
-    function CanJoinSession(clientID, sessionID) {
-        if (this.joinSessionAuthCallback != null) {
-            if (this.joinSessionAuthCallback(clientID, sessionID) != true) {
+    async function CanJoinSession(clientID, clientToken, sessionID, callback) {
+        if (callback != null) {
+            if (await callback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3420,9 +5145,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can exit a session.
      */
-    function CanExitSession(clientID, sessionID) {
+    function CanExitSession(clientID, clientToken, sessionID) {
         if (this.exitSessionAuthCallback != null) {
-            if (this.exitSessionAuthCallback(clientID, sessionID) != true) {
+            if (this.exitSessionAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3436,9 +5161,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can give a heartbeat.
      */
-    function CanGiveHeartbeat(clientID, sessionID) {
+    function CanGiveHeartbeat(clientID, clientToken, sessionID) {
         if (this.giveHeartbeatAuthCallback != null) {
-            if (this.GiveHeartbeatAuthCallback(clientID, sessionID) != true) {
+            if (this.GiveHeartbeatAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3452,9 +5177,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can get the session state.
      */
-    function CanGetSessionState(clientID, sessionID) {
+    function CanGetSessionState(clientID, clientToken, sessionID) {
         if (this.getSessionStateAuthCallback != null) {
-            if (this.getSessionStateAuthCallback(clientID, sessionID) != true) {
+            if (this.getSessionStateAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3468,9 +5193,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a container entity.
      */
-    function CanCreateContainerEntity(clientID, sessionID) {
+    function CanCreateContainerEntity(clientID, clientToken, sessionID) {
         if (this.createContainerEntityAuthCallback != null) {
-            if (this.createContainerEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createContainerEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3484,9 +5209,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a mesh entity.
      */
-    function CanCreateMeshEntity(clientID, sessionID) {
+    function CanCreateMeshEntity(clientID, clientToken, sessionID) {
         if (this.createMeshEntityAuthCallback != null) {
-            if (this.createMeshEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createMeshEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3500,9 +5225,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a character entity.
      */
-    function CanCreateCharacterEntity(clientID, sessionID) {
+    function CanCreateCharacterEntity(clientID, clientToken, sessionID) {
         if (this.createCharacterEntityAuthCallback != null) {
-            if (this.createCharacterEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createCharacterEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3516,9 +5241,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a button entity.
      */
-    function CanCreateButtonEntity(clientID, sessionID) {
+    function CanCreateButtonEntity(clientID, clientToken, sessionID) {
         if (this.createButtonEntityAuthCallback != null) {
-            if (this.createButtonEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createButtonEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3532,9 +5257,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a canvas entity.
      */
-    function CanCreateCanvasEntity(clientID, sessionID) {
+    function CanCreateCanvasEntity(clientID, clientToken, sessionID) {
         if (this.createCanvasEntityAuthCallback != null) {
-            if (this.createCanvasEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createCanvasEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3548,9 +5273,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create an input entity.
      */
-    function CanCreateInputEntity(clientID, sessionID) {
+    function CanCreateInputEntity(clientID, clientToken, sessionID) {
         if (this.createInputEntityAuthCallback != null) {
-            if (this.createInputEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createInputEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3564,9 +5289,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a light entity.
      */
-    function CanCreateLightEntity(clientID, sessionID) {
+    function CanCreateLightEntity(clientID, clientToken, sessionID) {
         if (this.createLightEntityAuthCallback != null) {
-            if (this.createLightEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createLightEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3580,9 +5305,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a terrain entity.
      */
-    function CanCreateTerrainEntity(clientID, sessionID) {
+    function CanCreateTerrainEntity(clientID, clientToken, sessionID) {
         if (this.createTerrainEntityAuthCallback != null) {
-            if (this.createTerrainEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createTerrainEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3596,9 +5321,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a text entity.
      */
-    function CanCreateTextEntity(clientID, sessionID) {
+    function CanCreateTextEntity(clientID, clientToken, sessionID) {
         if (this.createTextEntityAuthCallback != null) {
-            if (this.createTextEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createTextEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3612,9 +5337,105 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can create a voxel entity.
      */
-    function CanCreateVoxelEntity(clientID, sessionID) {
+    function CanCreateVoxelEntity(clientID, clientToken, sessionID) {
         if (this.createVoxelEntityAuthCallback != null) {
-            if (this.createVoxelEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.createVoxelEntityAuthCallback(clientID, clientToken, sessionID) != true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @function CanCreateAirplaneEntity Determine whether or not the client can create a airplane entity.
+     * @param {*} clientID Client ID.
+     * @param {*} sessionID Session ID
+     * @returns Whether or not the client can create a airplane entity.
+     */
+    function CanCreateAirplaneEntity(clientID, clientToken, sessionID) {
+        if (this.createAirplaneEntityAuthCallback != null) {
+            if (this.createAirplaneEntityAuthCallback(clientID, clientToken, sessionID) != true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @function CanCreateAudioEntity Determine whether or not the client can create a audio entity.
+     * @param {*} clientID Client ID.
+     * @param {*} sessionID Session ID
+     * @returns Whether or not the client can create a audio entity.
+     */
+    function CanCreateAudioEntity(clientID, clientToken, sessionID) {
+        if (this.createAudioEntityAuthCallback != null) {
+            if (this.createAudioEntityAuthCallback(clientID, clientToken, sessionID) != true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @function CanCreateAutomobileEntity Determine whether or not the client can create a automobile entity.
+     * @param {*} clientID Client ID.
+     * @param {*} sessionID Session ID
+     * @returns Whether or not the client can create a automobile entity.
+     */
+    function CanCreateAutomobileEntity(clientID, clientToken, sessionID) {
+        if (this.createAutomobileEntityAuthCallback != null) {
+            if (this.createAutomobileEntityAuthCallback(clientID, clientToken, sessionID) != true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @function CanCreateDropdownEntity Determine whether or not the client can create a dropdown entity.
+     * @param {*} clientID Client ID.
+     * @param {*} sessionID Session ID
+     * @returns Whether or not the client can create a dropdown entity.
+     */
+    function CanCreateDropdownEntity(clientID, clientToken, sessionID) {
+        if (this.createDropdownEntityAuthCallback != null) {
+            if (this.createDropdownEntityAuthCallback(clientID, clientToken, sessionID) != true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @function CanCreateHTMLEntity Determine whether or not the client can create a HTML entity.
+     * @param {*} clientID Client ID.
+     * @param {*} sessionID Session ID
+     * @returns Whether or not the client can create a HTML entity.
+     */
+    function CanCreateHTMLEntity(clientID, clientToken, sessionID) {
+        if (this.createHTMLEntityAuthCallback != null) {
+            if (this.createHTMLEntityAuthCallback(clientID, clientToken, sessionID) != true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @function CanCreateImageEntity Determine whether or not the client can create a image entity.
+     * @param {*} clientID Client ID.
+     * @param {*} sessionID Session ID
+     * @returns Whether or not the client can create a image entity.
+     */
+    function CanCreateImageEntity(clientID, clientToken, sessionID) {
+        if (this.createImageEntityAuthCallback != null) {
+            if (this.createImageEntityAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3628,9 +5449,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can send a message.
      */
-    function CanSendMessage(clientID, sessionID) {
+    function CanSendMessage(clientID, clientToken, sessionID) {
         if (this.sendMessageAuthCallback != null) {
-            if (this.sendMessageAuthCallback(clientID, sessionID) != true) {
+            if (this.sendMessageAuthCallback(clientID, clientToken, sessionID) != true) {
                 return false;
             }
         }
@@ -3644,9 +5465,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can delete an entity.
      */
-    function CanDeleteEntity(clientID, sessionID) {
+    function CanDeleteEntity(clientID, clientToken, sessionID, entityID) {
         if (this.deleteEntityAuthCallback != null) {
-            if (this.deleteEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.deleteEntityAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3660,9 +5481,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can remove an entity.
      */
-    function CanRemoveEntity(clientID, sessionID) {
+    function CanRemoveEntity(clientID, clientToken, sessionID, entityID) {
         if (this.removeEntityAuthCallback != null) {
-            if (this.removeEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.removeEntityAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3676,9 +5497,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can position an entity.
      */
-    function CanPositionEntity(clientID, sessionID) {
+    function CanPositionEntity(clientID, clientToken, sessionID, entityID) {
         if (this.positionEntityAuthCallback != null) {
-            if (this.positionEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.positionEntityAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3692,9 +5513,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can rotate an entity.
      */
-    function CanRotateEntity(clientID, sessionID) {
+    function CanRotateEntity(clientID, clientToken, sessionID, entityID) {
         if (this.rotateEntityAuthCallback != null) {
-            if (this.rotateEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.rotateEntityAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3708,9 +5529,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can scale an entity.
      */
-    function CanScaleEntity(clientID, sessionID) {
+    function CanScaleEntity(clientID, clientToken, sessionID, entityID) {
         if (this.scaleEntityAuthCallback != null) {
-            if (this.scaleEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.scaleEntityAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3724,9 +5545,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can size an entity.
      */
-    function CanSizeEntity(clientID, sessionID) {
+    function CanSizeEntity(clientID, clientToken, sessionID, entityID) {
         if (this.sizeEntityAuthCallback != null) {
-            if (this.sizeEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.sizeEntityAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3740,9 +5561,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can modify a terrain entity.
      */
-    function CanModifyTerrainEntity(clientID, sessionID) {
+    function CanModifyTerrainEntity(clientID, clientToken, sessionID, entityID) {
         if (this.modifyTerrainEntityAuthCallback != null) {
-            if (this.modifyTerrainEntityAuthCallback(clientID, sessionID) != true) {
+            if (this.modifyTerrainEntityAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3756,9 +5577,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can set an entity canvas type.
      */
-    function CanSetEntityCanvasType(clientID, sessionID) {
+    function CanSetEntityCanvasType(clientID, clientToken, sessionID, entityID) {
         if (this.setEntityCanvasTypeAuthCallback != null) {
-            if (this.setEntityCanvasTypeAuthCallback(clientID, sessionID) != true) {
+            if (this.setEntityCanvasTypeAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }
@@ -3772,9 +5593,9 @@ module.exports = function() {
      * @param {*} sessionID Session ID
      * @returns Whether or not the client can set an entity highlight state.
      */
-    function CanSetEntityHighlightState(clientID, sessionID) {
+    function CanSetEntityHighlightState(clientID, clientToken, sessionID, entityID) {
         if (this.setEntityHighlightStateAuthCallback != null) {
-            if (this.setEntityHighlightStateAuthCallback(clientID, sessionID) != true) {
+            if (this.setEntityHighlightStateAuthCallback(clientID, clientToken, sessionID, entityID) != true) {
                 return false;
             }
         }

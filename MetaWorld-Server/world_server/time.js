@@ -1,5 +1,18 @@
+Log = function(text) {
+    console.log(text);
+    if (process.platform == "win32") {
+        fs.appendFile(".\\vos.log", text + "\n", function(err){
+            
+        });
+    } else {
+        fs.appendFile("./vos.log", text + "\n", function(err){
+
+        });
+    }
+}
+
 module.exports = function(context, timeGetFunction, timeSetFunction, secondsPerDay, updateFrequency) {
-    setInterval(async function() {
+    setInterval(function() {
         timeGetFunction(context, (row) => {
             if (row == null) {
                 day = 0;

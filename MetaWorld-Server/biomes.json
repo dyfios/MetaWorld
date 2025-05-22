@@ -16,28 +16,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -164,23 +164,23 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"sandstone": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/sandstone/sandstone_rock_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sandstone/sandstone_rock_001_NRM.png"
+					"color_texture": "sandstone_rock_001_COLOR.png",
+					"normal_texture": "sandstone_rock_001_NRM.png"
 				},
 				"sand": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/sand/Sand_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sand/Sand_001_NRM.png"
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
 				},
 				"snow": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -262,23 +262,23 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"sandstone": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/sandstone/sandstone_rock_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sandstone/sandstone_rock_001_NRM.png"
+					"color_texture": "sandstone_rock_001_COLOR.png",
+					"normal_texture": "sandstone_rock_001_NRM.png"
 				},
 				"sand": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/sand/Sand_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sand/Sand_001_NRM.png"
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
 				},
 				"snow": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -355,28 +355,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -463,28 +463,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -606,28 +606,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -754,28 +754,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"drysoil": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/drysoil/Dried_Soil_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/drysoil/Dried_Soil_001_NRM.png"
+					"color_texture": "Dried_Soil_001_COLOR.png",
+					"normal_texture": "Dried_Soil_001_NRM.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -902,38 +902,38 @@
 			"terrain-materials": {
 				"basalt": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/basalt/Rock_047_BaseColor.png",
-					"normal_texture": "TerrainMaterials/basalt/Rock_047_Normal.png"
+					"color_texture": "Rock_047_BaseColor.png",
+					"normal_texture": "Rock_047_Normal.png"
 				},
 				"limestone": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/limestone/Rock_037_baseColor.png",
-					"normal_texture": "TerrainMaterials/limestone/Rock_037_normal.png"
+					"color_texture": "Rock_037_baseColor.png",
+					"normal_texture": "Rock_037_normal.png"
 				},
 				"sand": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/sand/Sand_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sand/Sand_001_NRM.png"
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
 				},
 				"grass": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"stone": {
 					"layer": 5,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"snow": {
 					"layer": 6,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1024,38 +1024,38 @@
 			"terrain-materials": {
 				"basalt": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/basalt/Rock_047_BaseColor.png",
-					"normal_texture": "TerrainMaterials/basalt/Rock_047_Normal.png"
+					"color_texture": "Rock_047_BaseColor.png",
+					"normal_texture": "Rock_047_Normal.png"
 				},
 				"limestone": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/limestone/Rock_037_baseColor.png",
-					"normal_texture": "TerrainMaterials/limestone/Rock_037_normal.png"
+					"color_texture": "Rock_037_baseColor.png",
+					"normal_texture": "Rock_037_normal.png"
 				},
 				"sand": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/sand/Sand_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sand/Sand_001_NRM.png"
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
 				},
 				"moss": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/moss/Rock_Moss_001_basecolor.png",
-					"normal_texture": "TerrainMaterials/moss/Rock_Moss_001_normal.png"
+					"color_texture": "Rock_Moss_001_basecolor.png",
+					"normal_texture": "Rock_Moss_001_normal.png"
 				},
 				"soil": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"stone": {
 					"layer": 5,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"snow": {
 					"layer": 6,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1156,28 +1156,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"sand": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/sand/Sand_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sand/Sand_001_NRM.png"
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1294,28 +1294,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"drysoil": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/drysoil/Dried_Soil_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/drysoil/Dried_Soil_001_NRM.png"
+					"color_texture": "Dried_Soil_001_COLOR.png",
+					"normal_texture": "Dried_Soil_001_NRM.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1427,18 +1427,18 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"drysoil": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/drysoil/Dried_Soil_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/drysoil/Dried_Soil_001_NRM.png"
+					"color_texture": "Dried_Soil_001_COLOR.png",
+					"normal_texture": "Dried_Soil_001_NRM.png"
 				},
 				"snow": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1521,28 +1521,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1664,28 +1664,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1802,28 +1802,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"moss": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/moss/Rock_Moss_001_basecolor.png",
-					"normal_texture": "TerrainMaterials/moss/Rock_Moss_001_normal.png"
+					"color_texture": "Rock_Moss_001_basecolor.png",
+					"normal_texture": "Rock_Moss_001_normal.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -1915,28 +1915,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -2063,38 +2063,38 @@
 			"terrain-materials": {
 				"basalt": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/basalt/Rock_047_BaseColor.png",
-					"normal_texture": "TerrainMaterials/basalt/Rock_047_Normal.png"
+					"color_texture": "Rock_047_BaseColor.png",
+					"normal_texture": "Rock_047_Normal.png"
 				},
 				"limestone": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/limestone/Rock_037_baseColor.png",
-					"normal_texture": "TerrainMaterials/limestone/Rock_037_normal.png"
+					"color_texture": "limeRock_037_baseColor.png",
+					"normal_texture": "limeRock_037_normal.png"
 				},
 				"sand": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/sand/Sand_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sand/Sand_001_NRM.png"
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
 				},
 				"grass": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"stone": {
 					"layer": 5,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"snow": {
 					"layer": 6,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -2185,28 +2185,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -2328,18 +2328,18 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"sand": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/sand/Sand_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/sand/Sand_001_NRM.png"
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
 				},
 				"snow": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -2422,28 +2422,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {
@@ -2535,28 +2535,28 @@
 			"terrain-materials": {
 				"stone": {
 					"layer": 0,
-					"color_texture": "TerrainMaterials/stone/Rock_044_BaseColor.png",
-					"normal_texture": "TerrainMaterials/stone/Rock_044_Normal.png"
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
 				},
 				"gravel": {
 					"layer": 1,
-					"color_texture": "TerrainMaterials/gravel/Gravel_001_BaseColor.jpg",
-					"normal_texture": "TerrainMaterials/gravel/Gravel_001_Normal.png"
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
 				},
 				"grass": {
 					"layer": 2,
-					"color_texture": "TerrainMaterials/grass/Grass_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/grass/Grass_001_NORM.png"
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
 				},
 				"soil": {
 					"layer": 3,
-					"color_texture": "TerrainMaterials/soil/Ground_Dirt_005_COLOR.png",
-					"normal_texture": "TerrainMaterials/soil/Ground_Dirt_005_NORM.png"
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
 				},
 				"snow": {
 					"layer": 4,
-					"color_texture": "TerrainMaterials/snow/Snow_001_COLOR.png",
-					"normal_texture": "TerrainMaterials/snow/Snow_001_NORM.png"
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
 				}
 			},
 			"terrain-layers": {

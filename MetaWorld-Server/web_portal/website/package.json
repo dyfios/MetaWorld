@@ -1,0 +1,14 @@
+{
+  "name": "metaworld_web_portal",
+  "version": "1.0.0",
+  "description": "Web portal for a MetaWorld world.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dylan Z. Baker",
+  "license": "MIT",
+  "devDependencies": {
+    "bootstrap": "^5.3.3"
+  }
+}

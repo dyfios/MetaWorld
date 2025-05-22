@@ -102,7 +102,7 @@ PositionEntity = async function(context, entityID, variantID, instanceID, xPos, 
             context.db.InsertIntoTable("entities",
                 { "entityid": entityID, "variantid": variantID, "instanceid": instanceID,
                     "xposition": xPos, "yposition": yPos, "zposition": zPos,
-                    "xrotation": xRot, "yrotation": yRot, "zrotation": zRot, "wrotation": wRot }, false);
+                    "xrotation": xRot, "yrotation": yRot, "zrotation": zRot, "wrotation": wRot, "state": "" }, false);
         }
         else {
             context.db.UpdateInTable("entities",

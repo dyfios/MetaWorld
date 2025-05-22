@@ -1,0 +1,6 @@
+[submodule "MetaWorld-Server/VOS"]
+	path = MetaWorld-Server/VOS
+	url = https://github.com/Five-Squared-Interactive/VOS.git
+[submodule "MetaWorld-Server/VOS-Synchronization"]
+	path = MetaWorld-Server/VOS-Synchronization
+	url = https://github.com/Five-Squared-Interactive/VOS-Synchronization.git

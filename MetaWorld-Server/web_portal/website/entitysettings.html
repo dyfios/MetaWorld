@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>World Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark border-bottom border-body" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+          <img src="assets/images/MetaWorld-Logo.png" alt="Logo" width="139" height="24" class="d-inline-block align-text-top">
+          World Manager
+      </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Settings</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <br>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-2">
+          <nav class="nav nav-pills flex-column">
+            <a class="nav-link" aria-current="page" href="settings.html">World</a>
+            <a class="nav-link" href="modelsettings.html">Models</a>
+            <a class="nav-link" href="texturesettings.html">Textures</a>
+            <a class="nav-link" href="thumbnailsettings.html">Thumbnails</a>
+            <a class="nav-link" href="terrainsettings.html">Terrain</a>
+            <a class="nav-link active" href="#">Entities</a>
+          </nav>
+        </div>
+        <div class="col">
+          <h1>Entity</h1>
+
+          <div class="container text-center">
+            <div class="row">
+              <div class="col-2">
+                <h5>Entity</h5>
+
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Name</th>
+                    </tr>
+                  </thead>
+                  <tbody id="entityTableBody">
+                  </tbody>
+                </table>
+
+                <button type="button" class="btn btn-primary" id="removeEntityButton">Remove</button>
+              </div>
+              <div class="col bg-secondary">
+                <br>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="entityIDInputLabel">Entity ID</span>
+                  </div>
+                  <input type="number" min="0" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="entityIDInputInput">
+                </div>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="entityNameInputLabel">Entity Name</span>
+                  </div>
+                  <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="entityNameInputInput">
+                </div>
+
+                <button type="button" class="btn btn-primary" id="saveEntityButton">Save Entity Name/ID</button>
+                <button type="button" class="btn btn-primary" id="newEntityButton">New...</button>
+                <br>
+                <br>
+
+                <div class="container text-center">
+                  <div class="row">
+                    <div class="col-3">
+                      <h5>Variants</h5>
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                          </tr>
+                        </thead>
+                        <tbody id="variantTableBody">
+                        </tbody>
+                      </table>
+      
+                      <button type="button" class="btn btn-primary" id="removeVariantButton">Remove</button>
+                    </div>
+                    <div class="col bg-light">
+                      <br>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="variantIDInputLabel">Variant ID</span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="variantIDInputInput">
+                      </div>
+
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="variantNameInputLabel">Variant Name</span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="variantNameInputInput">
+                      </div>
+      
+                      <div class="dropdown mb-3">
+                        Variant Model
+                        <button class="btn btn-secondary dropdown-toggle" id="modelsDropdownButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          No Models
+                        </button>
+                        <ul class="dropdown-menu" id="modelsDropdown">
+                        </ul>
+                      </div>
+
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="displayNameInputLabel">Display Name</span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="displayNameInputInput">
+                      </div>
+
+                      <div class="dropdown mb-3">
+                        Variant Thumbnail
+                        <button class="btn btn-secondary dropdown-toggle" id="thumbnailsDropdownButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          No Thumbnail
+                        </button>
+                        <ul class="dropdown-menu" id="thumbnailsDropdown">
+                        </ul>
+                      </div>
+
+                      <h5>Scripts</h5>
+
+                      oncreate:
+                      <textarea name="Text1" id="onCreateInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      ondestroy:
+                      <textarea name="Text1" id="onDestroyInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      0.25 Hz Update:
+                      <textarea name="Text1" id="0_25UpdateInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      0.5 Hz Update:
+                      <textarea name="Text1" id="0_5UpdateInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      1 Hz Update:
+                      <textarea name="Text1" id="1_0UpdateInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      2 Hz Update:
+                      <textarea name="Text1" id="2_0UpdateInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      onpickup:
+                      <textarea name="Text1" id="onPickupInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      onplace:
+                      <textarea name="Text1" id="onPlaceInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      ontouch:
+                      <textarea name="Text1" id="onTouchInputInput" cols="40" rows="5"></textarea>
+                      <br>
+
+                      onuntouch:
+                      <textarea name="Text1" id="onUntouchInputInput" cols="40" rows="5"></textarea>
+                      <br>
+                      <button type="button" class="btn btn-primary" id="saveVariantButton">Save Variant</button>
+                    </div>
+                    <br>
+                  </div>
+                  <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="assets/js/entitysettings.js"></script>
+  </body>
+</html>

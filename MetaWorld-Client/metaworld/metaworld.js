@@ -1,58 +1,33 @@
-this.toolbar = null;
+// MetaWorld Client Modules.
+let configurationModule = null;
+let entityModule = null;
+let identityModule = null;
+let inputModule = null;
+let playerModule = null;
+let restModule = null;
+let scriptModule = null;
+let synchronizationModule = null;
+let uiModule = null;
+let worldRenderingModule = null;
 
-var worldURI = World.GetQueryParam("world_uri");
-var worldConfig = new WorldConfiguration(worldURI);
-var startPos = GetStartPos(startPos);
+// Query Parameter Information.
+let worldURI = null;
+let userID = null;
+let userTag = null;
+let token = null;
 let interfaceMode = null;
 let runtimeMode = null;
-let characterSynchronized = false;
-let characterLoaded = false;
-let sessionJoined = false;
-let entityPlacer = new EntityPlacer();
-Context.DefineContext("ENTITYPLACERCONTEXT", entityPlacer);
-let worldRenderer = new WorldRenderer(Vector3.zero);
-let thirdPersonCharacter = null;
 let thirdPersonCharacterModel = null;
 let thirdPersonCharacterOffset = Vector3.zero;
 let thirdPersonCharacterRotation = Quaternion.identity;
 let thirdPersonCharacterLabelOffset = Vector3.zero;
-HandleQueryParams();
-
-let vosSynchronizer = null;
-
-Time.SetInterval(`
-    if (vosSynchronizer === null) {
-        SetUpSynchronizer();
-    }
-    
-    if (!characterSynchronized) {
-        if (characterLoaded && sessionJoined) {
-            vosSynchronizer.AddEntity(thirdPersonCharacter.characterEntityID, true);
-            sessionJoined = true;
-            characterSynchronized = true;
-        }
-    }
-`, 0.1);
-
-function SetUpSynchronizer() {
-    var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
-    if (vosSynchronizer === null && configContext.worldConfig != null) {
-        sessionInfo = {
-            id: configContext.worldConfig["vos-synchronization-service"]["session-id"],
-            tag: configContext.worldConfig["vos-synchronization-service"]["session-tag"]
-        };
-        vosSynchronizer = new VOSSynchronizer(configContext.worldConfig["vos-synchronization-service"].host, configContext.worldConfig["vos-synchronization-service"].port,
-            configContext.worldConfig["vos-synchronization-service"].tls, configContext.worldConfig["vos-synchronization-service"].transport, sessionInfo, OnConnect, OnJoinSession, "OnVSSMessage");
-        thirdPersonCharacter = new ThirdPersonCharacter(userName, null, -90, 90, 1, 0.1, startPos, OnCharacterLoaded, interfaceMode,
-            thirdPersonCharacterModel, [ thirdPersonCharacterModel ], thirdPersonCharacterOffset, thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset);
-        //thirdPersonCharacter = new ThirdPersonCharacter(userName, null, -90, 90, 1, 0.1, startPos, OnCharacterLoaded, interfaceMode,
-        //    "file://C:/Users/dbake/Desktop/world/character.glb", [ "file://C:/Users/dbake/Desktop/world/character.glb" ], new Vector3(0, 0.45, 0), new Quaternion(0, 0, 0, 1), new Vector3(0, 2, 0));
-        vosSynchronizer.Connect();
-    }
-}
+let worldStartPos = Vector3.zero;
+let startPos = Vector3.zero;
 
 function HandleQueryParams() {
-    userName = World.GetQueryParam("USER_NAME");
+    worldURI = World.GetQueryParam("world_uri");
+    userTag = World.GetQueryParam("user_tag");
+    userID = World.GetQueryParam("user_id");
     interfaceMode = World.GetQueryParam("IF_MODE");
     if (interfaceMode === "desktop") {
         
@@ -100,192 +75,89 @@ function HandleQueryParams() {
     if (thirdPersonCharacterLabelOffsetX != null && thirdPersonCharacterLabelOffsetY != null && thirdPersonCharacterLabelOffsetZ != null) {
         thirdPersonCharacterLabelOffset = new Vector3(thirdPersonCharacterLabelOffsetX, thirdPersonCharacterLabelOffsetY, thirdPersonCharacterLabelOffsetZ);
     }
-}
 
-function SetUpToolbar() {
-    this.toolbar = new MainToolbar();
-    WorldStorage.SetItem("TERRAIN-EDIT-LAYER", "-1");
-}
-
-function SetUpLoadingIndicator() {
-    this.loadingIndicator = new LoadingIndicator();
-}
-
-function OnConnect() {
-    
-}
-
-function OnJoinSession() {
-    sessionJoined = true;
-}
-
-function OnLeftPress() {
-    var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
-    
-    entityPlacer.StopPlacing();
-    
-    hitInfo = Input.GetPointerRaycast(Vector3.forward);
-    
-    if (hitInfo != null) {
-        if (hitInfo.entity != null) {
-            if (hitInfo.entity.Dig != null) {
-                layerToDig = parseInt(WorldStorage.GetItem("TERRAIN-EDIT-LAYER"));
-                if (layerToDig > -1) {
-                    alignedHitPoint = new Vector3(
-                        Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
-                        Math.round(hitInfo.hitPoint.y / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
-                        Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
-                    hitInfo.entity.Dig(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToDig);
-                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?x=" + alignedHitPoint.x +
-                        "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "dig" +
-                        "&brushType=roundedCube&layer=" + layerToDig, null);
-                    vosSynchronizer.SendTerrainDigUpdate("{x:" + alignedHitPoint.x + ",y:" +
-                        alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube", layerToDig);
-                }
-            }
-        }
+    var worldPosX = World.GetQueryParam("WORLD_POS_X");
+    var worldPosY = World.GetQueryParam("WORLD_POS_Y");
+    var worldPosZ = World.GetQueryParam("WORLD_POS_Z");
+    if (worldPosX != null && worldPosY != null && worldPosZ != null) {
+        worldStartPos = new Vector3(worldPosX, worldPosY, worldPosZ);
     }
-}
-
-function OnRightPress() {
-    var configContext = Context.GetContext("WORLDCONFIGCONTEXT");
-    
-    hitInfo = Input.GetPointerRaycast(Vector3.forward);
-    
-    if (hitInfo != null) {
-        if (hitInfo.entity != null) {
-            if (hitInfo.entity.Build != null) {
-                layerToBuild = parseInt(WorldStorage.GetItem("TERRAIN-EDIT-LAYER"));
-                if (layerToBuild > -1) {
-                    alignedHitPoint = new Vector3(
-                        Math.round(hitInfo.hitPoint.x / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
-                        Math.round(hitInfo.hitPoint.y / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"],
-                        Math.round(hitInfo.hitPoint.z / configContext.terrainConfig["grid-size"]) * configContext.terrainConfig["grid-size"]);
-                    hitInfo.entity.Build(alignedHitPoint, TerrainEntityBrushType.roundedCube, layerToBuild);
-                    HTTPNetworking.Fetch(configContext.worldConfig["world-state-service"] + "/modifyterrain?x=" + alignedHitPoint.x +
-                        "&y=" + alignedHitPoint.y + "&z=" + alignedHitPoint.z + "&operation=" + "build" +
-                        "&brushType=roundedCube&layer=" + layerToBuild, null);
-                    vosSynchronizer.SendTerrainBuildUpdate("{x:" + alignedHitPoint.x + ",y:" +
-                        alignedHitPoint.y + ",z:" + alignedHitPoint.z + "}", "roundedcube", layerToBuild);
-                }
-            }
-        }
+    else {
+        // Set to a default.
     }
-}
 
-function GetStartPos() {
-    var startPos = Vector3.zero;
-    var startXArg = World.GetQueryParam("start_x");
-    var startYArg = World.GetQueryParam("start_y");
-    var startZArg = World.GetQueryParam("start_z");
+    var startXArg = 0;
+    var startYArg = 512;
+    var startZArg = 0;
+    startXArg = World.GetQueryParam("start_x");
+    startYArg = World.GetQueryParam("start_y");
+    startZArg = World.GetQueryParam("start_z");
     if (startXArg != null && startYArg != null && startZArg != null) {
         startPos = new Vector3(parseFloat(startXArg), parseFloat(startYArg), parseFloat(startZArg));
     }
-    
-    return startPos;
+    token = World.GetQueryParam("token");
 }
 
-function OnVSSMessage(topic, sender, msg) {
-    context = Context.GetContext("VOSSynchronizationContext");
-    
-    // Filter messages from this client.
-    if (context.clientID == sender) {
-        return;
-    }
-    
-    if (topic === "TERRAIN.EDIT.DIG") {
-        msgFields = JSON.parse(msg);
-        
-        if (msg.position === null || msg.position.x === null || msg.position.y === null || msg.position.z === null) {
-            Logging.LogError("OnVSSMessage: Terrain edit dig message missing position.");
-            return;
-        }
-        
-        if (msg.brushType === null) {
-            Logging.LogError("OnVSSMessage: Terrain edit dig message missing brushType.");
-            return;
-        }
-        
-        if (msg.lyr === null) {
-            Logging.LogError("OnVSSMessage: Terrain edit dig message missing lyr.");
-            return;
-        }
-        
-        var brushType = TerrainEntityBrushType.sphere;
-        if (msg.brushType === "sphere") {
-            brushType = TerrainEntityBrushType.sphere;
-        }
-        else if (msg.brushType === "roundedcube") {
-            brushType = TerrainEntityBrushType.roundedCube;
-        }
-        
-        this.terrainEntity.Dig(new Vector3(msg.position.x, msg.position.y, msg.position.z), brushType, msg.lyr);
-    }
-    else if (topic === "TERRAIN.EDIT.BUILD") {
-        msgFields = JSON.parse(msg);
-        
-        if (msg.position === null || msg.position.x === null || msg.position.y === null || msg.position.z === null) {
-            Logging.LogError("OnVSSMessage: Terrain edit build message missing position.");
-            return;
-        }
-        
-        if (msg.brushType === null) {
-            Logging.LogError("OnVSSMessage: Terrain edit build message missing brushType.");
-            return;
-        }
-        
-        if (msg.lyr === null) {
-            Logging.LogError("OnVSSMessage: Terrain edit build message missing lyr.");
-            return;
-        }
-        
-        var brushType = TerrainEntityBrushType.sphere;
-        if (msg.brushType === "sphere") {
-            brushType = TerrainEntityBrushType.sphere;
-        }
-        else if (msg.brushType === "roundedcube") {
-            brushType = TerrainEntityBrushType.roundedCube;
-        }
-        
-        this.terrainEntity.Build(new Vector3(msg.position.x, msg.position.y, msg.position.z), brushType, msg.lyr);
-    }
+function InitializeModules() {
+    configurationModule = new ConfigurationModule(worldURI, PerformPostWorldConfigLoadActions);
+    entityModule = new EntityModule();
+    identityModule = new IdentityModule(userID, userTag, token);
+    inputModule = new InputModule();
+    playerModule = new PlayerModule(userTag, startPos, interfaceMode,
+        thirdPersonCharacterModel, thirdPersonCharacterOffset,
+        thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset);
+    restModule = new RESTModule();
+    scriptModule = new ScriptModule();
+    synchronizationModule = new SynchronizationModule(playerModule);
+    uiModule = new UIModule(runtimeMode);
+    worldRenderingModule = new WorldRenderingModule(worldStartPos);
+
+    GetWorldConfiguration();
 }
 
-function OnCharacterLoaded() {
-    characterLoaded = true;
+function GetWorldConfiguration() {
+    Logging.Log("Getting World Configuration...");
+
+    var configModule = Context.GetContext("CONFIGURATION_MODULE");
+
+    configModule.LoadWorldConfig();
 }
 
-function Move(x, y) {
-    if (thirdPersonCharacter != null) {
-        thirdPersonCharacter.MoveCharacter(x, y);
-    }
+function PerformPostWorldConfigLoadActions() {
+    Logging.Log("Performing Post World Config Load Actions...");
+    ConnectToGlobalSynchronizer();
+    MW_UI_SetUpEditToolbar()
 }
 
-function EndMove() {
-    if (thirdPersonCharacter != null) {
-        thirdPersonCharacter.EndMoveCharacter();
-    }
+function PerformPostSynchronizerConnectActions() {
+    Logging.Log("Performing Post Synchronizer Connect Actions...");
 }
 
-function Look(x, y) {
-    if (thirdPersonCharacter != null) {
-        thirdPersonCharacter.LookCharacter(x, y);
-    }
+function PerformPostSessionJoinedActions() {
+    Logging.Log("Performing Post Session Joined Actions...");
+    MW_Rend_LoadWorld();
 }
 
-function EndLook() {
-    if (thirdPersonCharacter != null) {
-        thirdPersonCharacter.EndLookCharacter();
-    }
+function ConnectToGlobalSynchronizer() {
+    var configModule = Context.GetContext("CONFIGURATION_MODULE");
+    var synchronizationModule = Context.GetContext("SYNCHRONIZATION_MODULE");
+
+    synchronizationSession = {
+        host: configModule.worldConfig["vos-synchronization-service"]["host"],
+        port: configModule.worldConfig["vos-synchronization-service"]["port"],
+        tls: configModule.worldConfig["vos-synchronization-service"]["tls"],
+        transport: configModule.worldConfig["vos-synchronization-service"]["transport"]
+    };
+
+    sessionInfo = {
+        id: configModule.worldConfig["vos-synchronization-service"]["global-session-id"],
+        tag: configModule.worldConfig["vos-synchronization-service"]["global-session-tag"]
+    };
+    MW_Sync_ConnectToGlobalSynchronizer(synchronizationSession, sessionInfo,
+        PerformPostSynchronizerConnectActions, PerformPostSessionJoinedActions);
 }
 
-function OnKey(key) {
-    if (key === "r") {
-        entityPlacer.ToggleOrientation();
-    }
-}
+//Environment.SetWorldOffset(new Vector3(100, 200, 300));
 
-//if (runtimeMode === "focused") {
-    SetUpToolbar();
-//}
-worldRenderer.LoadWorld();
+HandleQueryParams();
+InitializeModules();

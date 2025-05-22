@@ -1,0 +1,9 @@
+{
+    "world_config_file": "C:/Users/dbake/WebVerse/FiveSquaredLab/DylanWorldServer-Development/world.json",
+    "biome_settings_file": "C:/Users/dbake/WebVerse/FiveSquaredLab/DylanWorldServer-Development/biomes.json",
+    "entity_settings_file": "C:/Users/dbake/WebVerse/FiveSquaredLab/DylanWorldServer-Development/entities.json",
+    "model_directory": "C:/Users/dbake/WebVerse/FiveSquaredLab/DylanWorldServer-Development/models",
+    "texture_directory": "C:/Users/dbake/WebVerse/FiveSquaredLab/DylanWorldServer-Development/textures",
+    "thumbnail_directory": "C:/Users/dbake/WebVerse/FiveSquaredLab/DylanWorldServer-Development/textures",
+    "backup_directory": "C:/Users/dbake/WebVerse/FiveSquaredLab/DylanWorldServer-Development/backups"
+}

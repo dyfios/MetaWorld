@@ -1,0 +1,37 @@
+{
+    "server-name": "MetaWorld",
+    "bus-port": 5525,
+    "startup-apps": [
+        {
+            "name": "Rest Server",
+            "command": "node",
+            "args": [ "./world_server/restserver.js", 25252, "world", "world.db" ]
+        },
+        {
+            "name": "Synchronization Manager",
+            "command": "node",
+            "args": [ "./synchronization/synchronizationmanager.js", 15525, 15526, null, null, null, "./world/world.db" ]
+        },
+        {
+            "name": "Web Portal",
+            "command": "node",
+            "args": [ "./web_portal/server.js", "./web_portal", "https://accounts.google.com/o/oauth2/v2/auth",
+                       "URL",
+                       "SECRET", "https://oauth2.googleapis.com/token",
+                       "https://oauth2.googleapis.com/tokeninfo", "secret", "2d" ]
+        },
+        {
+            "name": "Management Server",
+            "command": "node",
+            "args": [ "./management_server/metaworldmanagementapi.js", "./management_server/config.json" ]
+        }
+    ],
+    "message-triggered-apps": [
+        {
+            "name": "Message Test",
+            "topic": "vos/app/messagetest",
+            "command": "notepad.exe",
+            "default-args": [  ]
+        }
+    ]
+}

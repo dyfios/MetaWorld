@@ -1,0 +1,2676 @@
+{
+	"world-seed": 1234,
+	"ground-chunk-size": 512,
+	"ground-heightmap-scale": 2,
+	"ground-chunk-height": 512,
+	"water-level": 127,
+	"biomes": {
+		"0": {
+			"name": "tropical-rainforest",
+			"temperature": 0.9,
+			"moisture": 0.9,
+			"terrain-variability": 0.5,
+			"large-flora": 0.9,
+			"medium-flora": 0.8,
+			"small-flora": 0.8,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 231,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 495,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"bamboo": {
+					"entity-id": 16,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"mushroom-tree": {
+					"entity-id": 22,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush3": {
+					"entity-id": 27,
+					"variant-id": 2,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.5
+				},
+				"elephant-ear": {
+					"entity-id": 33,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			}
+		},
+		"1": {
+			"name": "cold-desert",
+			"temperature": 0.2,
+			"moisture": 0.1,
+			"terrain-variability": 0.25,
+			"large-flora": 0.05,
+			"medium-flora": 0.1,
+			"small-flora": 0.3,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"sandstone": {
+					"layer": 1,
+					"color_texture": "sandstone_rock_001_COLOR.png",
+					"normal_texture": "sandstone_rock_001_NRM.png"
+				},
+				"sand": {
+					"layer": 2,
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
+				},
+				"snow": {
+					"layer": 3,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 1
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 3
+				}
+			},
+			"large-flora-entities": {
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 1
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush3": {
+					"entity-id": 27,
+					"variant-id": 2,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 1
+				}
+			}
+		},
+		"2": {
+			"name": "hot-desert",
+			"temperature": 0.9,
+			"moisture": 0.1,
+			"terrain-variability": 0.25,
+			"large-flora": 0.05,
+			"medium-flora": 0.1,
+			"small-flora": 0.1,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"sandstone": {
+					"layer": 1,
+					"color_texture": "sandstone_rock_001_COLOR.png",
+					"normal_texture": "sandstone_rock_001_NRM.png"
+				},
+				"sand": {
+					"layer": 2,
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
+				},
+				"snow": {
+					"layer": 3,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 1
+				},
+				"4": {
+					"max-height": 495,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 3
+				}
+			},
+			"large-flora-entities": {
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 1
+				}
+			},
+			"medium-flora-entities": {
+				"cactus1": {
+					"entity-id": 28,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"cactus2": {
+					"entity-id": 28,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"cactus3": {
+					"entity-id": 28,
+					"variant-id": 2,
+					"proportion": 0.25
+				},
+				"cactus4": {
+					"entity-id": 28,
+					"variant-id": 3,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 1
+				}
+			}
+		},
+		"3": {
+			"name": "mountains",
+			"temperature": 0.2,
+			"moisture": 0.2,
+			"terrain-variability": 1,
+			"large-flora": 0.05,
+			"medium-flora": 0.1,
+			"small-flora": 0.2,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.5
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 0.5
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			}
+		},
+		"4": {
+			"name": "temperate-swamp",
+			"temperature": 0.5,
+			"moisture": 0.9,
+			"terrain-variability": 0.2,
+			"large-flora": 0.8,
+			"medium-flora": 0.5,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 231,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 399,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bamboo": {
+					"entity-id": 16,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"mushroom-tree": {
+					"entity-id": 22,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"elephant-ear": {
+					"entity-id": 33,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"red-wort": {
+					"entity-id": 35,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			}
+		},
+		"5": {
+			"name": "temperate-rainforest",
+			"temperature": 0.5,
+			"moisture": 0.9,
+			"terrain-variability": 0.5,
+			"large-flora": 0.9,
+			"medium-flora": 0.7,
+			"small-flora": 0.7,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 231,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 399,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"bamboo": {
+					"entity-id": 16,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"mushroom-tree": {
+					"entity-id": 22,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush3": {
+					"entity-id": 27,
+					"variant-id": 2,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.5
+				},
+				"elephant-ear": {
+					"entity-id": 33,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			}
+		},
+		"6": {
+			"name": "grassland",
+			"temperature": 0.5,
+			"moisture": 0.1,
+			"terrain-variability": 0.1,
+			"large-flora": 0.1,
+			"medium-flora": 0.1,
+			"small-flora": 0.9,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"drysoil": {
+					"layer": 1,
+					"color_texture": "Dried_Soil_001_COLOR.png",
+					"normal_texture": "Dried_Soil_001_NRM.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.4
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"hilltop-tree": {
+					"entity-id": 19,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				},
+				"sunflower": {
+					"entity-id": 29,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"chamomile": {
+					"entity-id": 31,
+					"variant-id": 0,
+					"proportion": 0.05
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"daisies": {
+					"entity-id": 32,
+					"variant-id": 0,
+					"proportion": 0.05
+				},
+				"wheat": {
+					"entity-id": 37,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			}
+		},
+		"7": {
+			"name": "temperate-ocean",
+			"temperature": 0.5,
+			"moisture": 0.5,
+			"terrain-variability": 0.2,
+			"large-flora": 0.5,
+			"medium-flora": 0.5,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"basalt": {
+					"layer": 0,
+					"color_texture": "Rock_047_BaseColor.png",
+					"normal_texture": "Rock_047_Normal.png"
+				},
+				"limestone": {
+					"layer": 1,
+					"color_texture": "Rock_037_baseColor.png",
+					"normal_texture": "Rock_037_normal.png"
+				},
+				"sand": {
+					"layer": 2,
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
+				},
+				"grass": {
+					"layer": 3,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 4,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"stone": {
+					"layer": 5,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"snow": {
+					"layer": 6,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 99,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 119,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 129,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 179,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 199,
+					"layer": 4
+				},
+				"5": {
+					"max-height": 479,
+					"layer": 5
+				},
+				"6": {
+					"max-height": 511,
+					"layer": 6
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.7
+				},
+				"oak-tree": {
+					"entity-id": 23,
+					"variant-id": 0,
+					"proportion": 0.3
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 0.5
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			}
+		},
+		"8": {
+			"name": "cold-ocean",
+			"temperature": 0.2,
+			"moisture": 0.5,
+			"terrain-variability": 0.2,
+			"large-flora": 0.3,
+			"medium-flora": 0.3,
+			"small-flora": 0.3,
+			"terrain-materials": {
+				"basalt": {
+					"layer": 0,
+					"color_texture": "Rock_047_BaseColor.png",
+					"normal_texture": "Rock_047_Normal.png"
+				},
+				"limestone": {
+					"layer": 1,
+					"color_texture": "Rock_037_baseColor.png",
+					"normal_texture": "Rock_037_normal.png"
+				},
+				"sand": {
+					"layer": 2,
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
+				},
+				"moss": {
+					"layer": 3,
+					"color_texture": "Rock_Moss_001_basecolor.png",
+					"normal_texture": "Rock_Moss_001_normal.png"
+				},
+				"soil": {
+					"layer": 4,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"stone": {
+					"layer": 5,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"snow": {
+					"layer": 6,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 99,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 119,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 129,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 179,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 199,
+					"layer": 4
+				},
+				"5": {
+					"max-height": 279,
+					"layer": 5
+				},
+				"6": {
+					"max-height": 511,
+					"layer": 6
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"oak-tree": {
+					"entity-id": 23,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.3
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 0.5
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			}
+		},
+		"9": {
+			"name": "mediterranean",
+			"temperature": 0.5,
+			"moisture": 0.1,
+			"terrain-variability": 0.25,
+			"large-flora": 0.5,
+			"medium-flora": 0.5,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"sand": {
+					"layer": 1,
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 231,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 399,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"hilltop-tree": {
+					"entity-id": 19,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"date-palm": {
+					"entity-id": 17,
+					"variant-id": 1,
+					"proportion": 0.3
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush3": {
+					"entity-id": 27,
+					"variant-id": 2,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"chamomile": {
+					"entity-id": 31,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"daisies": {
+					"entity-id": 32,
+					"variant-id": 0,
+					"proportion": 0.3
+				}
+			}
+		},
+		"10": {
+			"name": "savanna",
+			"temperature": 0.9,
+			"moisture": 0.5,
+			"terrain-variability": 0.1,
+			"large-flora": 0.2,
+			"medium-flora": 0.4,
+			"small-flora": 0.7,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"drysoil": {
+					"layer": 1,
+					"color_texture": "Dried_Soil_001_COLOR.png",
+					"normal_texture": "Dried_Soil_001_NRM.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.4
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.3
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"elephant-ear": {
+					"entity-id": 33,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"red-wort": {
+					"entity-id": 35,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			}
+		},
+		"11": {
+			"name": "polar-desert",
+			"temperature": 0.1,
+			"moisture": 0.2,
+			"terrain-variability": 0.25,
+			"large-flora": 0,
+			"medium-flora": 0,
+			"small-flora": 0,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"drysoil": {
+					"layer": 1,
+					"color_texture": "Dried_Soil_001_COLOR.png",
+					"normal_texture": "Dried_Soil_001_NRM.png"
+				},
+				"snow": {
+					"layer": 2,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 123,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 179,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 0
+				},
+				"4": {
+					"max-height": 511,
+					"layer": 2
+				}
+			},
+			"large-flora-entities": {
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.5
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.7
+				}
+			}
+		},
+		"12": {
+			"name": "hot-swamp",
+			"temperature": 0.9,
+			"moisture": 0.9,
+			"terrain-variability": 0.2,
+			"large-flora": 0.8,
+			"medium-flora": 0.5,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 231,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 495,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bamboo": {
+					"entity-id": 16,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"mushroom-tree": {
+					"entity-id": 22,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"elephant-ear": {
+					"entity-id": 33,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"red-wort": {
+					"entity-id": 35,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			}
+		},
+		"13": {
+			"name": "forest",
+			"temperature": 0.5,
+			"moisture": 0.5,
+			"terrain-variability": 0.5,
+			"large-flora": 0.8,
+			"medium-flora": 0.5,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.3
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush3": {
+					"entity-id": 27,
+					"variant-id": 2,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.5
+				},
+				"elephant-ear": {
+					"entity-id": 33,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			}
+		},
+		"14": {
+			"name": "tundra",
+			"temperature": 0.2,
+			"moisture": 0.1,
+			"terrain-variability": 0.4,
+			"large-flora": 0.05,
+			"medium-flora": 0.2,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"moss": {
+					"layer": 2,
+					"color_texture": "Rock_Moss_001_basecolor.png",
+					"normal_texture": "Rock_Moss_001_normal.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 139,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 179,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 339,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.5
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush3": {
+					"entity-id": 27,
+					"variant-id": 2,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.7
+				}
+			}
+		},
+		"15": {
+			"name": "plains",
+			"temperature": 0.5,
+			"moisture": 0.5,
+			"terrain-variability": 0.01,
+			"large-flora": 0.1,
+			"medium-flora": 0.3,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.4
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"hilltop-tree": {
+					"entity-id": 19,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				},
+				"sunflower": {
+					"entity-id": 29,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"chamomile": {
+					"entity-id": 31,
+					"variant-id": 0,
+					"proportion": 0.05
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"daisies": {
+					"entity-id": 32,
+					"variant-id": 0,
+					"proportion": 0.05
+				},
+				"wheat": {
+					"entity-id": 37,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			}
+		},
+		"16": {
+			"name": "hot-ocean",
+			"temperature": 0.9,
+			"moisture": 0.5,
+			"terrain-variability": 0.2,
+			"large-flora": 0.7,
+			"medium-flora": 0.7,
+			"small-flora": 0.7,
+			"terrain-materials": {
+				"basalt": {
+					"layer": 0,
+					"color_texture": "Rock_047_BaseColor.png",
+					"normal_texture": "Rock_047_Normal.png"
+				},
+				"limestone": {
+					"layer": 1,
+					"color_texture": "limeRock_037_baseColor.png",
+					"normal_texture": "limeRock_037_normal.png"
+				},
+				"sand": {
+					"layer": 2,
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
+				},
+				"grass": {
+					"layer": 3,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 4,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"stone": {
+					"layer": 5,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"snow": {
+					"layer": 6,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 99,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 119,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 132,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 279,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 299,
+					"layer": 4
+				},
+				"5": {
+					"max-height": 503,
+					"layer": 5
+				},
+				"6": {
+					"max-height": 511,
+					"layer": 6
+				}
+			},
+			"large-flora-entities": {
+				"coconut-palm": {
+					"entity-id": 17,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"date-palm": {
+					"entity-id": 17,
+					"variant-id": 1,
+					"proportion": 0.4
+				},
+				"large-palm-tree": {
+					"entity-id": 17,
+					"variant-id": 2,
+					"proportion": 0.3
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 1
+				}
+			}
+		},
+		"17": {
+			"name": "cold-swamp",
+			"temperature": 0.2,
+			"moisture": 0.2,
+			"terrain-variability": 0.2,
+			"large-flora": 0.8,
+			"medium-flora": 0.5,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 199,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bamboo": {
+					"entity-id": 16,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"mushroom-tree": {
+					"entity-id": 22,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"elephant-ear": {
+					"entity-id": 33,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"red-wort": {
+					"entity-id": 35,
+					"variant-id": 0,
+					"proportion": 0.2
+				}
+			}
+		},
+		"18": {
+			"name": "frozen-ocean",
+			"temperature": 0.1,
+			"moisture": 0.2,
+			"terrain-variability": 0.2,
+			"large-flora": 0,
+			"medium-flora": 0,
+			"small-flora": 0,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"sand": {
+					"layer": 1,
+					"color_texture": "Sand_001_COLOR.png",
+					"normal_texture": "Sand_001_NRM.png"
+				},
+				"snow": {
+					"layer": 2,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 123,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 179,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 0
+				},
+				"4": {
+					"max-height": 511,
+					"layer": 2
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.5
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.25
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.25
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.25
+				}
+			},
+			"small-flora-entities": {
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 0.5
+				},
+				"fern": {
+					"entity-id": 34,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			}
+		},
+		"19": {
+			"name": "taiga",
+			"temperature": 0.2,
+			"moisture": 0.5,
+			"terrain-variability": 0.5,
+			"large-flora": 0.8,
+			"medium-flora": 0.5,
+			"small-flora": 0.5,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 179,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.5
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.5
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush3": {
+					"entity-id": 27,
+					"variant-id": 2,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.7
+				}
+			}
+		},
+		"20": {
+			"name": "cold-plains",
+			"temperature": 0.2,
+			"moisture": 0.5,
+			"terrain-variability": 0.01,
+			"large-flora": 0.1,
+			"medium-flora": 0.2,
+			"small-flora": 0.6,
+			"terrain-materials": {
+				"stone": {
+					"layer": 0,
+					"color_texture": "Rock_044_BaseColor.png",
+					"normal_texture": "Rock_044_Normal.png"
+				},
+				"gravel": {
+					"layer": 1,
+					"color_texture": "Gravel_001_BaseColor.jpg",
+					"normal_texture": "Gravel_001_Normal.png"
+				},
+				"grass": {
+					"layer": 2,
+					"color_texture": "Grass_001_COLOR.png",
+					"normal_texture": "Grass_001_NORM.png"
+				},
+				"soil": {
+					"layer": 3,
+					"color_texture": "Ground_Dirt_005_COLOR.png",
+					"normal_texture": "Ground_Dirt_005_NORM.png"
+				},
+				"snow": {
+					"layer": 4,
+					"color_texture": "Snow_001_COLOR.png",
+					"normal_texture": "Snow_001_NORM.png"
+				}
+			},
+			"terrain-layers": {
+				"0": {
+					"max-height": 119,
+					"layer": 0
+				},
+				"1": {
+					"max-height": 127,
+					"layer": 1
+				},
+				"2": {
+					"max-height": 179,
+					"layer": 2
+				},
+				"3": {
+					"max-height": 255,
+					"layer": 3
+				},
+				"4": {
+					"max-height": 383,
+					"layer": 0
+				},
+				"5": {
+					"max-height": 511,
+					"layer": 4
+				}
+			},
+			"large-flora-entities": {
+				"conifer": {
+					"entity-id": 18,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"pine": {
+					"entity-id": 24,
+					"variant-id": 0,
+					"proportion": 0.25
+				},
+				"large-tree": {
+					"entity-id": 20,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"small-tree": {
+					"entity-id": 25,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"thin-tree": {
+					"entity-id": 26,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"hilltop-tree": {
+					"entity-id": 19,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			},
+			"medium-flora-entities": {
+				"bush1": {
+					"entity-id": 27,
+					"variant-id": 0,
+					"proportion": 0.3
+				},
+				"bush2": {
+					"entity-id": 27,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"bush4": {
+					"entity-id": 27,
+					"variant-id": 3,
+					"proportion": 0.2
+				},
+				"bush5": {
+					"entity-id": 27,
+					"variant-id": 4,
+					"proportion": 0.2
+				}
+			},
+			"small-flora-entities": {
+				"animated-grass": {
+					"entity-id": 30,
+					"variant-id": 0,
+					"proportion": 0.2
+				},
+				"dry-grass": {
+					"entity-id": 30,
+					"variant-id": 1,
+					"proportion": 0.2
+				},
+				"grass": {
+					"entity-id": 30,
+					"variant-id": 2,
+					"proportion": 0.3
+				},
+				"chamomile": {
+					"entity-id": 31,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"thistle": {
+					"entity-id": 36,
+					"variant-id": 0,
+					"proportion": 0.1
+				},
+				"wheat": {
+					"entity-id": 37,
+					"variant-id": 0,
+					"proportion": 0.1
+				}
+			}
+		}
+	}
+}

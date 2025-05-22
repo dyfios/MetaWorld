@@ -1,0 +1,4 @@
+.github/
+.config-temp
+configuration.json
+vss.log

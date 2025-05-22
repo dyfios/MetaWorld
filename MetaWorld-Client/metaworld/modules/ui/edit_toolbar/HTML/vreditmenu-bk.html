@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="assets/css/style.css" rel="stylesheet">
+		<meta name="transparent" content="true">
+	</head>
+	<body>
+        <div id="prev-menu-button">
+            <button class="menu-nav-btn" id="prev-menu-btn" title="Previous Menu">
+                <img draggable="false" src="assets/images/menu-back.png" width="25px">
+            </button>
+        </div>
+        <div id="next-menu-button">
+            <button class="menu-nav-btn" id="next-menu-btn" title="Next Menu">
+                <img draggable="false" src="assets/images/menu-forward.png" width="25px">
+            </button>
+        </div>
+		<div id="terrain-menu-vr">
+			<div class="menu-title">
+				<div class="menu-title-text" title="Terrain Tools">Terrain</div>
+			</div>
+			<div class="terrain-menu-left-panel">
+				<div class="terrain-menu-left-panel-btn-container">
+					<div class="menu-dropdown">
+						<div class="menu-text">Brush Type</div>
+						<select name="brush-type" id="terrain-brush-type-dropdown">
+							<option value="test">Cube</option>
+							<option value="test">Sphere</option>
+							<option value="test">Round Cube</option>
+						</select>
+					</div>
+					<div class="menu-numeric-adjust">
+						<div class="menu-text">Brush Size</div>
+						<div class="terrain-menu-right-panel-btn-container">
+							<button class="menu-small-btn" id="terrain-brush-size-decrease-btn" title="Decrease Brush Size">
+								<img draggable="false" src="assets/images/brush-decrease-icon.png" width="10px">
+							</button>
+							<div class="menu-numeric-label" id="terrain-brush-size-label">10</div>
+							<button class="menu-small-btn" id="terrain-brush-size-increase-btn" title="Increase Brush Size">
+								<img draggable="false" src="assets/images/brush-increase-icon.png" width="10px">
+							</button>
+						</div>
+					</div>
+					<div class="menu-numeric-input">
+						<div class="menu-text">Min. Height</div>
+						<div class="terrain-menu-right-panel-btn-container">
+							<input type="number" class="menu-numeric-input-input" id="terrain-min-height-input"></input>
+							<button class="menu-small-btn" id="terrain-min-height-pick-btn" title="Pick Min. Height">
+								<img draggable="false" src="assets/images/picker.png" width="10px">
+							</button>
+						</div>
+					</div>
+					<div class="menu-numeric-input">
+						<div class="menu-text">Max. Height</div>
+						<div class="terrain-menu-right-panel-btn-container">
+							<input type="number" class="menu-numeric-input-input" id="terrain-max-height-input"></input>
+							<button class="menu-small-btn" id="terrain-max-height-pick-btn" title="Pick Max. Height">
+								<img draggable="false" src="assets/images/picker.png" width="10px">
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="terrain-menu-right-panel">
+				<div class="terrain-menu-materials-container" id="terrain-menu-materials-container">
+				</div>
+			</div>
+		</div>
+		
+		<div id="entities-menu-vr">
+			<div class="menu-title">
+				<div class="menu-title-text" title="Entities">Entities</div>
+			</div>
+			<div class="entities-menu-left-panel">
+				<div class="entities-menu-left-panel-btn-container">
+					<div class="menu-checkbox">
+						<label class="menu-text" for="entities-grid-toggle">
+							<input class="menu-checkbox-checkbox" type="checkbox" id="entities-grid-toggle" name="entities-grid-toggle" value="entities-grid-enabled"> Grid
+						</label>
+					</div>
+					<div class="menu-numeric-adjust">
+						<div class="menu-text">Grid Size</div>
+							<!--<button class="menu-small-btn" id="entities-grid-size-decrease-btn" title="Decrease Grid Size">
+								<img draggable="false" src="assets/images/brush-decrease-icon.png" width="10px">
+							</button>-->
+							<input type="number" class="menu-numeric-input-input" id="entities-grid-size-input"></input>
+							<!--<button class="menu-small-btn" id="entities-grid-size-increase-btn" title="Increase Grid Size">
+								<img draggable="false" src="assets/images/brush-increase-icon.png" width="10px">
+							</button>-->
+					</div>
+				</div>
+			</div>
+			<div class="entities-menu-right-panel">
+				<div class="menu-search-input">
+					<div class="entities-menu-right-panel-btn-container">
+						<input class="menu-search-input-input" id="entities-entity-filter-input"></input>
+						<button class="menu-small-btn" id="entities-entity-filter-btn" title="Filter">
+							<img draggable="false" src="assets/images/search.png" width="10px">
+						</button>
+					</div>
+				</div>
+				<div class="entities-menu-entities-container" id="entities-menu-entities-container">
+				</div>
+				<button class="menu-med-btn" id="entities-place-button" title="Place Entity">
+					<div class="med-btn-text">Start Placing</div>
+				</button>
+				<div class="menu-checkbox">
+					<label class="menu-text" for="entities-keep-spawning-toggle">
+						<input class="menu-checkbox-checkbox" type="checkbox" id="entities-keep-spawning-toggle" name="entities-keep-spawning-toggle" value="entities-keep-spawning">Spawn New After Placed
+					</label>
+				</div>
+			</div>
+		</div>
+		<script src="assets/scripts/mainmenu.js"></script>
+	</body>
+</html>

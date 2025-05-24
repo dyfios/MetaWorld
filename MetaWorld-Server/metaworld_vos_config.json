@@ -24,6 +24,16 @@
             "name": "Management Server",
             "command": "node",
             "args": [ "./management_server/metaworldmanagementapi.js", "./management_server/config.json" ]
+        },
+        {
+            "name": "World Server",
+            "command": "node",
+            "args": [ "./web_server/webserver.js", "8081", "../../../../DylanWorldServer-Development" ]
+        },
+        {
+            "name": "MetaWorld Client Server",
+            "command": "node",
+            "args": [ "./web_server/webserver.js", "8080", "../MetaWorld-Client" ]
         }
     ],
     "message-triggered-apps": [

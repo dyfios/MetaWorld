@@ -483,10 +483,10 @@ function MW_Rend_UnloadUnnecessaryRegions(centerRegionIdx) {
             tile != (centerRegionIdx.x - 1) + "." + (centerRegionIdx.y + 1) &&
             tile != (centerRegionIdx.x + 1) + "." + (centerRegionIdx.y - 1)
         ) {
-        if (worldRenderingModule.terrainTiles[tile] != null) {
-            worldRenderingModule.terrainTiles[tile].Delete(false);
-        }
-        delete worldRenderingModule.terrainTiles[tile];
+            if (worldRenderingModule.terrainTiles[tile] != null) {
+                worldRenderingModule.terrainTiles[tile].Delete(false);
+            }
+            delete worldRenderingModule.terrainTiles[tile];
         }
     }
 }

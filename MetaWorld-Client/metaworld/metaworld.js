@@ -157,7 +157,5 @@ function ConnectToGlobalSynchronizer() {
         PerformPostSynchronizerConnectActions, PerformPostSessionJoinedActions);
 }
 
-//Environment.SetWorldOffset(new Vector3(100, 200, 300));
-
 HandleQueryParams();
 InitializeModules();

@@ -62,6 +62,34 @@ function OnVSSMessage(topic, sender, msg) {
         
         this.terrainEntity.Build(new Vector3(msg.position.x, msg.position.y, msg.position.z), brushType, msg.lyr);
     }
+    else if (topic === "MESSAGE.NEW") {
+        msgFields = JSON.parse(msg);
+        
+        if (!msgFields.hasOwnProperty("message")) {
+            Logging.LogError("OnVSSMessage: Message missing message field.");
+            return;
+        }
+        
+        if (!msgFields.hasOwnProperty("client-id")) {
+            Logging.LogError("OnVSSMessage: Message missing client-id.");
+            return;
+        }
+        
+        var message = msgFields.message;
+        var clientId = msgFields["client-id"];
+        var senderName = clientId === "system" ? "System" : `Client ${clientId}`;
+        var timestamp = Date.Now.ToTimeString();
+        
+        // Check if this is a command response (sent by system)
+        if (msgFields.hasOwnProperty("is-command-response") && msgFields["is-command-response"] === true) {
+            // This is a command response, only show it to the original sender
+            // The server already handles this, so just display it
+            postWorldMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${message})`);
+        } else {
+            // Regular message, display to all
+            postWorldMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${message})`);
+        }
+    }
     else if (topic === "SESSION.MESSAGE") {
         msgFields = JSON.parse(msg);
         

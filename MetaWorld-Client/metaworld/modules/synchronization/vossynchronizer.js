@@ -74,16 +74,18 @@ class VOSSynchronizer {
             return;
         }
         
+        // For CMD type, send the command with '/' prefix, for MSG type send as-is
+        const messageContent = messageType === "CMD" ? "/" + content : content;
+        
         const messageData = {
-            "session-id": this.sessionToConnectTo.id,
             "client-id": this.clientID,
             "client-token": this.clientToken,
-            "type": messageType,
-            "content": content
+            "topic": "chat",
+            "message": messageContent
         };
         
-        // Send directly to the server's session message handler
-        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "SESSION.MESSAGE", JSON.stringify(messageData));
+        // Use the existing message infrastructure
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "MESSAGE.CREATE", JSON.stringify(messageData));
     }
 }
 

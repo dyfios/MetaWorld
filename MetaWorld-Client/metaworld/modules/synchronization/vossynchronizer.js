@@ -67,6 +67,24 @@ class VOSSynchronizer {
     SendMessage(topic, message) {
         VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "CONSOLE." + topic, message);
     }
+
+    SendSessionMessage(messageType, content) {
+        if (!this.sessionToConnectTo || !this.sessionToConnectTo.id) {
+            Logging.LogError("VOSSynchronizer: No session to send message to");
+            return;
+        }
+        
+        const messageData = {
+            "session-id": this.sessionToConnectTo.id,
+            "client-id": this.clientID,
+            "client-token": this.clientToken,
+            "type": messageType,
+            "content": content
+        };
+        
+        // Send directly to the server's session message handler
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "SESSION.MESSAGE", JSON.stringify(messageData));
+    }
 }
 
 function MW_Sync_VSS_SendEntityAddUpdate(sessionID, entityID, position, rotation) {
@@ -115,4 +133,22 @@ function MW_Sync_VSS_SendTerrainBuildUpdate(sessionID, position, brushType, lyr)
     };
     
     VOSSynchronization.SendMessage(sessionID, "TERRAIN.EDIT.BUILD", JSON.stringify(messageInfo));
+}
+
+function MW_Sync_VSS_SendMessage(content) {
+    var context = Context.GetContext("VOSSynchronizationContext");
+    if (context && context.SendSessionMessage) {
+        context.SendSessionMessage("MSG", content);
+    } else {
+        Logging.LogError("VOSSynchronizer: Unable to send message - context not available");
+    }
+}
+
+function MW_Sync_VSS_SendCommand(command) {
+    var context = Context.GetContext("VOSSynchronizationContext");
+    if (context && context.SendSessionMessage) {
+        context.SendSessionMessage("CMD", command);
+    } else {
+        Logging.LogError("VOSSynchronizer: Unable to send command - context not available");
+    }
 }

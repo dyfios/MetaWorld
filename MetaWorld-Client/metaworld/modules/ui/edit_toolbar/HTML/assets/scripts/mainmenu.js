@@ -175,7 +175,14 @@ if (consoleInput != null) {
     function submitCommand() {
         const userInput = consoleInput.value.trim();
         if (userInput) {
-            postWorldMessage("TOOLBAR.CONSOLE.SEND-MESSAGE(" + userInput + ")");
+            if (userInput.startsWith('/')) {
+                // This is a command - remove the '/' prefix and send as CMD
+                const command = userInput.substring(1);
+                postWorldMessage("TOOLBAR.CONSOLE.SEND-COMMAND(" + command + ")");
+            } else {
+                // This is a regular message - send as MSG
+                postWorldMessage("TOOLBAR.CONSOLE.SEND-MESSAGE(" + userInput + ")");
+            }
         }
     }
 

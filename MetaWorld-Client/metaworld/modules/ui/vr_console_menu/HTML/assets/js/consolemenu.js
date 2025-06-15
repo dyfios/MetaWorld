@@ -62,7 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function submitCommand() {
         const userInput = consoleInput.value.trim();
         if (userInput) {
-            postWorldMessage("CONSOLE.SEND_MESSAGE(" + userInput + ")");
+            if (userInput.startsWith('/')) {
+                // This is a command - remove the '/' prefix and send as CMD
+                const command = userInput.substring(1);
+                postWorldMessage("CONSOLE.SUBMIT_COMMAND(" + command + ")");
+            } else {
+                // This is a regular message - send as MSG
+                postWorldMessage("CONSOLE.SEND_MESSAGE(" + userInput + ")");
+            }
         }
     }
 

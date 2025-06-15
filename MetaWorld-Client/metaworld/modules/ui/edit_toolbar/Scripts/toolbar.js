@@ -127,11 +127,18 @@ function HandleToolbarMessage(msg) {
         ToggleTerrainMenu(false);
     }
     else if (msg.startsWith("TOOLBAR.CONSOLE.SEND-MESSAGE")) {
+        var message = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
         var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-TOOLBAR-ID"));
         if (mainToolbar != null) {
-            mainToolbar.ExecuteJavaScript("AddMessageToConsole(\"" + Date.Now.ToTimeString() + "\",\"You\",\"" +
-                msg.substring(msg.indexOf("(") + 1, msg.indexOf(")")) + "\");", null);
+            mainToolbar.ExecuteJavaScript("AddMessageToConsole(\"" + Date.Now.ToTimeString() + "\",\"You\",\"" + message + "\");", null);
         }
+        // Also send through synchronization system
+        MW_Sync_VSS_SendMessage(message);
+    }
+    else if (msg.startsWith("TOOLBAR.CONSOLE.SEND-COMMAND")) {
+        var command = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
+        // Send command through synchronization system
+        MW_Sync_VSS_SendCommand(command);
     }
     else if (msg.startsWith("TOOLBAR.CONSOLE.REMOTE-MESSAGE")) {
         var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-TOOLBAR-ID"));

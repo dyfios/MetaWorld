@@ -5,6 +5,7 @@ const mqtt = require("mqtt");
 const fs = require("fs");
 const { v4: uuidv4 } = require('uuid');
 const vosSynchronizationSession = require('./vossynchronizationsession.js');
+const WorldCommands = require('./worldcommands.js');
 const path = require("path");
 
 /**
@@ -126,6 +127,11 @@ module.exports = function() {
      * Callback for Message Sending.
      */
     this.messageSentCallback = null;
+
+    /*
+     * Callback for Session Message (MSG/CMD).
+     */
+    this.sessionMessageCallback = null;
 
     /*
      * Callback for Entity Deletion.
@@ -361,6 +367,11 @@ module.exports = function() {
      * VOS Synchronization Sessions.
      */
     var vosSynchronizationSessions = {};
+
+    /**
+     * World Commands Module.
+     */
+    var worldCommands = new WorldCommands();
 
     /**
      * @function RunMQTT Run MQTT process.
@@ -1922,6 +1933,21 @@ module.exports = function() {
                     returnMessage["entities"] = entities;
                 }
                 SendMessage(returnTopic, JSON.stringify(returnMessage));
+                break;
+
+            case "vos/session/message":
+                result = HandleSessionMessage(JSON.parse(message));
+                if (result && result.broadcast) {
+                    returnTopic = `vos/status/${parsedMessage["session-id"]}/message`;
+                    returnMessage = JSON.parse(message);
+                    returnMessage["message-id"] = uuidv4();
+                    delete returnMessage["client-token"];
+                    SendMessage(returnTopic, JSON.stringify(returnMessage));
+                    if (this.sessionMessageCallback) {
+                        this.sessionMessageCallback(returnMessage["session-id"], returnMessage["client-id"],
+                            returnMessage["type"], returnMessage["content"]);
+                    }
+                }
                 break;
 
             default:
@@ -5091,6 +5117,76 @@ module.exports = function() {
             return;
         }
         session.SetVisibility(data["entity-id"], entity.visible);
+    }
+
+    /**
+     * @function HandleSessionMessage Handle a Session Message (MSG/CMD).
+     * @param {*} data Data.
+     * @returns {object} Result object with broadcast flag.
+     */
+    function HandleSessionMessage(data) {
+        if (!data.hasOwnProperty("session-id")) {
+            console.warn("[VOSSynchronizationService] Session Message does not contain: session-id");
+            return { broadcast: false };
+        }
+        if (!data.hasOwnProperty("client-id")) {
+            console.warn("[VOSSynchronizationService] Session Message does not contain: client-id");
+            return { broadcast: false };
+        }
+        if (!data.hasOwnProperty("type")) {
+            console.warn("[VOSSynchronizationService] Session Message does not contain: type");
+            return { broadcast: false };
+        }
+        if (!data.hasOwnProperty("content")) {
+            console.warn("[VOSSynchronizationService] Session Message does not contain: content");
+            return { broadcast: false };
+        }
+
+        const session = GetSynchronizedSession(data["session-id"]);
+        if (session == null) {
+            console.warn(`[VOSSynchronizationService] Session ${data["session-id"]} not found`);
+            return { broadcast: false };
+        }
+
+        // Validate client permissions
+        if (!CanSendMessage(data["client-id"], data["client-token"], data["session-id"])) {
+            Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to send messages in session ${data["session-id"]}`);
+            return { broadcast: false };
+        }
+
+        const messageType = data["type"].toUpperCase();
+        const content = data["content"];
+
+        if (messageType === "MSG") {
+            // MSG messages are broadcast to all clients in the session
+            Log(`[VOSSynchronizationService] MSG from client ${data["client-id"]} in session ${data["session-id"]}: ${content}`);
+            return { broadcast: true };
+        } else if (messageType === "CMD") {
+            // CMD messages are processed as world commands
+            Log(`[VOSSynchronizationService] CMD from client ${data["client-id"]} in session ${data["session-id"]}: ${content}`);
+            
+            const commandResult = worldCommands.ProcessCommand(content, data["session-id"], data["client-id"]);
+            
+            if (commandResult.success && commandResult.message) {
+                // Send command result back as a MSG to the issuing client
+                const responseMessage = {
+                    "message-id": uuidv4(),
+                    "session-id": data["session-id"],
+                    "client-id": "system",
+                    "type": "MSG",
+                    "content": commandResult.message
+                };
+                
+                const responseTopic = `vos/status/${data["session-id"]}/message`;
+                SendMessage(responseTopic, JSON.stringify(responseMessage));
+            }
+            
+            // CMD messages are not broadcast (only the response is sent)
+            return { broadcast: false };
+        } else {
+            console.warn(`[VOSSynchronizationService] Unknown message type: ${messageType}`);
+            return { broadcast: false };
+        }
     }
 
     /**

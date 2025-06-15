@@ -62,4 +62,36 @@ function OnVSSMessage(topic, sender, msg) {
         
         this.terrainEntity.Build(new Vector3(msg.position.x, msg.position.y, msg.position.z), brushType, msg.lyr);
     }
+    else if (topic === "SESSION.MESSAGE") {
+        msgFields = JSON.parse(msg);
+        
+        if (!msgFields.hasOwnProperty("type")) {
+            Logging.LogError("OnVSSMessage: Session message missing type.");
+            return;
+        }
+        
+        if (!msgFields.hasOwnProperty("content")) {
+            Logging.LogError("OnVSSMessage: Session message missing content.");
+            return;
+        }
+        
+        if (!msgFields.hasOwnProperty("client-id")) {
+            Logging.LogError("OnVSSMessage: Session message missing client-id.");
+            return;
+        }
+        
+        var messageType = msgFields.type.toUpperCase();
+        var content = msgFields.content;
+        var clientId = msgFields["client-id"];
+        
+        if (messageType === "MSG") {
+            // Handle MSG messages by logging to console
+            var senderName = clientId === "system" ? "System" : `Client ${clientId}`;
+            var timestamp = Date.Now.ToTimeString();
+            
+            // Use the toolbar message system to add to console
+            postWorldMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${content})`);
+        }
+        // CMD messages are handled server-side and don't need client processing
+    }
 }

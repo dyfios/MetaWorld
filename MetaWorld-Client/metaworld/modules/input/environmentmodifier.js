@@ -197,7 +197,7 @@ function MW_Input_EnvMod_HandleRightPress() {
     if (interactionMode == "HAND") {
         if (hitInfo != null) {
             if (hitInfo.entity != null) {
-                if (hitInfo instanceof AutomobileEntity) {
+                if (hitInfo.entity instanceof AutomobileEntity) {
                     MW_Input_EnvMod_PlaceCharacterInAutomobile(hitInfo.entity);
                 }
                 else if (hitInfo.entity instanceof AirplaneEntity) {

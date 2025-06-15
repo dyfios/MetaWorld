@@ -91,7 +91,7 @@ class ThirdPersonCharacterController {
 
                     var cameraRotation = new Vector3(context.currentRotation.z, 0, 0);
                     if (context.inVehicle) {
-
+                        context.characterEntity.SetPosition(new Vector3(0, 1, -4), true, false);
                     }
                     else {
                         var newPosition = new Vector3(context.currentTransform.position.x + newMotion.x,
@@ -486,12 +486,91 @@ function MW_Player_ThirdPerson_PlaceCharacterInAutomobileEntity(automobileEntity
     var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
 
     context.characterEntity.SetParent(automobileEntity);
-    context.characterEntity.SetPosition(Vector3.zero, true, false);
+    context.characterEntity.SetPosition(new Vector3(0, 1, -4), true, false);
     context.characterEntity.SetRotation(Quaternion.identity, true, false);
     context.characterEntity.SetInteractionState(InteractionState.Static);
+    context.characterEntity.fixHeight = false;
+    context.characterEntity.SetPhysicalProperties(new EntityPhysicalProperties(null, null, null, false, null));
     context.characterEntity.SetVisibility(false, false);
     context.inVehicle = true;
     context.activeVehicle = automobileEntity;
 
     Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+}
+
+function MW_Player_ThirdPerson_ExitVehicle() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.inVehicle && context.activeVehicle != null) {
+        var vehiclePosition = context.activeVehicle.GetPosition(false);
+        context.characterEntity.SetParent(null);
+        context.characterEntity.SetPosition(new Vector3(
+            vehiclePosition.x, vehiclePosition.y + 2, vehiclePosition.z), true, false);
+        context.characterEntity.SetRotation(Quaternion.identity, true, false);
+        context.characterEntity.SetInteractionState(InteractionState.Physical);
+        context.characterEntity.fixHeight = true;
+        context.characterEntity.SetPhysicalProperties(new EntityPhysicalProperties(null, null, null, true, null));
+        context.characterEntity.SetVisibility(true, false);
+        context.inVehicle = false;
+        context.activeVehicle = null;
+        Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+        // Place the camera on the character.
+        context.characterEntity.PlaceCameraOn();
+        Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+        Camera.SetPosition(new Vector3(0, 1, -2), true);
+    }
+    else {
+        Logging.LogError("[ThirdPersonCharacter] Cannot exit vehicle, not in a vehicle.");
+    }
+}
+
+function MW_Player_ThirdPerson_StartVehicleEngine() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.activeVehicle != null) {
+        context.activeVehicle.engineStartStop = true;
+    }
+}
+
+function MW_Player_ThirdPerson_MoveVehicleForward() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.activeVehicle != null) {
+        context.activeVehicle.brake = 0;
+        context.activeVehicle.throttle = 1;
+    }
+}
+
+function MW_Player_ThirdPerson_MoveVehicleBackward() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.activeVehicle != null) {
+        context.activeVehicle.brake = 1;
+        context.activeVehicle.throttle = 0;
+    }
+}
+
+function MW_Player_ThirdPerson_StopMovingVehicle() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.activeVehicle != null) {
+        context.activeVehicle.brake = 0;
+        context.activeVehicle.throttle = 0;
+    }
+}
+
+function MW_Player_ThirdPerson_SteerVehicleLeft() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.activeVehicle != null) {
+        context.activeVehicle.steer = -1;
+    }
+}
+
+function MW_Player_ThirdPerson_SteerVehicleRight() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.activeVehicle != null) {
+        context.activeVehicle.steer = 1;
+    }
+}
+
+function MW_Player_ThirdPerson_StopSteeringVehicle() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.activeVehicle != null) {
+        context.activeVehicle.steer = 0;
+    }
 }

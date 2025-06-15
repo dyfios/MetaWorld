@@ -64,22 +64,20 @@ function MW_Input_Desktop_OnKey(key) {
     else if (key == " ") {
         MW_Player_ThirdPerson_JumpCharacter(1);
     }
-    /*else if (key == "k") {
-        thirdPersonCharacterController.activeVehicle.engineStartStop = true;
-    }*/
-    else if (key == "p") {
-        thirdPersonCharacterController.activeVehicle.brake = 0;
-        thirdPersonCharacterController.activeVehicle.throttle = 1;
+    else if (key == "e") {
+        MW_Player_ThirdPerson_StartVehicleEngine();
     }
-    /*else if (key == "l") {
-        thirdPersonCharacterController.activeVehicle.brake = 1;
-        thirdPersonCharacterController.activeVehicle.throttle = 0;
-    }*/
-    else if (key == "x") {
-        thirdPersonCharacterController.activeVehicle.steer = -1;
+    else if (key == "w") {
+        MW_Player_ThirdPerson_MoveVehicleForward();
     }
-    else if (key == "c") {
-        thirdPersonCharacterController.activeVehicle.steer = 1;
+    else if (key == "s") {
+        MW_Player_ThirdPerson_MoveVehicleBackward();
+    }
+    else if (key == "a") {
+        MW_Player_ThirdPerson_SteerVehicleLeft();
+    }
+    else if (key == "d") {
+        MW_Player_ThirdPerson_SteerVehicleRight();
     }
     else if (key == "i") {
         MW_Input_EnvMod_PerformRotate("z", false);
@@ -92,6 +90,9 @@ function MW_Input_Desktop_OnKey(key) {
     }
     else if (key == "l") {
         MW_Input_EnvMod_PerformRotate("y", false);
+    }
+    else if (key == "x") {
+        MW_Player_ThirdPerson_ExitVehicle();
     }
     else if (key == "1") {
         MW_UI_EditToolbar_SelectLowerToolbarItem(0);
@@ -133,18 +134,16 @@ function MW_Input_Desktop_OnKeyRelease(key) {
     else if (key === "z") {
         thirdPersonCharacterController.currentMotion.y = 0;
     }
-    else if (key == "p") {
-        thirdPersonCharacterController.activeVehicle.brake = 0;
-        thirdPersonCharacterController.activeVehicle.throttle = 0;
+    else if (key == "w") {
+        MW_Player_ThirdPerson_StopMovingVehicle();
     }
-    else if (key == "l") {
-        thirdPersonCharacterController.activeVehicle.brake = 0;
-        thirdPersonCharacterController.activeVehicle.throttle = 0;
+    else if (key == "s") {
+        MW_Player_ThirdPerson_StopMovingVehicle();
     }
-    else if (key == "x") {
-        thirdPersonCharacterController.activeVehicle.steer = 0;
+    else if (key == "a") {
+        MW_Player_ThirdPerson_StopSteeringVehicle();
     }
-    else if (key == "c") {
-        thirdPersonCharacterController.activeVehicle.steer = 0;
+    else if (key == "d") {
+        MW_Player_ThirdPerson_StopSteeringVehicle();
     }
 }

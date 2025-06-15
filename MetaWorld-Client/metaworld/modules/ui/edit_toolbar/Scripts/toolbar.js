@@ -587,8 +587,6 @@ function SetUpVRTerrainMenu() {
 function SetUpEntitiesInMenu() {
     var configModule = Context.GetContext("CONFIGURATION_MODULE");
     var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-TOOLBAR-ID"));
-    
-    mainToolbar.ExecuteJavaScript("AddEntityButton('Delete','TODO','TOOLBAR.ENTITY.ENTITY-SELECTED.-1.-1');", null);
 
     for (var entity in configModule.entitiesConfig) {
         for (var variant in configModule.entitiesConfig[entity].variants) {

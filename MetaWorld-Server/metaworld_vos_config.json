@@ -5,7 +5,7 @@
         {
             "name": "Rest Server",
             "command": "node",
-            "args": [ "./world_server/restserver.js", 25252, "world", "world.db" ]
+            "args": [ "./world_server/restserver.js", 25252, "world", "world.db", "2289b763-7f4c-4682-85fe-c1f789351b7a", "world" ]
         },
         {
             "name": "Synchronization Manager",

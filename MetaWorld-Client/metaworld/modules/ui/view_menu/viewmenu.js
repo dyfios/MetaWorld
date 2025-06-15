@@ -222,3 +222,24 @@ function MW_UI_ViewMenu_SetTouchControls() {
         dropControlEntity.SetVisibility(false);
     }
 }
+
+function MW_UI_ViewMenu_ToggleCameraMode() {
+    var currentCameraMode = WorldStorage.GetItem("METAWORLD-CAMERA-MODE");
+    if (currentCameraMode == null) {
+        currentCameraMode = "third_person";
+    }
+    
+    var newCameraMode = currentCameraMode === "third_person" ? "first_person" : "third_person";
+    WorldStorage.SetItem("METAWORLD-CAMERA-MODE", newCameraMode);
+    
+    MW_Player_ThirdPerson_SetCameraMode(newCameraMode);
+    
+    var buttonText = Entity.GetByTag("CameraText");
+    if (buttonText != null) {
+        if (newCameraMode === "third_person") {
+            buttonText.SetText("Camera: Third Person");
+        } else {
+            buttonText.SetText("Camera: First Person");
+        }
+    }
+}

@@ -10,6 +10,7 @@ const fs = require("fs");
 const sqliteDatabase = require("../sqlite/sqliteDatabase");
 const vosapp = require("../VOS/vosapp");
 const VOSSynchronizationService = require("./VOS-Synchronization/vossynchronizationservice");
+const WorldCommands = require("./VOS-Synchronization/worldcommands");
 const { argv } = require("process");
 const path = require("path");
 
@@ -589,6 +590,10 @@ this.vosApp = new vosapp();
 this.vosApp.Log("Synchronization Manager Started");
 
 this.vss = new VOSSynchronizationService();
+
+// Create and inject world commands handler
+this.worldCommandsHandler = new WorldCommands();
+this.vss.worldCommandsHandler = this.worldCommandsHandler;
 
 this.vss.sessionCreatedCallback = (sessionID, sessionTag) => {
     var sessionIDParts = sessionTag.split(".");

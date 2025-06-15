@@ -5,7 +5,6 @@ const mqtt = require("mqtt");
 const fs = require("fs");
 const { v4: uuidv4 } = require('uuid');
 const vosSynchronizationSession = require('./vossynchronizationsession.js');
-const WorldCommands = require('./worldcommands.js');
 const path = require("path");
 
 /**
@@ -132,6 +131,11 @@ module.exports = function() {
      * Callback for Session Message (MSG/CMD).
      */
     this.sessionMessageCallback = null;
+
+    /*
+     * World Commands Handler.
+     */
+    this.worldCommandsHandler = null;
 
     /*
      * Callback for Entity Deletion.
@@ -367,11 +371,6 @@ module.exports = function() {
      * VOS Synchronization Sessions.
      */
     var vosSynchronizationSessions = {};
-
-    /**
-     * World Commands Module.
-     */
-    var worldCommands = new WorldCommands();
 
     /**
      * @function RunMQTT Run MQTT process.
@@ -5124,7 +5123,7 @@ module.exports = function() {
      * @param {*} data Data.
      * @returns {object} Result object with broadcast flag.
      */
-    function HandleSessionMessage(data) {
+    const HandleSessionMessage = (data) => {
         if (!data.hasOwnProperty("session-id")) {
             console.warn("[VOSSynchronizationService] Session Message does not contain: session-id");
             return { broadcast: false };
@@ -5165,20 +5164,35 @@ module.exports = function() {
             // CMD messages are processed as world commands
             Log(`[VOSSynchronizationService] CMD from client ${data["client-id"]} in session ${data["session-id"]}: ${content}`);
             
-            const commandResult = worldCommands.ProcessCommand(content, data["session-id"], data["client-id"]);
-            
-            if (commandResult.success && commandResult.message) {
-                // Send command result back as a MSG to the issuing client
-                const responseMessage = {
+            // Check if world commands handler is available
+            if (this.worldCommandsHandler && typeof this.worldCommandsHandler.ProcessCommand === 'function') {
+                const commandResult = this.worldCommandsHandler.ProcessCommand(content, data["session-id"], data["client-id"]);
+                
+                if (commandResult.success && commandResult.message) {
+                    // Send command result back as a MSG to the issuing client
+                    const responseMessage = {
+                        "message-id": uuidv4(),
+                        "session-id": data["session-id"],
+                        "client-id": "system",
+                        "type": "MSG",
+                        "content": commandResult.message
+                    };
+                    
+                    const responseTopic = `vos/status/${data["session-id"]}/message`;
+                    SendMessage(responseTopic, JSON.stringify(responseMessage));
+                }
+            } else {
+                // No world commands handler available
+                const errorMessage = {
                     "message-id": uuidv4(),
                     "session-id": data["session-id"],
                     "client-id": "system",
                     "type": "MSG",
-                    "content": commandResult.message
+                    "content": "World commands are not available in this session."
                 };
                 
                 const responseTopic = `vos/status/${data["session-id"]}/message`;
-                SendMessage(responseTopic, JSON.stringify(responseMessage));
+                SendMessage(responseTopic, JSON.stringify(errorMessage));
             }
             
             // CMD messages are not broadcast (only the response is sent)
@@ -5187,7 +5201,7 @@ module.exports = function() {
             console.warn(`[VOSSynchronizationService] Unknown message type: ${messageType}`);
             return { broadcast: false };
         }
-    }
+    };
 
     /**
      * @function CanCreateSession Determine whether or not the client can create a session.

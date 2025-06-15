@@ -1,6 +1,8 @@
 // argv[2]: REST service port.
 // argv[3]: World directory.
 // argv[4]: Main DB file.
+// argv[5]: Top Level Synchronizer ID.
+// argv[6]: Top Level Synchronizer Tag.
 
 const worldrestserver = require("./worldrestserver");
 const fs = require("fs");
@@ -39,6 +41,9 @@ this.worldDirectory = argv[3];
 
 this.mainDBFile = argv[4];
 
+this.topLevelSynchronizerID = argv[5] || uuidv4();
+this.topLevelSynchronizerTag = argv[6] || "world";
+
 this.worldInfoFile = "../biomes.json";
 
 /**
@@ -76,7 +81,11 @@ function StartServer(context, port) {
 
     InitializeRegionDBMap(context);
 
-    Log("World Region DB Map set up. Setting up World Region Synchronizer Map...");
+    Log("World Region DB Map set up. Setting up Top Level Synchronizer...");
+
+    InitializeTopLevelSynchronizer(context);
+
+    Log("Top Level Synchronizer set up. Setting up World Region Synchronizer Map...");
 
     InitializeRegionSynchronizerMap(context);
 
@@ -842,6 +851,13 @@ OpenRegionDatabase = async function(dbFile, callback) {
     else {
         callback?.(null);
     }
+}
+
+InitializeTopLevelSynchronizer = async function(context) {
+    context.vosApp.PublishOnVOS("vos/app/sync/createsession", `{
+        "id":"${context.topLevelSynchronizerID}",
+        "tag":"${context.topLevelSynchronizerTag}"
+    }`);
 }
 
 AddRegionSynchronizer = async function(context, regionX, regionY) {

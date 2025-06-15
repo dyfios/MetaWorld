@@ -25,6 +25,10 @@ class ThirdPersonCharacterController {
         this.inVehicle = false;
         this.activeVehicle = null;
         
+        // Initialize camera mode from storage or default to third person
+        var savedCameraMode = WorldStorage.GetItem("METAWORLD-CAMERA-MODE");
+        this.cameraMode = (savedCameraMode === "first_person") ? "first_person" : "third_person";
+        
         this.characterEntityID = null;
         if (id != null)
         {
@@ -45,7 +49,12 @@ class ThirdPersonCharacterController {
                 context.characterEntity.SetVisibility(false, false);
             }
             else {
-                context.characterEntity.SetVisibility(true, false);
+                // Set visibility based on camera mode
+                if (context.cameraMode === "first_person") {
+                    context.characterEntity.SetVisibility(false, false);
+                } else {
+                    context.characterEntity.SetVisibility(true, false);
+                }
             }
             context.characterEntity.EnablePositionBroadcast(0.25);
             context.characterEntity.EnableRotationBroadcast(0.25);
@@ -84,8 +93,13 @@ class ThirdPersonCharacterController {
                     if (context.inVRMode) {
                         Input.RemoveRigFollower(context.characterEntity);
                         context.characterEntity.PlaceCameraOn();
-                        Camera.SetPosition(new Vector3(0, 1, -2), true);
-                        context.characterEntity.SetVisibility(true, false);
+                        if (context.cameraMode === "third_person") {
+                            Camera.SetPosition(new Vector3(0, 1, -2), true);
+                            context.characterEntity.SetVisibility(true, false);
+                        } else {
+                            Camera.SetPosition(new Vector3(0, 0.1, 0), true);
+                            context.characterEntity.SetVisibility(false, false);
+                        }
                         context.inVRMode = false;
                     }
 
@@ -105,6 +119,15 @@ class ThirdPersonCharacterController {
                         }
                         var entityRotation = new Vector3(context.currentRotation.x, context.currentRotation.y, 0);
                         context.characterEntity.SetEulerRotation(entityRotation, false);
+                        
+                        // Update camera position based on camera mode
+                        if (context.cameraMode === "first_person") {
+                            Camera.SetPosition(new Vector3(0, 0.1, 0), true);
+                            context.characterEntity.SetVisibility(false, false);
+                        } else {
+                            Camera.SetPosition(new Vector3(0, 1, -2), true);
+                            context.characterEntity.SetVisibility(true, false);
+                        }
                     }
                     Camera.SetEulerRotation(cameraRotation, true);
                 }
@@ -128,7 +151,12 @@ class ThirdPersonCharacterController {
         }
         else if (!Input.IsVR) {
             this.characterEntity.PlaceCameraOn();
-            Camera.SetPosition(new Vector3(0, 1, -2), true);
+            // Initialize camera position based on default camera mode
+            if (this.cameraMode === "first_person") {
+                Camera.SetPosition(new Vector3(0, 0.1, 0), true);
+            } else {
+                Camera.SetPosition(new Vector3(0, 1, -2), true);
+            }
         }
         
         Time.SetInterval(`
@@ -306,6 +334,67 @@ class ThirdPersonCharacterController {
         else if (key === "z") {
             this.currentMotion.y = 0;
         }
+    }
+
+    /// @function ToggleCameraMode
+    /// Toggle between first person and third person camera modes.
+    ToggleCameraMode() {
+        var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+        if (context.cameraMode === "third_person") {
+            context.cameraMode = "first_person";
+        } else {
+            context.cameraMode = "third_person";
+        }
+        
+        // Save to storage
+        WorldStorage.SetItem("METAWORLD-CAMERA-MODE", context.cameraMode);
+        
+        // Immediately update camera position and character visibility
+        if (context.characterEntity != null) {
+            if (context.cameraMode === "first_person") {
+                Camera.SetPosition(new Vector3(0, 0.1, 0), true);
+                context.characterEntity.SetVisibility(false, false);
+            } else {
+                Camera.SetPosition(new Vector3(0, 1, -2), true);
+                context.characterEntity.SetVisibility(true, false);
+            }
+        }
+        
+        Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+    }
+
+    /// @function SetCameraMode
+    /// Set the camera mode to first person or third person.
+    /// @param {string} mode The camera mode: "first_person" or "third_person"
+    SetCameraMode(mode) {
+        var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+        if (mode === "first_person" || mode === "third_person") {
+            context.cameraMode = mode;
+            
+            // Save to storage
+            WorldStorage.SetItem("METAWORLD-CAMERA-MODE", context.cameraMode);
+            
+            // Immediately update camera position and character visibility
+            if (context.characterEntity != null) {
+                if (context.cameraMode === "first_person") {
+                    Camera.SetPosition(new Vector3(0, 0.1, 0), true);
+                    context.characterEntity.SetVisibility(false, false);
+                } else {
+                    Camera.SetPosition(new Vector3(0, 1, -2), true);
+                    context.characterEntity.SetVisibility(true, false);
+                }
+            }
+            
+            Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+        }
+    }
+
+    /// @function GetCameraMode
+    /// Get the current camera mode.
+    /// @returns {string} The current camera mode: "first_person" or "third_person"
+    GetCameraMode() {
+        var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+        return context.cameraMode;
     }
 }
 
@@ -494,4 +583,65 @@ function MW_Player_ThirdPerson_PlaceCharacterInAutomobileEntity(automobileEntity
     context.activeVehicle = automobileEntity;
 
     Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+}
+
+/// @function ToggleCameraMode
+/// Toggle between first person and third person camera modes.
+function MW_Player_ThirdPerson_ToggleCameraMode() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (context.cameraMode === "third_person") {
+        context.cameraMode = "first_person";
+    } else {
+        context.cameraMode = "third_person";
+    }
+    
+    // Save to storage
+    WorldStorage.SetItem("METAWORLD-CAMERA-MODE", context.cameraMode);
+    
+    // Immediately update camera position and character visibility
+    if (context.characterEntity != null) {
+        if (context.cameraMode === "first_person") {
+            Camera.SetPosition(new Vector3(0, 0.1, 0), true);
+            context.characterEntity.SetVisibility(false, false);
+        } else {
+            Camera.SetPosition(new Vector3(0, 1, -2), true);
+            context.characterEntity.SetVisibility(true, false);
+        }
+    }
+    
+    Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+}
+
+/// @function SetCameraMode
+/// Set the camera mode to first person or third person.
+/// @param {string} mode The camera mode: "first_person" or "third_person"
+function MW_Player_ThirdPerson_SetCameraMode(mode) {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    if (mode === "first_person" || mode === "third_person") {
+        context.cameraMode = mode;
+        
+        // Save to storage
+        WorldStorage.SetItem("METAWORLD-CAMERA-MODE", context.cameraMode);
+        
+        // Immediately update camera position and character visibility
+        if (context.characterEntity != null) {
+            if (context.cameraMode === "first_person") {
+                Camera.SetPosition(new Vector3(0, 0.1, 0), true);
+                context.characterEntity.SetVisibility(false, false);
+            } else {
+                Camera.SetPosition(new Vector3(0, 1, -2), true);
+                context.characterEntity.SetVisibility(true, false);
+            }
+        }
+        
+        Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+    }
+}
+
+/// @function GetCameraMode
+/// Get the current camera mode.
+/// @returns {string} The current camera mode: "first_person" or "third_person"
+function MW_Player_ThirdPerson_GetCameraMode() {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+    return context.cameraMode;
 }

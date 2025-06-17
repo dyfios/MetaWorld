@@ -127,6 +127,13 @@ module.exports = function() {
      */
     this.messageSentCallback = null;
 
+
+
+    /*
+     * World Commands Handler.
+     */
+    this.worldCommandsHandler = null;
+
     /*
      * Callback for Entity Deletion.
      */
@@ -1924,6 +1931,8 @@ module.exports = function() {
                 SendMessage(returnTopic, JSON.stringify(returnMessage));
                 break;
 
+
+
             default:
                 if (topic.startsWith("vos/request") && topic.endsWith("/createcontainerentity")) {
                     sessionUUID = topic.replace("vos/request/", "").replace("/createcharacterentity", "");
@@ -2288,18 +2297,26 @@ module.exports = function() {
                         console.error(`[VOSSynchronizationService->ProcessMessage] Unknown session ID ${sessionUUID}`);
                         return;
                     }
-                    entityUUID = HandleSendMessageMessage(session, JSON.parse(message));
-                    returnTopic = topic.replace("vos/request/", "vos/status/").replace("/message/create", "/message/new");
-                    returnMessage = message;
-                    returnMessage["message-id"] = uuidv4();
-                    delete returnMessage["client-id"];
-                    delete returnMessage["client-token"];
-                    message["entity-id"] = entityUUID;
-                    SendMessage(returnTopic, returnMessage);
-                    if (this.messageSentCallback) {
-                        this.messageSentCallback(returnMessage["session-id"], returnMessage["client-id"],
-                            returnMessage["topic"], returnMessage["message"]);
+                    
+                    const parsedMessage = JSON.parse(message);
+                    const handleResult = HandleSendMessageMessage.call(this, session, parsedMessage);
+                    
+                    // If HandleSendMessageMessage returns null, it means it was a command that was already processed
+                    // If it returns undefined or any other value, proceed with normal message broadcasting
+                    if (handleResult !== null) {
+                        // This is a regular message, proceed with broadcasting
+                        returnTopic = topic.replace("vos/request/", "vos/status/").replace("/message/create", "/message/new");
+                        returnMessage = JSON.parse(message);
+                        returnMessage["message-id"] = uuidv4();
+                        delete returnMessage["client-id"];
+                        delete returnMessage["client-token"];
+                        SendMessage(returnTopic, JSON.stringify(returnMessage));
+                        if (this.messageSentCallback) {
+                            this.messageSentCallback(returnMessage["session-id"], returnMessage["client-id"],
+                                returnMessage["topic"], returnMessage["message"]);
+                        }
                     }
+                    // If handleResult is null, the command was processed and no broadcast is needed
                 }
                 else if (topic.startsWith("vos/request/") && topic.endsWith("delete")) {
                     ids = topic.replace("vos/request/", "").replace("/delete", "").split("/entity/");
@@ -4714,7 +4731,7 @@ module.exports = function() {
      * @param {*} session Session.
      * @param {*} data Data.
      */
-    function HandleSendMessageMessage(session, data) {
+    const HandleSendMessageMessage = (session, data) => {
         if (!data.hasOwnProperty("client-id")) {
             console.warn("[VOSSynchronizationService] Send Message Message does not contain: client-id");
             return;
@@ -4735,7 +4752,55 @@ module.exports = function() {
             Log(`[VOSSynchronizationService] Client ${data["client-id"]} is not allowed to send a message in session ${session.id}`);
             return;
         }
-    }
+
+        // Check if this is a command (starts with '/') or a regular message
+        const message = data["message"];
+        if (typeof message === 'string' && message.startsWith('/')) {
+            // Handle as command
+            Log(`[VOSSynchronizationService] CMD from client ${data["client-id"]} in session ${session.id}: ${message}`);
+            
+            // Check if world commands handler is available
+            if (this.worldCommandsHandler && typeof this.worldCommandsHandler.ProcessCommand === 'function') {
+                const commandResult = this.worldCommandsHandler.ProcessCommand(message.substring(1), session.id, data["client-id"]);
+                
+                if (commandResult.success && commandResult.message) {
+                    // Create command response message
+                    const responseMessage = {
+                        "message-id": uuidv4(),
+                        "session-id": session.id,
+                        "client-id": "system",
+                        "topic": data["topic"],
+                        "message": commandResult.message,
+                        "is-command-response": true
+                    };
+                    
+                    // Send response only to the client who issued the command
+                    const responseTopic = `vos/status/${session.id}/message/new`;
+                    SendMessage(responseTopic, JSON.stringify(responseMessage));
+                }
+            } else {
+                // No world commands handler available
+                const errorMessage = {
+                    "message-id": uuidv4(),
+                    "session-id": session.id,
+                    "client-id": "system", 
+                    "topic": data["topic"],
+                    "message": "World commands are not available in this session.",
+                    "is-command-response": true
+                };
+                
+                const responseTopic = `vos/status/${session.id}/message/new`;
+                SendMessage(responseTopic, JSON.stringify(errorMessage));
+            }
+            
+            // Commands are not broadcast further
+            return null;
+        } else {
+            // Handle as regular message - will be broadcast by existing logic
+            Log(`[VOSSynchronizationService] MSG from client ${data["client-id"]} in session ${session.id}: ${message}`);
+            return undefined; // Let existing logic handle the broadcast
+        }
+    };
 
     /**
      * @function HandleDeleteEntityMessage Handle a Delete Entity Message.
@@ -5092,6 +5157,8 @@ module.exports = function() {
         }
         session.SetVisibility(data["entity-id"], entity.visible);
     }
+
+
 
     /**
      * @function CanCreateSession Determine whether or not the client can create a session.

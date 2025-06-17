@@ -80,11 +80,18 @@ function HandleConsoleMenuMessage(msg) {
     }
     else if (msg.startsWith("CONSOLE.SUBMIT_COMMAND")) {
         var command = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
-        postWorldMessage(command);
+        // Send command through synchronization system
+        MW_Sync_VSS_SendCommand(command);
     }
     else if (msg.startsWith("CONSOLE.SEND_MESSAGE")) {
-        mainToolbar.ExecuteJavaScript("AddMessageToConsole(\"" + Date.Now.ToTimeString() + "\",\"You\",\"" +
-                msg.substring(msg.indexOf("(") + 1, msg.indexOf(")")) + "\");", null);
+        var message = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
+        // Send message through synchronization system
+        MW_Sync_VSS_SendMessage(message);
+        // Also add to local console for immediate feedback
+        var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-TOOLBAR-ID"));
+        if (mainToolbar != null) {
+            mainToolbar.ExecuteJavaScript("AddMessageToConsole(\"" + Date.Now.ToTimeString() + "\",\"You\",\"" + message + "\");", null);
+        }
     }
     else {
         Logging.Log("[HandleConsoleMenuMessage] Received invalid message: " + msg);

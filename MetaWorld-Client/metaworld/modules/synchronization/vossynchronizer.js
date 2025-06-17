@@ -67,6 +67,26 @@ class VOSSynchronizer {
     SendMessage(topic, message) {
         VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "CONSOLE." + topic, message);
     }
+
+    SendSessionMessage(messageType, content) {
+        if (!this.sessionToConnectTo || !this.sessionToConnectTo.id) {
+            Logging.LogError("VOSSynchronizer: No session to send message to");
+            return;
+        }
+        
+        // For CMD type, send the command with '/' prefix, for MSG type send as-is
+        const messageContent = messageType === "CMD" ? "/" + content : content;
+        
+        const messageData = {
+            "client-id": this.clientID,
+            "client-token": this.clientToken,
+            "topic": "chat",
+            "message": messageContent
+        };
+        
+        // Use the existing message infrastructure
+        VOSSynchronization.SendMessage(this.sessionToConnectTo.id, "MESSAGE.CREATE", JSON.stringify(messageData));
+    }
 }
 
 function MW_Sync_VSS_SendEntityAddUpdate(sessionID, entityID, position, rotation) {
@@ -115,4 +135,32 @@ function MW_Sync_VSS_SendTerrainBuildUpdate(sessionID, position, brushType, lyr)
     };
     
     VOSSynchronization.SendMessage(sessionID, "TERRAIN.EDIT.BUILD", JSON.stringify(messageInfo));
+}
+
+function MW_Sync_VSS_SendGlobalMessage(content) {
+    var globalSynchronizer = Context.GetContext("GLOBAL_SYNCHRONIZER");
+    if (globalSynchronizer && globalSynchronizer.SendSessionMessage) {
+        globalSynchronizer.SendSessionMessage("MSG", content);
+    } else {
+        Logging.LogError("VOSSynchronizer: Unable to send global message - global synchronizer not available");
+    }
+}
+
+function MW_Sync_VSS_SendGlobalCommand(command) {
+    var globalSynchronizer = Context.GetContext("GLOBAL_SYNCHRONIZER");
+    if (globalSynchronizer && globalSynchronizer.SendSessionMessage) {
+        globalSynchronizer.SendSessionMessage("CMD", command);
+    } else {
+        Logging.LogError("VOSSynchronizer: Unable to send global command - global synchronizer not available");
+    }
+}
+
+function MW_Sync_VSS_SendMessage(content) {
+    // Use the global synchronizer instead of the session-based one
+    MW_Sync_VSS_SendGlobalMessage(content);
+}
+
+function MW_Sync_VSS_SendCommand(command) {
+    // Use the global synchronizer instead of the session-based one
+    MW_Sync_VSS_SendGlobalCommand(command);
 }

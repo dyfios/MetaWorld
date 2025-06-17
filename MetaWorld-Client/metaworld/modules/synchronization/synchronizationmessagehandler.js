@@ -84,10 +84,10 @@ function OnVSSMessage(topic, sender, msg) {
         if (msgFields.hasOwnProperty("is-command-response") && msgFields["is-command-response"] === true) {
             // This is a command response, only show it to the original sender
             // The server already handles this, so just display it
-            postWorldMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${message})`);
+            HandleToolbarMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${message})`);
         } else {
             // Regular message, display to all
-            postWorldMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${message})`);
+            HandleToolbarMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${message})`);
         }
     }
     else if (topic === "SESSION.MESSAGE") {
@@ -118,7 +118,7 @@ function OnVSSMessage(topic, sender, msg) {
             var timestamp = Date.Now.ToTimeString();
             
             // Use the toolbar message system to add to console
-            postWorldMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${content})`);
+            HandleToolbarMessage(`TOOLBAR.CONSOLE.REMOTE-MESSAGE(${timestamp}|${senderName}|${content})`);
         }
         // CMD messages are handled server-side and don't need client processing
     }

@@ -137,20 +137,30 @@ function MW_Sync_VSS_SendTerrainBuildUpdate(sessionID, position, brushType, lyr)
     VOSSynchronization.SendMessage(sessionID, "TERRAIN.EDIT.BUILD", JSON.stringify(messageInfo));
 }
 
-function MW_Sync_VSS_SendMessage(content) {
-    var context = Context.GetContext("VOSSynchronizationContext");
-    if (context && context.SendSessionMessage) {
-        context.SendSessionMessage("MSG", content);
+function MW_Sync_VSS_SendGlobalMessage(content) {
+    var globalSynchronizer = Context.GetContext("GLOBAL_SYNCHRONIZER");
+    if (globalSynchronizer && globalSynchronizer.SendSessionMessage) {
+        globalSynchronizer.SendSessionMessage("MSG", content);
     } else {
-        Logging.LogError("VOSSynchronizer: Unable to send message - context not available");
+        Logging.LogError("VOSSynchronizer: Unable to send global message - global synchronizer not available");
     }
 }
 
-function MW_Sync_VSS_SendCommand(command) {
-    var context = Context.GetContext("VOSSynchronizationContext");
-    if (context && context.SendSessionMessage) {
-        context.SendSessionMessage("CMD", command);
+function MW_Sync_VSS_SendGlobalCommand(command) {
+    var globalSynchronizer = Context.GetContext("GLOBAL_SYNCHRONIZER");
+    if (globalSynchronizer && globalSynchronizer.SendSessionMessage) {
+        globalSynchronizer.SendSessionMessage("CMD", command);
     } else {
-        Logging.LogError("VOSSynchronizer: Unable to send command - context not available");
+        Logging.LogError("VOSSynchronizer: Unable to send global command - global synchronizer not available");
     }
+}
+
+function MW_Sync_VSS_SendMessage(content) {
+    // Use the global synchronizer instead of the session-based one
+    MW_Sync_VSS_SendGlobalMessage(content);
+}
+
+function MW_Sync_VSS_SendCommand(command) {
+    // Use the global synchronizer instead of the session-based one
+    MW_Sync_VSS_SendGlobalCommand(command);
 }

@@ -26,5 +26,8 @@ function MW_Sync_ConnectToGlobalSynchronizer(synchronizationSettings, sessionInf
         synchronizationSettings.tls, synchronizationSettings.transport, sessionInfo, onConnect,
         onJoinSession, "OnVSSMessage", identityModule.userID, identityModule.token);
     
+    // Store the global synchronizer in context for access by other functions
+    Context.DefineContext("GLOBAL_SYNCHRONIZER", vosSynchronizer);
+    
     vosSynchronizer.Connect();
 }

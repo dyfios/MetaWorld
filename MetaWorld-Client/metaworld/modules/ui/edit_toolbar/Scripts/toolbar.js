@@ -140,20 +140,6 @@ function HandleToolbarMessage(msg) {
         // Send command through synchronization system
         MW_Sync_VSS_SendCommand(command);
     }
-    else if (msg.startsWith("TOOLBAR.CONSOLE.REMOTE-MESSAGE")) {
-        var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-TOOLBAR-ID"));
-        if (mainToolbar != null) {
-            // Parse the message format: TOOLBAR.CONSOLE.REMOTE-MESSAGE(timestamp|sender|content)
-            var messageData = msg.substring(msg.indexOf("(") + 1, msg.indexOf(")"));
-            var parts = messageData.split("|");
-            if (parts.length >= 3) {
-                var timestamp = parts[0];
-                var sender = parts[1];
-                var content = parts.slice(2).join("|"); // Rejoin in case content contains |
-                mainToolbar.ExecuteJavaScript("AddMessageToConsole(\"" + timestamp + "\",\"" + sender + "\",\"" + content + "\");", null);
-            }
-        }
-    }
     else if (msg == "TOOLBAR.CONSOLE.INPUT-ACTIVE") {
         WorldStorage.SetItem("CONSOLE-INPUT-ACTIVE", "TRUE");
     }
@@ -806,6 +792,21 @@ function SelectVREntityMenuToolbarButtonAtRight() {
     var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-VR-TOOLBAR-ID"));
     
     mainToolbar.ExecuteJavaScript("SelectLowerToolbarButtonAtRight();", null);
+}
+
+// Dedicated functions for console message handling
+function AddConsoleMessage(timestamp, sender, message) {
+    var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-TOOLBAR-ID"));
+    if (mainToolbar != null) {
+        mainToolbar.ExecuteJavaScript("AddMessageToConsole(\"" + timestamp + "\",\"" + sender + "\",\"" + message + "\");", null);
+    }
+}
+
+function AddRemoteConsoleMessage(timestamp, sender, content) {
+    var mainToolbar = Entity.Get(WorldStorage.GetItem("MAIN-TOOLBAR-ID"));
+    if (mainToolbar != null) {
+        mainToolbar.ExecuteJavaScript("AddMessageToConsole(\"" + timestamp + "\",\"" + sender + "\",\"" + content + "\");", null);
+    }
 }
 
 WorldStorage.SetItem("TERRAIN-BRUSH-MIN-HEIGHT", "1");

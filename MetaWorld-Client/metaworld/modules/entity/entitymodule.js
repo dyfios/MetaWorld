@@ -49,7 +49,8 @@ function MW_Entity_LoadEntity(type, loadedEntityID, entityIndex, variantIndex,
                 automobileWheels, mass, AutomobileType.default, null, null, "MW_Entity_FinishLoadingPlacingEntity");
         }
         else if (type == "airplane") {
-
+            AirplaneEntity.Create(parentEntity, modelPath, [ modelPath ], offset, rotation,
+                mass, null, null, "MW_Entity_FinishLoadingPlacingEntity");
         }
         else {
             Logging.LogWarning("Entity type not supported: " + type);
@@ -77,7 +78,8 @@ function MW_Entity_LoadEntity(type, loadedEntityID, entityIndex, variantIndex,
                 automobileWheels, mass, AutomobileType.default, null, null, "MW_Entity_FinishLoadingPlacedEntity");
         }
         else if (type == "airplane") {
-
+            AirplaneEntity.Create(parentEntity, modelPath, [ modelPath ], offset, rotation,
+                mass, null, null, "MW_Entity_FinishLoadingPlacedEntity");
         }
         else {
             Logging.LogWarning("Entity type not supported: " + type);
@@ -122,7 +124,7 @@ function MW_Entity_FinishLoadingPlacingEntity(entity) {
 
 function MW_Entity_FinishLoadingPlacedEntity(entity) {
     entity.SetVisibility(true);
-    if (entity instanceof AutomobileEntity) {
+    if (entity instanceof AutomobileEntity || entity instanceof AirplaneEntity) {
         entity.SetInteractionState(InteractionState.Physical);
     }
     else {

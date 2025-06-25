@@ -498,6 +498,22 @@ function MW_Player_ThirdPerson_PlaceCharacterInAutomobileEntity(automobileEntity
     Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
 }
 
+function MW_Player_ThirdPerson_PlaceCharacterInAirplaneEntity(airplaneEntity) {
+    var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
+
+    context.characterEntity.SetParent(airplaneEntity);
+    context.characterEntity.SetPosition(new Vector3(0, 1, -4), true, false);
+    context.characterEntity.SetRotation(Quaternion.identity, true, false);
+    context.characterEntity.SetInteractionState(InteractionState.Static);
+    context.characterEntity.fixHeight = false;
+    context.characterEntity.SetPhysicalProperties(new EntityPhysicalProperties(null, null, null, false, null));
+    context.characterEntity.SetVisibility(false, false);
+    context.inVehicle = true;
+    context.activeVehicle = airplaneEntity;
+
+    Context.DefineContext("THIRD_PERSON_CHARACTER_CONTROLLER", context);
+}
+
 function MW_Player_ThirdPerson_ExitVehicle() {
     var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
     if (context.inVehicle && context.activeVehicle != null) {

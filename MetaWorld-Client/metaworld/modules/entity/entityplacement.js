@@ -192,7 +192,7 @@ class EntityPlacement {
 
             entityPlacementComponent.placingEntity.SetParent(MW_Rend_GetTerrainTileForIndex(terrainIndex));
             entityPlacementComponent.placingEntity.SetHighlight(false);
-            if (entityPlacementComponent.placingEntity instanceof AutomobileEntity) {
+            if (entityPlacementComponent.placingEntity instanceof AutomobileEntity || entityPlacementComponent.placingEntity instanceof AirplaneEntity) {
                 entityPlacementComponent.placingEntity.SetInteractionState(InteractionState.Physical);
             }
             entityPlacementComponent.placingEntity = null;

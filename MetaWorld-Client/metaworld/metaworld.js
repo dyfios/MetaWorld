@@ -88,15 +88,30 @@ function HandleQueryParams() {
         // Set to a default.
     }
 
-    var startXArg = 0;
-    var startYArg = 512;
-    var startZArg = 0;
-    startXArg = World.GetQueryParam("start_x");
-    startYArg = World.GetQueryParam("start_y");
-    startZArg = World.GetQueryParam("start_z");
-    if (startXArg != null && startYArg != null && startZArg != null) {
-        startPos = new Vector3(parseFloat(startXArg), parseFloat(startYArg), parseFloat(startZArg));
-        hasExplicitStartPos = true;
+    var startXArg = World.GetQueryParam("start_x");
+    var startYArg = World.GetQueryParam("start_y");
+    var startZArg = World.GetQueryParam("start_z");
+    
+    // Default position values
+    let finalX = 0;
+    let finalY = 512;
+    let finalZ = 0;
+    
+    // Use provided coordinates or defaults
+    if (startXArg != null) {
+        finalX = parseFloat(startXArg);
+    }
+    if (startYArg != null) {
+        finalY = parseFloat(startYArg);
+        hasExplicitStartPos = true; // Only disable ground finding if Y is explicitly set
+    }
+    if (startZArg != null) {
+        finalZ = parseFloat(startZArg);
+    }
+    
+    // Only update startPos if any coordinate was provided
+    if (startXArg != null || startYArg != null || startZArg != null) {
+        startPos = new Vector3(finalX, finalY, finalZ);
     }
     //token = World.GetQueryParam("token");
 }

@@ -111,8 +111,11 @@ function HandleQueryParams() {
     
     // Only update startPos if any coordinate was provided
     if (startXArg != null || startYArg != null || startZArg != null) {
-        startPos = new Vector3(finalX, finalY, finalZ);
-        Logging.Log(`Setting startPos from query params: x=${finalX}, y=${finalY}, z=${finalZ}`);
+        // Convert from world coordinates (what users expect) to rendered coordinates (what the engine uses)
+        // In the coordinate transformation: worldPos.x -> renderedPos.z, worldPos.z -> renderedPos.x
+        startPos = new Vector3(finalZ, finalY, finalX); // Swap X and Z for coordinate system
+        Logging.Log(`Setting startPos from query params (world coords): x=${finalX}, y=${finalY}, z=${finalZ}`);
+        Logging.Log(`Converted to rendered coords: x=${finalZ}, y=${finalY}, z=${finalX}`);
         Logging.Log(`Original query values: start_x=${startXArg}, start_y=${startYArg}, start_z=${startZArg}`);
     }
     //token = World.GetQueryParam("token");

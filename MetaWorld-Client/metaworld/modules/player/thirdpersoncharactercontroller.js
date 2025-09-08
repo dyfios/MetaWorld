@@ -45,11 +45,6 @@ class ThirdPersonCharacterController {
             }
             var context = Context.GetContext("THIRD_PERSON_CHARACTER_CONTROLLER");
             context.characterEntity.SetInteractionState(InteractionState.Physical);
-            
-            // Log the final position after loading
-            var finalPos = context.characterEntity.GetPosition(false);
-            Logging.Log(`Character final position after loading: x=${finalPos.x}, y=${finalPos.y}, z=${finalPos.z}`);
-            
             if (mode === "vr") {
                 context.characterEntity.SetVisibility(false, false);
             }
@@ -143,9 +138,7 @@ class ThirdPersonCharacterController {
         
         this.characterEntity = CharacterEntity.Create(null, position,
             Quaternion.identity, Vector3.one, false, name, this.characterEntityID, "FinishLoadingCharacter");
-        Logging.Log(`Character entity created with position: x=${position.x}, y=${position.y}, z=${position.z}`);
         this.characterEntity.fixHeight = findGround;
-        Logging.Log(`Ground finding enabled: ${findGround}`);
         if (findGround) {
             MW_Player_ThirdPerson_SetMotionModePhysical();
         }

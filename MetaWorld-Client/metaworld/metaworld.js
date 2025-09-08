@@ -24,6 +24,7 @@ let thirdPersonCharacterRotation = Quaternion.identity;
 let thirdPersonCharacterLabelOffset = Vector3.zero;
 let worldStartPos = Vector3.zero;
 let startPos = Vector3.zero;
+let hasExplicitStartPos = false;
 
 function HandleQueryParams() {
     worldURI = World.GetQueryParam("world_uri");
@@ -95,6 +96,7 @@ function HandleQueryParams() {
     startZArg = World.GetQueryParam("start_z");
     if (startXArg != null && startYArg != null && startZArg != null) {
         startPos = new Vector3(parseFloat(startXArg), parseFloat(startYArg), parseFloat(startZArg));
+        hasExplicitStartPos = true;
     }
     //token = World.GetQueryParam("token");
 }
@@ -106,7 +108,7 @@ function InitializeModules() {
     inputModule = new InputModule();
     playerModule = new PlayerModule(userTag, startPos, interfaceMode,
         thirdPersonCharacterModel, thirdPersonCharacterOffset,
-        thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset);
+        thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset, hasExplicitStartPos);
     restModule = new RESTModule();
     scriptModule = new ScriptModule();
     synchronizationModule = new SynchronizationModule(playerModule);

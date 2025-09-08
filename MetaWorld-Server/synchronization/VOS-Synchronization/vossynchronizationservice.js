@@ -4764,6 +4764,28 @@ module.exports = function() {
                 const commandResult = this.worldCommandsHandler.ProcessCommand(message.substring(1), session.id, data["client-id"]);
                 
                 if (commandResult.success && commandResult.message) {
+                    // Handle teleport command specially
+                    if (commandResult.action === "teleport" && commandResult.position) {
+                        // Create a teleport message that will be broadcast to all clients
+                        const teleportBroadcast = {
+                            "message-id": uuidv4(),
+                            "session-id": session.id,
+                            "client-id": data["client-id"],
+                            "topic": "PLAYER.TELEPORT",
+                            "message": JSON.stringify({
+                                "client-id": data["client-id"],
+                                "action": "player-teleport",
+                                "position": commandResult.position
+                            })
+                        };
+                        
+                        // Send the teleport message using the standard VOS broadcasting
+                        const teleportTopic = `vos/status/${session.id}/message/new`;
+                        SendMessage(teleportTopic, JSON.stringify(teleportBroadcast));
+                        
+                        Log(`[VOSSynchronizationService] Client ${data["client-id"]} teleported to ${JSON.stringify(commandResult.position)}`);
+                    }
+                    
                     // Create command response message
                     const responseMessage = {
                         "message-id": uuidv4(),

@@ -41,6 +41,9 @@ module.exports = function() {
                 return this.HandleInfoCommand(args, sessionId, clientId);
             case "ping":
                 return this.HandlePingCommand(args);
+            case "teleport":
+            case "tp":
+                return this.HandleTeleportCommand(args, sessionId, clientId);
             default:
                 return {
                     success: false,
@@ -59,7 +62,9 @@ module.exports = function() {
             "Available commands:",
             "  help - Show this help message",
             "  info - Show session and client information", 
-            "  ping - Test command response"
+            "  ping - Test command response",
+            "  teleport <x> <y> <z> - Teleport to specified coordinates",
+            "  tp <x> <y> <z> - Alias for teleport command"
         ].join("\n");
 
         return {
@@ -98,5 +103,75 @@ module.exports = function() {
             success: true,
             message: "Pong!"
         };
+    };
+
+    /**
+     * @function HandleTeleportCommand Handle teleport command.
+     * @param {Array} args Command arguments (x, y, z coordinates).
+     * @param {string} sessionId Session ID.
+     * @param {string} clientId Client ID.
+     * @returns {object} Command result.
+     */
+    this.HandleTeleportCommand = function(args, sessionId, clientId) {
+        // Validate argument count
+        if (args.length !== 3) {
+            return {
+                success: false,
+                message: "Usage: teleport <x> <y> <z> - Please provide exactly 3 coordinates"
+            };
+        }
+
+        // Parse and validate coordinates
+        const x = parseFloat(args[0]);
+        const y = parseFloat(args[1]);
+        const z = parseFloat(args[2]);
+
+        if (isNaN(x) || isNaN(y) || isNaN(z)) {
+            return {
+                success: false,
+                message: "Invalid coordinates: All values must be numbers"
+            };
+        }
+
+        // Apply boundary checks to prevent abuse
+        const MAX_COORDINATE = 10000;
+        const MIN_COORDINATE = -10000;
+        
+        if (x < MIN_COORDINATE || x > MAX_COORDINATE ||
+            y < MIN_COORDINATE || y > MAX_COORDINATE ||
+            z < MIN_COORDINATE || z > MAX_COORDINATE) {
+            return {
+                success: false,
+                message: `Coordinates must be between ${MIN_COORDINATE} and ${MAX_COORDINATE}`
+            };
+        }
+
+        // Validate minimum Y coordinate to prevent teleporting underground
+        const MIN_Y = 0;
+        if (y < MIN_Y) {
+            return {
+                success: false,
+                message: `Y coordinate must be at least ${MIN_Y} to prevent underground teleportation`
+            };
+        }
+
+        // Create teleport response with position data
+        const teleportData = {
+            success: true,
+            message: `Teleporting to coordinates: ${x}, ${y}, ${z}`,
+            action: "teleport",
+            position: {
+                x: x,
+                y: y,
+                z: z
+            },
+            clientId: clientId,
+            sessionId: sessionId
+        };
+
+        // TODO: Add position broadcasting to other clients in multiplayer
+        // This will be handled by the VOS synchronization system
+
+        return teleportData;
     };
 };

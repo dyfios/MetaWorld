@@ -1,6 +1,6 @@
 class PlayerModule {
     constructor(userName, startPos, interfaceMode, thirdPersonCharacterModel, thirdPersonCharacterOffset,
-        thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset) {
+        thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset, hasExplicitStartPos = false) {
 
         this.characterLoaded = false;
 
@@ -17,7 +17,7 @@ class PlayerModule {
         Context.DefineContext("PLAYER_MODULE", this);
 
         this.thirdPersonCharacterController = new ThirdPersonCharacterController(userName, null,
-            -90, 90, 0.05, 0.05, startPos, this.CharacterLoaded, interfaceMode, true,
+            -90, 90, 0.05, 0.05, startPos, this.CharacterLoaded, interfaceMode, !hasExplicitStartPos,
             thirdPersonCharacterModel, [ thirdPersonCharacterModel ], thirdPersonCharacterOffset,
             thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset);
 

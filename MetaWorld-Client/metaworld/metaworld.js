@@ -24,6 +24,7 @@ let thirdPersonCharacterRotation = Quaternion.identity;
 let thirdPersonCharacterLabelOffset = Vector3.zero;
 let worldStartPos = Vector3.zero;
 let startPos = Vector3.zero;
+let hasExplicitStartPos = false;
 
 function HandleQueryParams() {
     worldURI = World.GetQueryParam("world_uri");
@@ -87,14 +88,32 @@ function HandleQueryParams() {
         // Set to a default.
     }
 
-    var startXArg = 0;
-    var startYArg = 512;
-    var startZArg = 0;
-    startXArg = World.GetQueryParam("start_x");
-    startYArg = World.GetQueryParam("start_y");
-    startZArg = World.GetQueryParam("start_z");
-    if (startXArg != null && startYArg != null && startZArg != null) {
-        startPos = new Vector3(parseFloat(startXArg), parseFloat(startYArg), parseFloat(startZArg));
+    var startXArg = World.GetQueryParam("start_x");
+    var startYArg = World.GetQueryParam("start_y");
+    var startZArg = World.GetQueryParam("start_z");
+    
+    // Default position values
+    let finalX = 0;
+    let finalY = 512;
+    let finalZ = 0;
+    
+    // Use provided coordinates or defaults
+    if (startXArg != null) {
+        finalX = parseFloat(startXArg);
+    }
+    if (startYArg != null) {
+        finalY = parseFloat(startYArg);
+        hasExplicitStartPos = true; // Only disable ground finding if Y is explicitly set
+    }
+    if (startZArg != null) {
+        finalZ = parseFloat(startZArg);
+    }
+    
+    // Only update startPos if any coordinate was provided
+    if (startXArg != null || startYArg != null || startZArg != null) {
+        // Convert from world coordinates (what users expect) to rendered coordinates (what the engine uses)
+        // In the coordinate transformation: worldPos.x -> renderedPos.z, worldPos.z -> renderedPos.x
+        startPos = new Vector3(finalZ, finalY, finalX); // Swap X and Z for coordinate system
     }
     //token = World.GetQueryParam("token");
 }
@@ -106,7 +125,7 @@ function InitializeModules() {
     inputModule = new InputModule();
     playerModule = new PlayerModule(userTag, startPos, interfaceMode,
         thirdPersonCharacterModel, thirdPersonCharacterOffset,
-        thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset);
+        thirdPersonCharacterRotation, thirdPersonCharacterLabelOffset, hasExplicitStartPos);
     restModule = new RESTModule();
     scriptModule = new ScriptModule();
     synchronizationModule = new SynchronizationModule(playerModule);

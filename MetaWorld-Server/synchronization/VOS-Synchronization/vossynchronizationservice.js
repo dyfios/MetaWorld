@@ -4767,21 +4767,16 @@ module.exports = function() {
                     // Handle teleport command specially
                     if (commandResult.action === "teleport" && commandResult.position) {
                         // Create a teleport message that will be broadcast to all clients
-                        const teleportBroadcast = {
+                        const teleportMessage = {
                             "message-id": uuidv4(),
                             "session-id": session.id,
                             "client-id": data["client-id"],
-                            "topic": "PLAYER.TELEPORT",
-                            "message": JSON.stringify({
-                                "client-id": data["client-id"],
-                                "action": "player-teleport",
-                                "position": commandResult.position
-                            })
+                            "action": "player-teleport",
+                            "position": commandResult.position
                         };
                         
-                        // Send the teleport message using the standard VOS broadcasting
-                        const teleportTopic = `vos/status/${session.id}/message/new`;
-                        SendMessage(teleportTopic, JSON.stringify(teleportBroadcast));
+                        // Send the teleport message directly to all clients in the session
+                        SendMessage(`vos/status/${session.id}/playerteleport`, JSON.stringify(teleportMessage));
                         
                         Log(`[VOSSynchronizationService] Client ${data["client-id"]} teleported to ${JSON.stringify(commandResult.position)}`);
                     }

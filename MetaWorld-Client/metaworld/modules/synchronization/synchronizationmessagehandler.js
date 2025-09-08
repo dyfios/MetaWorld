@@ -164,12 +164,14 @@ function OnVSSMessage(topic, sender, msg) {
             var playerModule = Context.GetContext("PLAYER_MODULE");
             
             if (playerModule && playerModule.thirdPersonCharacterController && playerModule.thirdPersonCharacterController.characterEntity) {
-                var newPosition = new Vector3(position.x, position.y, position.z);
+                // Convert world coordinates to rendered coordinates accounting for world offset
+                var worldPosition = new Vector3(position.x, position.y, position.z);
+                var renderedPosition = MW_Rend_GetRenderedPositionForWorldPosition(worldPosition);
                 
-                Logging.Log(`[Teleport] Moving player to position: ${position.x}, ${position.y}, ${position.z}`);
+                Logging.Log(`[Teleport] Moving player to world position: ${position.x}, ${position.y}, ${position.z} (rendered: ${renderedPosition.x}, ${renderedPosition.y}, ${renderedPosition.z})`);
                 
-                // Update character position
-                playerModule.thirdPersonCharacterController.characterEntity.SetPosition(newPosition, false);
+                // Update character position using rendered coordinates
+                playerModule.thirdPersonCharacterController.characterEntity.SetPosition(renderedPosition, false);
                 
                 // Update camera if needed
                 // Camera position will be automatically updated by the character controller

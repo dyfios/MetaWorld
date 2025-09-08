@@ -112,6 +112,8 @@ function HandleQueryParams() {
     // Only update startPos if any coordinate was provided
     if (startXArg != null || startYArg != null || startZArg != null) {
         startPos = new Vector3(finalX, finalY, finalZ);
+        Logging.Log(`Setting startPos from query params: x=${finalX}, y=${finalY}, z=${finalZ}`);
+        Logging.Log(`Original query values: start_x=${startXArg}, start_y=${startYArg}, start_z=${startZArg}`);
     }
     //token = World.GetQueryParam("token");
 }

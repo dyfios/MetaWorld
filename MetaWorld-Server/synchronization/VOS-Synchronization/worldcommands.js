@@ -6,6 +6,11 @@
 module.exports = function() {
 
     /**
+     * Reference to VOS Synchronization Service for message broadcasting.
+     */
+    this.vosService = null;
+
+    /**
      * @function ProcessCommand Process a world command.
      * @param {string} command Command string to process.
      * @param {string} sessionId Session ID where command originated.
@@ -155,6 +160,38 @@ module.exports = function() {
             };
         }
 
+        // Send teleport message to clients if VOS service is available
+        if (this.vosService && typeof this.vosService.SendMessage === 'function') {
+            try {
+                const { v4: uuidv4 } = require('uuid');
+                
+                // Create a teleport message that will be broadcast to all clients
+                const teleportBroadcast = {
+                    "message-id": uuidv4(),
+                    "session-id": sessionId,
+                    "client-id": clientId,
+                    "topic": "PLAYER.TELEPORT",
+                    "message": JSON.stringify({
+                        "client-id": clientId,
+                        "action": "player-teleport",
+                        "position": {
+                            x: x,
+                            y: y,
+                            z: z
+                        }
+                    })
+                };
+                
+                // Send the teleport message using the standard VOS broadcasting
+                const teleportTopic = `vos/status/${sessionId}/message/new`;
+                this.vosService.SendMessage(teleportTopic, JSON.stringify(teleportBroadcast));
+                
+                console.log(`[WorldCommands] Client ${clientId} teleported to ${JSON.stringify({x, y, z})}`);
+            } catch (error) {
+                console.error(`[WorldCommands] Error broadcasting teleport message: ${error.message}`);
+            }
+        }
+
         // Create teleport response with position data
         const teleportData = {
             success: true,
@@ -168,9 +205,6 @@ module.exports = function() {
             clientId: clientId,
             sessionId: sessionId
         };
-
-        // TODO: Add position broadcasting to other clients in multiplayer
-        // This will be handled by the VOS synchronization system
 
         return teleportData;
     };

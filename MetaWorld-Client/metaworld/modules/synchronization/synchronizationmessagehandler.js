@@ -129,4 +129,59 @@ function OnVSSMessage(topic, sender, msg) {
         }
         // CMD messages are handled server-side and don't need client processing
     }
+    else if (topic === "PLAYER.TELEPORT") {
+        msgFields = JSON.parse(msg);
+        
+        if (!msgFields.hasOwnProperty("action") || msgFields.action !== "player-teleport") {
+            Logging.LogError("OnVSSMessage: Invalid teleport message action.");
+            return;
+        }
+        
+        if (!msgFields.hasOwnProperty("position")) {
+            Logging.LogError("OnVSSMessage: Teleport message missing position.");
+            return;
+        }
+        
+        if (!msgFields.hasOwnProperty("client-id")) {
+            Logging.LogError("OnVSSMessage: Teleport message missing client-id.");
+            return;
+        }
+        
+        var position = msgFields.position;
+        var clientId = msgFields["client-id"];
+        
+        // Validate position data
+        if (typeof position.x !== 'number' || typeof position.y !== 'number' || typeof position.z !== 'number') {
+            Logging.LogError("OnVSSMessage: Invalid teleport position coordinates.");
+            return;
+        }
+        
+        // Get the current client context to check if this teleport is for us
+        var vosContext = Context.GetContext("VOSSynchronizationContext");
+        
+        if (vosContext && vosContext.clientID === clientId) {
+            // This teleport is for our client - update our position
+            var playerModule = Context.GetContext("PLAYER_MODULE");
+            
+            if (playerModule && playerModule.thirdPersonCharacterController && playerModule.thirdPersonCharacterController.characterEntity) {
+                // Convert world coordinates to rendered coordinates accounting for world offset
+                var worldPosition = new Vector3(position.x, position.y, position.z);
+                var renderedPosition = MW_Rend_GetRenderedPositionForWorldPosition(worldPosition);
+                
+                Logging.Log(`[Teleport] Moving player to world position: ${position.x}, ${position.y}, ${position.z} (rendered: ${renderedPosition.x}, ${renderedPosition.y}, ${renderedPosition.z})`);
+                
+                // Update character position using rendered coordinates
+                playerModule.thirdPersonCharacterController.characterEntity.SetPosition(renderedPosition, false);
+                
+                // Update camera if needed
+                // Camera position will be automatically updated by the character controller
+            } else {
+                Logging.LogError("OnVSSMessage: Unable to teleport - player module or character not available.");
+            }
+        } else {
+            // This teleport is for another client - we might want to update their representation
+            // For now, just log it
+            Logging.Log(`[Teleport] Client ${clientId} teleported to position: ${position.x}, ${position.y}, ${position.z}`);
+        }
+    }
 }

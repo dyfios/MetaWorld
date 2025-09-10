@@ -595,6 +595,9 @@ this.vss = new VOSSynchronizationService();
 this.worldCommandsHandler = new WorldCommands();
 this.vss.worldCommandsHandler = this.worldCommandsHandler;
 
+// Provide VOS service reference to world commands for message broadcasting
+this.worldCommandsHandler.vosService = this.vss;
+
 this.vss.sessionCreatedCallback = (sessionID, sessionTag) => {
     var sessionIDParts = sessionTag.split(".");
     if (sessionIDParts.length != 3) {
